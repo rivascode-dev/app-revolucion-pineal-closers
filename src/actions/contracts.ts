@@ -48,20 +48,19 @@ export async function signContract(
   try {
     const webhookUrl = process.env.N8N_WEBHOOK_URL
     if (webhookUrl) {
+      const now = new Date();
+      const fecha = now.toISOString().split('T')[0];
+      const hora = now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
       await fetch(webhookUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nombre_cliente: contract.nombre_cliente,
           nombre_cliente_contrato: nombreClienteContrato,
-          fecha_nacimiento_cliente: fechaNacimientoCliente,
           telefono_cliente: contract.telefono_cliente,
-          fecha_firma: new Date().toISOString(),
-          importe: contract.importe,
-          cuotas: contract.numero_cuotas,
-          moneda: contract.moneda,
-          dia_cobro: contract.dia_cobro,
-          tipo_contrato: contract.tipo_contrato
+          tipo_contrato: contract.tipo_contrato,
+          fecha: fecha,
+          hora: hora
         })
       })
     }

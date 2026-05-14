@@ -18,10 +18,10 @@ export function CopyButton({ id }: { id: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white/5 text-gray-500 hover:text-white transition-all border border-transparent hover:border-white/5"
+      className="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-surface-hover text-secondary hover:text-foreground transition-all border border-transparent hover:border-border"
       title="Copiar Enlace Público"
     >
-      {copied ? <Check size={18} className="text-green-400" strokeWidth={3} /> : <LinkIcon size={18} />}
+      {copied ? <Check size={18} className="text-green-500" strokeWidth={3} /> : <LinkIcon size={18} />}
     </button>
   )
 }

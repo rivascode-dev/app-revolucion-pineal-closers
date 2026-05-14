@@ -133,4 +133,12 @@ Los datos que se pasarán en el webhook son, como mínimo:
 - Confirmar si se necesita almacenar la **firma como imagen** y/o el contrato firmado como **PDF**.
 - Confirmar el **texto exacto** del mensaje de bienvenida que enviará n8n.
 
+### 7. Reglas de negocio n8n (WhatsApp groups)
+- si el tipo_contrato es 'alquimia_vilal_eca', debe agregar el cleinte a estos dos grupos de whatsapp:
+  - Emprende con Alma 120363424654026759@g.us 
+  - Alquimia Vital (Iniciación) 120363364922610977@g.us
+- si el tipo_contrato es cualquiera de los otros, debe agregar el cliente a estos grupos de whatsapp:
+  - Alquimia Vital (Iniciación) 120363364922610977@g.us
+  - 
+
 

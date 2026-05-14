@@ -1,0 +1,207 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "be674b0d-5b4c-4990-90b3-e0dc23f9161b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -460,
+        0
+      ],
+      "id": "f19d364c-a890-4362-9d91-2b3b67564091",
+      "name": "trig_webhook",
+      "webhookId": "be674b0d-5b4c-4990-90b3-e0dc23f9161b"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/send-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "keypair",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "={{ $('trig_webhook').item.json.body.telefono_cliente }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ 'Hola ' + $('trig_webhook').item.json.body.nombre_cliente_contrato + ', confirmamos que tu contrato de ' + $('trig_webhook').item.json.body.tipo_contrato + ' ha sido firmado exitosamente el ' + $('trig_webhook').item.json.body.fecha + ' a las ' + $('trig_webhook').item.json.body.hora + '.' }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7072b5b9-f29c-4806-95e5-9949141b0c17",
+      "name": "post_whatsapp_msg",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "bBcrdGrIXhIAjFzs",
+          "name": "WasenderAPI - Lucem (Principal)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "e931e21b-6f81-42cb-b1b7-aeb8af04b6b1",
+              "leftValue": "={{ $('trig_webhook').item.json.body.tipo_contrato }}",
+              "rightValue": "alquimia_vital_eca",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.1,
+      "position": [
+        -20,
+        0
+      ],
+      "id": "67de7657-3f34-4bc0-9c2b-e10b2fec2e5b",
+      "name": "flow_check_contrato"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/groups/120363424654026759@g.us/participants/add",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"participants\": [ \"{{ $('trig_webhook').item.json.body.telefono_cliente }}\" ] }",
+        "options": {}
+      },
+      "id": "0092647d-9d79-461a-b551-7576c3377f8a",
+      "name": "post_whatsapp_group_alma",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        200,
+        -100
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "bBcrdGrIXhIAjFzs",
+          "name": "WasenderAPI - Lucem (Principal)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/groups/120363364922610977@g.us/participants/add",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"participants\": [ \"{{ $('trig_webhook').item.json.body.telefono_cliente }}\" ] }",
+        "options": {}
+      },
+      "id": "87e9142f-7a56-4b2a-a9e9-74d754b2d28f",
+      "name": "post_whatsapp_group_alquimia",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        420,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "bBcrdGrIXhIAjFzs",
+          "name": "WasenderAPI - Lucem (Principal)"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "trig_webhook": {
+      "main": [
+        [
+          {
+            "node": "post_whatsapp_msg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "post_whatsapp_msg": {
+      "main": [
+        [
+          {
+            "node": "flow_check_contrato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "flow_check_contrato": {
+      "main": [
+        [
+          {
+            "node": "post_whatsapp_group_alma",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post_whatsapp_group_alquimia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "post_whatsapp_group_alma": {
+      "main": [
+        [
+          {
+            "node": "post_whatsapp_group_alquimia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "5fb31353bf4dc16311b0347ead4b884fad18ae1960ff4cbda8f09bf4a2cad0c8"
+  }
+}
