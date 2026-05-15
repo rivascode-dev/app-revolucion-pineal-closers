@@ -4,14 +4,23 @@ import { useTransition, useState } from 'react';
 import { createContract } from './actions';
 import {
   User,
-  Phone,
   Hash,
-  Euro,
-  Loader2,
-  ArrowLeft,
   Send,
+  ArrowLeft,
 } from 'lucide-react';
 import Link from 'next/link';
+import { 
+  Box, 
+  Stack, 
+  Typography, 
+  TextField, 
+  MenuItem, 
+  Button, 
+  Divider, 
+  Alert,
+  Paper,
+  CircularProgress
+} from '@mui/material';
 
 const CURRENCIES = ['EUR', 'USD', 'MXN', 'ARS', 'PEN'];
 
@@ -49,224 +58,264 @@ export default function NewContractPage() {
   };
 
   return (
-    <div className='max-w-3xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700'>
-      <div className='flex items-center justify-between'>
-        <Link
-          href='/dashboard/contratos'
-          className='group flex items-center gap-2 text-secondary hover:text-foreground transition-all text-sm font-bold uppercase tracking-widest'
+    <Box sx={{ maxWidth: 'md', mx: 'auto', py: 4 }}>
+      {/* Header */}
+      <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', mb: 5 }}>
+        <Button
+          component={Link}
+          href="/dashboard/contratos"
+          startIcon={
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                border: '1px solid',
+                borderColor: 'divider',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s',
+              }}
+            >
+              <ArrowLeft size={18} />
+            </Box>
+          }
+          sx={{
+            color: 'text.secondary',
+            '&:hover': { 
+              color: 'text.primary', 
+              bgcolor: 'transparent',
+              '& .MuiBox-root': {
+                bgcolor: 'action.hover',
+                borderColor: 'text.primary',
+              }
+            },
+            fontSize: '0.875rem',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
+          }}
         >
-          <div className='w-10 h-10 rounded-full border border-border flex items-center justify-center group-hover:bg-surface-hover group-hover:border-foreground/10 transition-all'>
-            <ArrowLeft size={18} />
-          </div>
           Volver
-        </Link>
-        <div className='h-px flex-1 bg-border mx-6 hidden sm:block'></div>
-        <p className='text-[10px] font-black uppercase tracking-[0.3em] text-secondary'>
+        </Button>
+        
+        <Divider sx={{ flex: 1, mx: 3, display: { xs: 'none', sm: 'block' } }} />
+        
+        <Typography 
+          variant="caption" 
+          sx={{ 
+            fontWeight: 900, 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.3em', 
+            color: 'text.secondary' 
+          }}
+        >
           Paso 01 / Generación
-        </p>
-      </div>
+        </Typography>
+      </Stack>
 
-      <div className='space-y-4'>
-        <h1 className='text-4xl font-black tracking-tight text-foreground'>
+      <Stack spacing={2} sx={{ mb: 6 }}>
+        <Typography variant="h3" color="text.primary">
           Nuevo Contrato
-        </h1>
-        <p className='text-secondary'>
+        </Typography>
+        <Typography variant="body1" color="text.secondary">
           Completa los detalles para generar el enlace de firma digital.
-        </p>
-      </div>
+        </Typography>
+      </Stack>
 
-      <div className='bg-surface border border-border p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden'>
+      <Paper 
+        elevation={0}
+        sx={{ 
+          p: { xs: 4, md: 6 }, 
+          borderRadius: 6, 
+          position: 'relative', 
+          overflow: 'hidden',
+          bgcolor: 'background.paper',
+          border: '1px solid',
+          borderColor: 'divider',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.05)'
+        }}
+      >
         {/* Decorative element */}
-        <div className='absolute top-0 right-0 w-32 h-32 bg-foreground/[0.02] rounded-bl-[5rem] border-l border-b border-border'></div>
+        <Box 
+          sx={{ 
+            position: 'absolute', 
+            top: 0, 
+            right: 0, 
+            width: 128, 
+            height: 128, 
+            bgcolor: 'action.hover', 
+            borderBottomLeftRadius: 80,
+            borderLeft: '1px solid',
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            opacity: 0.5
+          }} 
+        />
 
-        <form onSubmit={handleSubmit} className='space-y-10 relative z-10'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10'>
+        <Box component="form" onSubmit={handleSubmit} sx={{ position: 'relative', zIndex: 1 }}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4, mb: 4 }}>
+            
             {/* Cliente */}
-            <div className='space-y-4'>
-              <div className='flex items-center gap-2 text-secondary mb-2'>
-                <User size={14} />
-                <span className='text-[10px] font-black uppercase tracking-widest'>
+            <Stack spacing={3}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center', color: 'text.secondary', mb: 1 }}>
+                <User size={16} />
+                <Typography variant="overline">
                   Información del Cliente
-                </span>
-              </div>
-              <div className='space-y-4'>
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='nombre_cliente'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    Nombre Completo
-                  </label>
-                  <input
-                    id='nombre_cliente'
-                    name='nombre_cliente'
-                    type='text'
-                    required
-                    className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground placeholder:text-secondary/30 focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium'
-                    placeholder='Ej: Juan Antonio Pérez'
-                  />
-                </div>
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='telefono_cliente'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    WhatsApp (con prefijo)
-                  </label>
-                  <div className='relative'>
-                    <input
-                      id='telefono_cliente'
-                      name='telefono_cliente'
-                      type='tel'
-                      required
-                      className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground placeholder:text-secondary/30 focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium'
-                      placeholder='+34 600 000 000'
-                    />
-                  </div>
-                </div>
+                </Typography>
+              </Stack>
+              
+              <TextField
+                id="nombre_cliente"
+                name="nombre_cliente"
+                label="Nombre Completo"
+                placeholder="Ej: Juan Antonio Pérez"
+                required
+                fullWidth
+                variant="outlined"
+                slotProps={{ inputLabel: { shrink: true } }}
+              />
 
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='tipo_contrato'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    Tipo de Contrato
-                  </label>
+              <TextField
+                id="telefono_cliente"
+                name="telefono_cliente"
+                label="WhatsApp (con prefijo)"
+                placeholder="+34 600 000 000"
+                type="tel"
+                required
+                fullWidth
+                variant="outlined"
+                slotProps={{ inputLabel: { shrink: true } }}
+              />
 
-                  <div className='flex gap-x-4 '>
-                    <select
-                      id='tipo_contrato'
-                      name='tipo_contrato'
-                      required
-                      className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium cursor-pointer'
-                    >
-                      {TYPE_OF_CONTRACTS.map((contract, index) => (
-                        <option
-                          key={index}
-                          value={contract.value}
-                          className='bg-surface text-foreground'
-                        >
-                          {contract.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+              <TextField
+                id="tipo_contrato"
+                name="tipo_contrato"
+                select
+                label="Tipo de Contrato"
+                required
+                fullWidth
+                variant="outlined"
+                slotProps={{ inputLabel: { shrink: true } }}
+                defaultValue={TYPE_OF_CONTRACTS[0].value}
+              >
+                {TYPE_OF_CONTRACTS.map((contract) => (
+                  <MenuItem key={contract.value} value={contract.value}>
+                    {contract.name}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Stack>
 
             {/* Condiciones */}
-            <div className='space-y-4'>
-              <div className='flex items-center gap-2 text-secondary mb-2'>
-                <Hash size={14} />
-                <span className='text-[10px] font-black uppercase tracking-widest'>
+            <Stack spacing={3}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center', color: 'text.secondary', mb: 1 }}>
+                <Hash size={16} />
+                <Typography variant="overline">
                   Condiciones Económicas
-                </span>
-              </div>
-              <div className='space-y-4'>
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='importe'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    Moneda / Importe Total
-                  </label>
+                </Typography>
+              </Stack>
+              
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  id="moneda"
+                  name="moneda"
+                  select
+                  label="Moneda"
+                  required
+                  variant="outlined"
+                  slotProps={{ inputLabel: { shrink: true } }}
+                  defaultValue={CURRENCIES[0]}
+                  sx={{ width: '40%' }}
+                >
+                  {CURRENCIES.map((currency) => (
+                    <MenuItem key={currency} value={currency}>
+                      {currency}
+                    </MenuItem>
+                  ))}
+                </TextField>
 
-                  <div className='flex gap-x-4 '>
-                    <select
-                      id='moneda'
-                      name='moneda'
-                      required
-                      className='block w-25 px-5 py-4 border border-border rounded-2xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium cursor-pointer'
-                    >
-                      {CURRENCIES.map((currency) => (
-                        <option
-                          key={currency}
-                          value={currency}
-                          className='bg-surface text-foreground'
-                        >
-                          {currency}
-                        </option>
-                      ))}
-                    </select>
+                <TextField
+                  id="importe"
+                  name="importe"
+                  type="number"
+                  slotProps={{ htmlInput: { step: '0.01' }, inputLabel: { shrink: true } }}
+                  label="Importe Total"
+                  placeholder="0.00"
+                  required
+                  fullWidth
+                  variant="outlined"
+                />
+              </Stack>
 
-                    <input
-                      id='importe'
-                      name='importe'
-                      type='number'
-                      step='0.01'
-                      required
-                      className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground placeholder:text-secondary/30 focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium'
-                      placeholder='0.00'
-                    />
-                  </div>
-                </div>
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='numero_cuotas'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    Número de Cuotas
-                  </label>
-                  <select
-                    id='numero_cuotas'
-                    name='numero_cuotas'
-                    required
-                    className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium appearance-none cursor-pointer'
-                  >
-                    {[1, 2, 3, 4, 6, 12].map((n) => (
-                      <option key={n} value={n} className='bg-surface text-foreground'>
-                        {n} {n === 1 ? 'Cuota (Pago Único)' : 'Cuotas'}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className='group space-y-2'>
-                  <label
-                    htmlFor='dia_cobro'
-                    className='text-xs font-bold text-secondary uppercase tracking-wider ml-1'
-                  >
-                    Día de cobro
-                  </label>
-                  <input
-                    id='dia_cobro'
-                    name='dia_cobro'
-                    type='number'
-                    min={1}
-                    max={31}
-                    required
-                    className='block w-full px-5 py-4 border border-border rounded-2xl bg-background text-foreground placeholder:text-secondary/30 focus:outline-none focus:ring-2 focus:ring-foreground/10 focus:bg-surface-hover transition-all text-sm font-medium'
-                    placeholder='1'
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+              <TextField
+                id="numero_cuotas"
+                name="numero_cuotas"
+                select
+                label="Número de Cuotas"
+                required
+                fullWidth
+                variant="outlined"
+                slotProps={{ inputLabel: { shrink: true } }}
+                defaultValue={1}
+              >
+                {[1, 2, 3, 4, 6, 12].map((n) => (
+                  <MenuItem key={n} value={n}>
+                    {n} {n === 1 ? 'Cuota (Pago Único)' : 'Cuotas'}
+                  </MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                id="dia_cobro"
+                name="dia_cobro"
+                type="number"
+                variant="outlined"
+                label="Día de cobro"
+                placeholder="1"
+                required
+                fullWidth
+                slotProps={{ htmlInput: { min: 1, max: 31 }, inputLabel: { shrink: true } }}
+                defaultValue={1}
+              />
+            </Stack>
+          </Box>
 
           {error && (
-            <div className='text-red-500 text-xs bg-red-500/5 p-5 rounded-2xl border border-red-500/20 animate-in fade-in zoom-in duration-300'>
+            <Alert severity="error" sx={{ mb: 4, borderRadius: 2 }}>
               {error}
-            </div>
+            </Alert>
           )}
 
-          <div className='pt-6'>
-            <button
-              type='submit'
+          <Box sx={{ pt: 3 }}>
+            <Button
+              type="submit"
               disabled={isPending}
-              className='w-full flex justify-center items-center gap-3 py-5 px-4 bg-black dark:bg-white text-white dark:text-black text-sm font-black rounded-2xl hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-xl uppercase tracking-[0.2em] active:scale-[0.98]'
+              variant="contained"
+              fullWidth
+              size="large"
+              endIcon={!isPending && <Send size={18} strokeWidth={3} />}
+              sx={{
+                py: 2,
+                borderRadius: 4,
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                boxShadow: 4,
+                bgcolor: 'text.primary',
+                color: 'background.paper',
+                '&:hover': {
+                  bgcolor: 'text.secondary',
+                }
+              }}
             >
-              {isPending ? (
-                <Loader2 className='animate-spin h-5 w-5' />
-              ) : (
-                <>
-                  Generar y Obtener Enlace
-                  <Send size={18} strokeWidth={3} />
-                </>
-              )}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              {isPending ? <CircularProgress size={24} color="inherit" /> : 'Generar y Obtener Enlace'}
+            </Button>
+          </Box>
+        </Box>
+      </Paper>
+    </Box>
   );
 }
+

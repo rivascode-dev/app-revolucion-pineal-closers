@@ -2,35 +2,44 @@
 
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { cn } from '@/lib/utils';
+import { useColorScheme } from '@mui/material/styles';
+import { IconButton, Skeleton } from '@mui/material';
 
 export function ThemeToggle() {
-  const { resolvedTheme, setTheme } = useTheme();
+  const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
 
-  // Avoid hydration mismatch
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
   if (!mounted) {
-    return (
-      <div className='w-10 h-10 rounded-xl bg-surface border border-border animate-pulse' />
-    );
+    return <Skeleton variant="rounded" width={40} height={40} sx={{ borderRadius: 2 }} />;
   }
 
   return (
-    <button
-      onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-      className='relative w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center hover:bg-surface-hover hover:border-primary/20 transition-all duration-200 group'
+    <IconButton
+      onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}
       aria-label='Cambiar tema'
+      sx={{
+        width: 40,
+        height: 40,
+        borderRadius: 2,
+        border: '1px solid',
+        borderColor: 'divider',
+        bgcolor: 'background.paper',
+        '&:hover': {
+          borderColor: 'primary.main',
+          bgcolor: 'action.hover',
+        },
+        transition: 'all 0.2s',
+      }}
     >
-      {resolvedTheme === 'dark' ? (
-        <Sun className='h-5 w-5 text-amber-500' />
+      {mode === 'dark' ? (
+        <Sun size={20} color="#f59e0b" />
       ) : (
-        <Moon className='h-5 w-5 text-blue-400' />
+        <Moon size={20} color="#60a5fa" />
       )}
-    </button>
+    </IconButton>
   );
 }

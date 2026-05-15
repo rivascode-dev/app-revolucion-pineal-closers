@@ -1,16 +1,8 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 export const metadata: Metadata = {
   title: 'Revolucion Pineal - Sistema de Firmas',
@@ -18,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 import { Toaster } from 'sonner';
-import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { InitColorSchemeScript } from '@mui/material';
+import ThemeMUIProvider from '@/components/providers/ThemeMUIProvider';
 
 export default function RootLayout({
   children,
@@ -27,18 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es' suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-          enableSystem
-          disableTransitionOnChange
-        >
+      <body>
+        <InitColorSchemeScript attribute='class' defaultMode='light' />
+        <ThemeMUIProvider>
           {children}
           <Toaster position='top-right' theme='dark' />
-        </ThemeProvider>
+        </ThemeMUIProvider>
       </body>
     </html>
   );

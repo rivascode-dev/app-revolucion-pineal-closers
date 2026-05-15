@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { Topbar } from '@/components/layout/Topbar'
+import { Box } from '@mui/material'
 
 export default async function DashboardLayout({
   children,
@@ -19,14 +20,14 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
+    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
       <Sidebar />
-      <div className="flex-1 flex flex-col min-w-0">
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         <Topbar userEmail={user.email || ''} />
-        <main className="flex-1 p-6 md:p-10">
+        <Box component="main" sx={{ flex: 1, p: { xs: 3, md: 5 } }}>
           {children}
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   )
 }

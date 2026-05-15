@@ -1,43 +1,55 @@
-'use client'
+'use client';
 
-import { Search } from 'lucide-react'
-import { useRouter, usePathname, useSearchParams } from 'next/navigation'
-import { useTransition } from 'react'
+import { Search } from 'lucide-react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useTransition } from 'react';
+import {
+  Box,
+  TextField,
+  InputAdornment,
+  CircularProgress,
+} from '@mui/material';
 
 export function ContractSearch() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [isPending, startTransition] = useTransition()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const handleSearch = (term: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams);
     if (term) {
-      params.set('search', term)
+      params.set('search', term);
     } else {
-      params.delete('search')
+      params.delete('search');
     }
 
     startTransition(() => {
-      router.replace(`${pathname}?${params.toString()}`)
-    })
-  }
+      router.replace(`${pathname}?${params.toString()}`);
+    });
+  };
 
   return (
-    <div className="relative flex-1 w-full">
-      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary" size={18} />
-      <input 
-        type="text" 
-        placeholder="Buscar por nombre de cliente..." 
-        defaultValue={searchParams.get('search')?.toString()}
+    <Box>
+      <TextField
+        placeholder='Buscar por nombre de cliente...'
+        defaultValue={searchParams.get('search')?.toString() || ''}
         onChange={(e) => handleSearch(e.target.value)}
-        className="w-full bg-background border border-border rounded-xl py-3 pl-12 pr-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-foreground/10 transition-all placeholder:text-secondary/50"
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position='start'>
+                <Search size={18} />
+              </InputAdornment>
+            ),
+            endAdornment: isPending ? (
+              <InputAdornment position='end'>
+                <CircularProgress size={16} color='inherit' />
+              </InputAdornment>
+            ) : null,
+          },
+        }}
       />
-      {isPending && (
-        <div className="absolute right-4 top-1/2 -translate-y-1/2">
-          <div className="w-4 h-4 border-2 border-border border-t-foreground/50 rounded-full animate-spin"></div>
-        </div>
-      )}
-    </div>
-  )
+    </Box>
+  );
 }

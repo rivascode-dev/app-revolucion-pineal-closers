@@ -2,70 +2,91 @@
 
 import { useState } from 'react';
 import { User, LogOut, ChevronDown } from 'lucide-react';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
 import { signOut } from '@/actions/auth';
 import { ThemeToggle } from '../ThemeToggle';
+import { AppBar, Toolbar, Box, Typography, Menu, MenuItem, Avatar, Fade } from '@mui/material';
 
 export function Topbar({ userEmail }: { userEmail: string }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSignOut = () => {
+    handleClose();
+    signOut();
+  };
 
   return (
-    <header className='h-20 border-b border-border bg-background/80 backdrop-blur-md sticky top-0 z-50 px-4 md:px-8 flex items-center justify-between'>
-      <div className='flex-1'></div>
-
-      <div className='flex items-center gap-4'>
-        <ThemeToggle />
-
-        {/* User Avatar - Left */}
-        <div className='relative'>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className='flex items-center gap-3 hover:bg-surface p-2 rounded-xl transition-all group'
+    <AppBar
+      color='inherit'
+      elevation={0}
+      sx={{
+        bgcolor: 'background.paper',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+      }}
+    >
+      <Toolbar sx={{ justifyContent: 'space-between' }}>
+        <Box sx={{ flex: 1 }} />
+        
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <ThemeToggle />
+          
+          <Box
+            onClick={handleClick}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
+              p: 1,
+              borderRadius: 3,
+              cursor: 'pointer',
+              transition: 'background-color 0.2s',
+              '&:hover': { bgcolor: 'action.hover' }
+            }}
           >
-            <div className='w-10 h-10 rounded-full bg-gradient-to-br from-gray-200 to-gray-400 dark:from-gray-700 dark:to-black border border-border flex items-center justify-center overflow-hidden'>
-              <User
-                className='text-secondary group-hover:text-white transition-colors'
-                size={20}
-              />
-            </div>
-            <div className='text-left hidden sm:block'>
-              <p className='text-sm font-semibold text-foreground leading-tight'>
-                Micuenta
-              </p>
-              <p className='text-[10px] text-secondary truncate max-w-[120px]'>
+            <Avatar sx={{ width: 40, height: 40 }}>
+              <User size={20} />
+            </Avatar>
+            <Box sx={{ display: { xs: 'none', sm: 'block' }, textAlign: 'left' }}>
+              <Typography variant='subtitle2' sx={{ color: 'text.primary' }}>
+                Mi cuenta
+              </Typography>
+              <Typography variant='caption' sx={{ display: 'block', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', color: 'text.secondary' }}>
                 {userEmail}
-              </p>
-            </div>
-            <ChevronDown
-              size={14}
-              className={cn(
-                'text-secondary transition-transform duration-200',
-                isOpen && 'rotate-180',
-              )}
-            />
-          </button>
+              </Typography>
+            </Box>
+            <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'none' }} />
+          </Box>
 
-          {/* Dropdown / Dialog */}
-          {isOpen && (
-            <div className='absolute top-full right-0 mt-2 w-56 bg-surface border border-border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200'>
-              <div className='p-4 border-b border-border'>
-                <p className='text-xs text-secondary mb-1'>Conectado como</p>
-                <p className='text-sm font-medium text-foreground truncate'>
-                  {userEmail}
-                </p>
-              </div>
-              <button
-                onClick={() => signOut()}
-                className='w-full flex items-center gap-3 px-4 py-3 text-sm text-red-500 hover:bg-red-500/10 transition-colors'
-              >
-                <LogOut size={16} />
-                Cerrar Sesión
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-    </header>
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slots={{ transition: Fade }}
+            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          >
+            <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', mb: 1 }}>
+              <Typography variant="caption" color="text.secondary">Conectado como</Typography>
+              <Typography variant="subtitle2" sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {userEmail}
+              </Typography>
+            </Box>
+            <MenuItem onClick={handleSignOut} sx={{ color: 'error.main', py: 1.5, px: 2, gap: 1.5 }}>
+              <LogOut size={16} />
+              Cerrar Sesión
+            </MenuItem>
+          </Menu>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

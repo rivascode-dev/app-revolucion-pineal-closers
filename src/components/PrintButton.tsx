@@ -1,15 +1,30 @@
 'use client';
 
 import { Printer } from 'lucide-react';
+import { Button } from '@mui/material';
 
 export function PrintButton() {
   return (
-    <button
+    <Button
+      variant="outlined"
+      color="inherit"
+      startIcon={<Printer size={18} />}
       onClick={() => window.print()}
-      className='mt-6 inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all font-medium text-sm border border-white/10 shadow-lg cursor-pointer'
+      sx={{
+        mt: 3,
+        borderRadius: 2,
+        textTransform: 'none',
+        fontWeight: 'medium',
+        py: 1,
+        px: 3,
+        borderColor: 'divider',
+        '&:hover': {
+          borderColor: 'text.primary',
+          backgroundColor: 'action.hover',
+        }
+      }}
     >
-      <Printer size={18} />
       Descargar como PDF
-    </button>
+    </Button>
   );
 }

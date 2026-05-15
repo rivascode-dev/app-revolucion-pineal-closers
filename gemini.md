@@ -23,3 +23,5 @@ Este archivo define las directivas generales de interacción para el agente de I
 *Para estándares técnicos, consultar:*
 - [Next.js Architecture](.agents/nextjs-architecture.md)
 - [Naming Conventions](.agents/naming-conventions.md)
+- [Material UI and Next.js](.agents/mui-nextjs.md)
+

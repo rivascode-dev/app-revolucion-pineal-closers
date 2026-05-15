@@ -5,6 +5,8 @@ import { CheckCircle2 } from 'lucide-react';
 import { SignatureContainer } from '@/sections/contratos/SignatureContainer';
 import ReactMarkdown from 'react-markdown';
 import { PrintButton } from '@/components/PrintButton';
+import { Box, Container, Typography, Card, Stack, Paper } from '@mui/material';
+import { LightModeWrapper } from '@/sections/contratos/LightModeWrapper';
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -42,116 +44,341 @@ export default async function ContractPage({ params }: PageProps) {
     );
 
   return (
-    <div className='min-h-screen bg-slate-50 py-12 px-4 relative overflow-hidden flex items-center justify-center font-sans print:py-0 print:block print:text-black'>
-      {/* Background patterns for a clean premium feel */}
-      <div className='absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none print:hidden opacity-40'>
-        <div className='absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-100/50 rounded-full blur-[120px]'></div>
-        <div className='absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-50/50 rounded-full blur-[120px]'></div>
-      </div>
+    <LightModeWrapper>
+      <Container>
+        {/* Background patterns */}
+        {/* <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden',
+            pointerEvents: 'none',
+            opacity: 0.4,
+            '@media print': { display: 'none' },
+          }}
+        >
+          <Box
+            sx={{
+              position: 'absolute',
+              top: '-10%',
+              right: '-10%',
+              width: '50%',
+              height: '50%',
+              bgcolor: 'primary.light',
+              borderRadius: '50%',
+              filter: 'blur(120px)',
+              opacity: 0.5,
+            }}
+          />
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: '-10%',
+              left: '-10%',
+              width: '50%',
+              height: '50%',
+              bgcolor: 'secondary.light',
+              borderRadius: '50%',
+              filter: 'blur(120px)',
+              opacity: 0.5,
+            }}
+          />
+        </Box> */}
 
-      <div className='max-w-3xl w-full space-y-10 relative z-10 animate-in fade-in zoom-in duration-1000 print:space-y-4 print:shadow-none print:max-w-none'>
-        {/* Header */}
-        <div className='text-center space-y-4 print:space-y-2'>
-          <div className='inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-gray-200 shadow-sm print:hidden'>
-            <div className='w-1.5 h-1.5 rounded-full bg-green-500'></div>
-            <span className='text-[10px] font-black uppercase tracking-[0.3em] text-gray-400'>
-              Portal Seguro de Firma
-            </span>
-          </div>
-          <h1 className='text-5xl font-black tracking-tighter text-gray-900 print:text-black print:text-3xl'>
-            Revolución Pineal
-          </h1>
-          <p className='text-gray-500 font-medium print:text-gray-800'>
-            Contrato de Formación Académica
-          </p>
-        </div>
-
-        {/* Contract Content */}
-        <div className='bg-white border border-gray-200 rounded-[3rem] shadow-xl shadow-gray-200/50 overflow-hidden print:border-none print:rounded-none print:shadow-none'>
-          <div className='p-6 md:p-6 border-b border-gray-100 print:border-none'>
-            <div
-              className='prose prose-sm md:prose-base max-w-none 
-              prose-headings:text-gray-900 prose-headings:font-black prose-headings:tracking-tight
-              prose-p:text-gray-700 prose-p:leading-relaxed
-              prose-strong:text-gray-900 prose-strong:font-bold
-              prose-li:text-gray-700
-              font-serif selection:bg-gray-900 selection:text-white'
+        <Container
+          maxWidth='md'
+          sx={{
+            position: 'relative',
+            zIndex: 10,
+            '@media print': { boxShadow: 'none', maxWidth: 'none', px: 0 },
+          }}
+        >
+          <Stack
+            spacing={{ xs: 5, md: 10 }}
+            sx={{ '@media print': { spacing: 2 }, mt: { xs: 2, md: 2 } }}
+          >
+            {/* Header */}
+            <Stack
+              spacing={2}
+              sx={{
+                alignItems: 'center',
+                textAlign: 'center',
+                '@media print': { spacing: 1 },
+              }}
             >
-              <ReactMarkdown>{contractText}</ReactMarkdown>
-            </div>
-          </div>
+              <Box
+                sx={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  px: 2,
+                  py: 0.5,
+                  borderRadius: 10,
+                  bgcolor: 'background.paper',
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  boxShadow: 1,
+                  '@media print': { display: 'none' },
+                }}
+              >
+                <Box
+                  sx={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: '50%',
+                    bgcolor: 'success.main',
+                  }}
+                />
+                <Typography variant='overline' color='portal'>
+                  Portal Seguro de Firma
+                </Typography>
+              </Box>
+              <Typography variant='h2' component='h1' color='contract-title'>
+                Revolución Pineal
+              </Typography>
+              <Typography variant='subtitle1' color='contract-subtitle'>
+                Contrato de Formación Académica
+              </Typography>
+            </Stack>
 
-          {/* Signature Section */}
-          <div className='p-10 md:p-16 space-y-10 bg-gray-50/50 print:bg-white'>
-            {contract.estado === 'firmado' ? (
-              <div className='flex flex-col items-center justify-center space-y-6 py-4'>
-                <div className='relative print:hidden'>
-                  <div className='absolute -inset-4 bg-green-500/10 rounded-full blur-xl'></div>
-                  <div className='relative bg-green-500/5 p-6 rounded-full border border-green-500/20'>
-                    <CheckCircle2
-                      size={56}
-                      className='text-green-600'
-                      strokeWidth={3}
-                    />
-                  </div>
-                </div>
-                <div className='text-center space-y-2 print:hidden'>
-                  <h2 className='text-2xl font-black text-gray-900 tracking-tight'>
-                    ¡Contrato Firmado!
-                  </h2>
-                  <p className='text-gray-500 max-w-xs mx-auto text-sm leading-relaxed'>
-                    Tu inscripción se ha procesado con éxito. En breve recibirás
-                    los accesos por WhatsApp.
-                  </p>
-                </div>
-                {contract.firma_data && (
-                  <div className='mt-10 pt-10 border-t border-gray-200 w-full flex flex-col items-center print:mt-4 print:pt-4'>
-                    <p className='text-[10px] text-gray-400 mb-6 uppercase tracking-[0.4em] font-black print:mb-2'>
-                      Certificado de Firma
-                    </p>
-                    <div className='bg-white border border-gray-100 rounded-2xl p-6 shadow-sm print:border-none print:p-0'>
-                      <img
-                        src={contract.firma_data}
-                        alt='Firma Digital'
-                        className='max-h-32 grayscale brightness-0 opacity-90'
+            {/* Contract Content */}
+            <Card>
+              <Box
+                sx={{
+                  p: { xs: 3, md: 6 },
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  '@media print': { border: 'none', p: 0 },
+                }}
+              >
+                <Box
+                  sx={{
+                    '& h1, & h2, & h3, & h4, & h5, & h6': {
+                      color: 'text.primary',
+                      fontWeight: 900,
+                      letterSpacing: '-0.02em',
+                      mb: 2,
+                      mt: 4,
+                    },
+                    '& p': {
+                      color: 'text.primary',
+                      lineHeight: 1.8,
+                      mb: 2,
+                      opacity: 0.8,
+                    },
+                    '& strong': { color: 'text.primary', fontWeight: 'bold' },
+                    '& li': { color: 'text.primary', mb: 1, opacity: 0.8 },
+                    '& ul, & ol': { pl: 3, mb: 2 },
+                    '& ::selection': {
+                      bgcolor: 'text.primary',
+                      color: 'background.paper',
+                    },
+                    fontFamily: 'serif',
+                  }}
+                >
+                  <ReactMarkdown>{contractText}</ReactMarkdown>
+                </Box>
+              </Box>
+
+              {/* Signature Section */}
+              <Box
+                sx={{
+                  p: { xs: 4, md: 8 },
+                  bgcolor: 'action.hover',
+                  '@media print': { bgcolor: 'transparent', p: 0, mt: 4 },
+                }}
+              >
+                {contract.estado === 'firmado' ? (
+                  <Stack
+                    spacing={3}
+                    sx={{
+                      py: 2,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        position: 'relative',
+                        '@media print': { display: 'none' },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          inset: -16,
+                          bgcolor: 'success.main',
+                          opacity: 0.1,
+                          borderRadius: '50%',
+                          filter: 'blur(20px)',
+                        }}
                       />
-                    </div>
-                    <div className='mt-4 text-center print:block'>
-                      <p className='text-sm text-gray-600 print:text-black font-semibold'>
-                        Firmado por: {contract.nombre_cliente_contrato}
-                      </p>
-                      <p className='text-xs text-gray-400 print:text-black font-medium'>
-                        Fecha de Nacimiento: {contract.fecha_nacimiento_cliente}
-                      </p>
-                    </div>
-                  </div>
+                      <Box
+                        sx={{
+                          position: 'relative',
+                          bgcolor: 'success.main',
+                          opacity: 0.2,
+                          p: 2,
+                          borderRadius: '50%',
+                          border: '1px solid',
+                          borderColor: 'success.light',
+                        }}
+                      >
+                        <CheckCircle2
+                          size={56}
+                          style={{ color: '#000' }}
+                          strokeWidth={3}
+                        />
+                      </Box>
+                    </Box>
+                    <Stack
+                      spacing={1}
+                      sx={{
+                        textAlign: 'center',
+                        '@media print': { display: 'none' },
+                      }}
+                    >
+                      <Typography variant='h5' color='text.primary'>
+                        ¡Contrato Firmado!
+                      </Typography>
+                      <Typography
+                        variant='body2'
+                        color='text.secondary'
+                        sx={{ maxWidth: '320px', mx: 'auto', lineHeight: 1.6 }}
+                      >
+                        Tu inscripción se ha procesado con éxito. En breve
+                        recibirás los accesos por WhatsApp.
+                      </Typography>
+                    </Stack>
+                    {contract.firma_data && (
+                      <Box
+                        sx={{
+                          mt: 5,
+                          pt: 5,
+                          borderTop: '1px solid',
+                          borderColor: 'divider',
+                          width: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          '@media print': { mt: 2, pt: 2 },
+                        }}
+                      >
+                        <Typography
+                          variant='overline'
+                          color='text.secondary'
+                          sx={{ mb: 3, '@media print': { mb: 1 } }}
+                        >
+                          Certificado de Firma
+                        </Typography>
+                        <Box
+                          component={Paper}
+                          variant='info'
+                          sx={{
+                            bgcolor: 'background.paper',
+                            p: 3,
+                            boxShadow: 1,
+                            '@media print': {
+                              border: 'none',
+                              p: 0,
+                              boxShadow: 'none',
+                            },
+                          }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={contract.firma_data}
+                            alt='Firma Digital'
+                            style={{
+                              maxHeight: 128,
+                              filter: 'grayscale(100%) brightness(0%)',
+                              opacity: 0.9,
+                            }}
+                          />
+                        </Box>
+                        <Box sx={{ mt: 2, textAlign: 'center' }}>
+                          <Typography
+                            variant='body2'
+                            color='text.primary'
+                            sx={{
+                              fontWeight: 600,
+                              '@media print': { color: 'black' },
+                            }}
+                          >
+                            Firmado por: {contract.nombre_cliente_contrato}
+                          </Typography>
+                          <Typography
+                            variant='caption'
+                            color='text.secondary'
+                            sx={{
+                              fontWeight: 'medium',
+                              '@media print': { color: 'black' },
+                            }}
+                          >
+                            Fecha de Nacimiento:{' '}
+                            {contract.fecha_nacimiento_cliente}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    )}
+                    <Box sx={{ '@media print': { display: 'none' } }}>
+                      <PrintButton />
+                    </Box>
+                  </Stack>
+                ) : (
+                  <Box sx={{ '@media print': { display: 'none' } }}>
+                    <SignatureContainer id={id} />
+                  </Box>
                 )}
-                <div className='print:hidden'>
-                  <PrintButton />
-                </div>
-              </div>
-            ) : (
-              <div className='print:hidden'>
-                <SignatureContainer id={id} />
-              </div>
-            )}
-          </div>
-        </div>
+              </Box>
+            </Card>
 
-        {/* Footer */}
-        <div className='flex flex-col items-center gap-4 text-center print:mt-10'>
-          <div className='text-[10px] text-gray-400 font-bold uppercase tracking-[0.2em] flex items-center gap-3'>
-            <span>SECURE ENCRYPTION</span>
-            <span className='w-1 h-1 rounded-full bg-gray-200'></span>
-            <span>ID: {id.split('-')[0].toUpperCase()}</span>
-          </div>
-          <p className='text-[10px] text-gray-400 font-medium max-w-sm'>
-            Este documento tiene plena validez legal conforme a la Ley de
-            Servicios de la Sociedad de la Información y de Comercio
-            Electrónico.
-          </p>
-        </div>
-      </div>
-    </div>
+            {/* Footer */}
+            <Stack
+              spacing={2}
+              sx={{
+                alignItems: 'center',
+                textAlign: 'center',
+                '@media print': { mt: 5 },
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5,
+                  color: 'text.disabled',
+                }}
+              >
+                <Typography variant='overline'>SECURE ENCRYPTION</Typography>
+                <Box
+                  sx={{
+                    width: 4,
+                    height: 4,
+                    borderRadius: '50%',
+                    bgcolor: 'divider',
+                  }}
+                />
+                <Typography variant='overline'>
+                  ID: {id.split('-')[0].toUpperCase()}
+                </Typography>
+              </Box>
+              <Typography
+                variant='caption'
+                color='text.disabled'
+                sx={{ fontWeight: 'medium', maxWidth: 'sm' }}
+              >
+                Este documento tiene plena validez legal conforme a la Ley de
+                Servicios de la Sociedad de la Información y de Comercio
+                Electrónico.
+              </Typography>
+            </Stack>
+          </Stack>
+        </Container>
+      </Container>
+    </LightModeWrapper>
   );
 }
