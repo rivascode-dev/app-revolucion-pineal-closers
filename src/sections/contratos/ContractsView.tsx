@@ -95,7 +95,7 @@ export default function ContractsView({ contracts }: ContractsViewProps) {
                 </TableCell>
                 <TableCell>
                   <Typography variant='subtitle2' color='text.primary'>
-                    €{contract.importe}
+                    €{contract.importe_cuotas}
                   </Typography>
                   <Typography variant='overline' color='text.secondary'>
                     {contract.numero_cuotas} cuotas

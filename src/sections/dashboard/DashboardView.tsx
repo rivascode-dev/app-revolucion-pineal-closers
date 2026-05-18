@@ -25,7 +25,7 @@ export default function DashboardView({
     totalRevenue:
       contracts
         ?.filter((c) => c.estado === 'firmado')
-        .reduce((acc, c) => acc + (Number(c.importe) || 0), 0) || 0,
+        .reduce((acc, c) => acc + (Number(c.importe_cuotas) || 0), 0) || 0,
   };
 
   const cards = [
@@ -163,7 +163,7 @@ export default function DashboardView({
                         {contract.nombre_cliente}
                       </Typography>
                       <Typography variant='caption' color='text.secondary'>
-                        €{contract.importe} • {contract.numero_cuotas} cuotas
+                        €{contract.importe_cuotas} • {contract.numero_cuotas} cuotas
                       </Typography>
                     </Box>
                   </Stack>

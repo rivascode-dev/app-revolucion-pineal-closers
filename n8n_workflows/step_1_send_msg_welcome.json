@@ -1,0 +1,208 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.body.closer_name }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "Daniel"
+            },
+            {
+              "value2": "Albert",
+              "output": 1
+            },
+            {
+              "value2": "Nathalia",
+              "output": 2
+            }
+          ]
+        }
+      },
+      "id": "08e9ed1b-c1d1-459f-a5fe-a248479442d9",
+      "name": "Switch por Closer",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        -304
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/send-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "={{ $json.body.telefono_cliente }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6d4ac875-39d0-4b4f-965b-50e87e5c9b88",
+      "name": "post_whatsapp_daniel1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -896,
+        -608
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "Lwon3g7FdqiloRV0",
+          "name": "WasenderAPI - Daniel"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/send-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "={{ $json.body.telefono_cliente }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1722487b-6f5a-4af9-9cd1-6ee51c987055",
+      "name": "post_whatsapp_albert1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -880,
+        -368
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "9S2DAqv04jplTv0h",
+          "name": "WasenderAPI - Albert"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/send-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "={{ $json.body.telefono_cliente }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2e8d38c4-e4f8-4e15-ab3a-1dceb4813573",
+      "name": "post_whatsapp_nathatia1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -864,
+        -128
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "BAwn067QUZPtpGJt",
+          "name": "WasenderAPI - Natalia"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "welcome",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1600,
+        -272
+      ],
+      "id": "c6093da7-4fe4-4c8a-aa17-e49ec64ac3e1",
+      "name": "trig_webhook_welcome",
+      "webhookId": "ea7e22da-5247-4422-afd6-e7825a8bae27"
+    }
+  ],
+  "connections": {
+    "Switch por Closer": {
+      "main": [
+        [
+          {
+            "node": "post_whatsapp_daniel1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post_whatsapp_albert1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post_whatsapp_nathatia1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "trig_webhook_welcome": {
+      "main": [
+        [
+          {
+            "node": "Switch por Closer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "5fb31353bf4dc16311b0347ead4b884fad18ae1960ff4cbda8f09bf4a2cad0c8"
+  }
+}

@@ -17,11 +17,12 @@ Este archivo define las directivas generales de interacción para el agente de I
 
 ## 2. GESTIÓN DE ARTEFACTOS
 - **Trazabilidad:** Nombres descriptivos con prefijo `YYYY-MM-DD_nombre.md`.
-- **Ubicación:** Todos los artefactos deben guardarse en la carpeta `.artifacts/`.
+- **Ubicación:** Todos los artefactos deben estar en tu brain y genera una copia en la carpeta `.artifacts/`.
 
 ---
 *Para estándares técnicos, consultar:*
 - [Next.js Architecture](.agents/nextjs-architecture.md)
 - [Naming Conventions](.agents/naming-conventions.md)
-- [Material UI and Next.js](.agents/mui-nextjs.md)
+- [n8n code conventions](.agents/n8n-conventions.md)
+- [Tailwind CSS v4 and Shadcn/ui](.agents/tailwind-shadcn.md)
 

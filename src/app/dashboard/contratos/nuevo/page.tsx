@@ -44,6 +44,26 @@ export default function NewContractPage() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
+  const [formDataState, setFormDataState] = useState({
+    nombre_cliente: '',
+    telefono_cliente: '',
+    email_cliente: '',
+    tipo_contrato: TYPE_OF_CONTRACTS[0].value,
+    moneda: CURRENCIES[0],
+    importe: '',
+    numero_cuotas: 1,
+    dia_cobro: 1,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormDataState({
+      ...formDataState,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const isFormValid = Object.values(formDataState).every(val => val !== '' && val !== null);
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError(null);
@@ -174,6 +194,8 @@ export default function NewContractPage() {
                 required
                 fullWidth
                 variant="outlined"
+                value={formDataState.nombre_cliente}
+                onChange={handleChange}
                 slotProps={{ inputLabel: { shrink: true } }}
               />
 
@@ -186,6 +208,22 @@ export default function NewContractPage() {
                 required
                 fullWidth
                 variant="outlined"
+                value={formDataState.telefono_cliente}
+                onChange={handleChange}
+                slotProps={{ inputLabel: { shrink: true } }}
+              />
+
+              <TextField
+                id="email_cliente"
+                name="email_cliente"
+                label="Correo Electrónico"
+                placeholder="cliente@email.com"
+                type="email"
+                required
+                fullWidth
+                variant="outlined"
+                value={formDataState.email_cliente}
+                onChange={handleChange}
                 slotProps={{ inputLabel: { shrink: true } }}
               />
 
@@ -197,8 +235,9 @@ export default function NewContractPage() {
                 required
                 fullWidth
                 variant="outlined"
+                value={formDataState.tipo_contrato}
+                onChange={handleChange}
                 slotProps={{ inputLabel: { shrink: true } }}
-                defaultValue={TYPE_OF_CONTRACTS[0].value}
               >
                 {TYPE_OF_CONTRACTS.map((contract) => (
                   <MenuItem key={contract.value} value={contract.value}>
@@ -225,8 +264,9 @@ export default function NewContractPage() {
                   label="Moneda"
                   required
                   variant="outlined"
+                  value={formDataState.moneda}
+                  onChange={handleChange}
                   slotProps={{ inputLabel: { shrink: true } }}
-                  defaultValue={CURRENCIES[0]}
                   sx={{ width: '40%' }}
                 >
                   {CURRENCIES.map((currency) => (
@@ -241,11 +281,13 @@ export default function NewContractPage() {
                   name="importe"
                   type="number"
                   slotProps={{ htmlInput: { step: '0.01' }, inputLabel: { shrink: true } }}
-                  label="Importe Total"
+                  label="Importe de Cuota"
                   placeholder="0.00"
                   required
                   fullWidth
                   variant="outlined"
+                  value={formDataState.importe}
+                  onChange={handleChange}
                 />
               </Stack>
 
@@ -257,8 +299,9 @@ export default function NewContractPage() {
                 required
                 fullWidth
                 variant="outlined"
+                value={formDataState.numero_cuotas}
+                onChange={handleChange}
                 slotProps={{ inputLabel: { shrink: true } }}
-                defaultValue={1}
               >
                 {[1, 2, 3, 4, 6, 12].map((n) => (
                   <MenuItem key={n} value={n}>
@@ -276,8 +319,9 @@ export default function NewContractPage() {
                 placeholder="1"
                 required
                 fullWidth
+                value={formDataState.dia_cobro}
+                onChange={handleChange}
                 slotProps={{ htmlInput: { min: 1, max: 31 }, inputLabel: { shrink: true } }}
-                defaultValue={1}
               />
             </Stack>
           </Box>
@@ -291,7 +335,7 @@ export default function NewContractPage() {
           <Box sx={{ pt: 3 }}>
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || !isFormValid}
               variant="contained"
               fullWidth
               size="large"
@@ -307,6 +351,10 @@ export default function NewContractPage() {
                 color: 'background.paper',
                 '&:hover': {
                   bgcolor: 'text.secondary',
+                },
+                '&.Mui-disabled': {
+                  bgcolor: 'action.disabledBackground',
+                  color: 'action.disabled'
                 }
               }}
             >
