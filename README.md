@@ -1,4 +1,4 @@
-# git 
+# revolucion pineal closers app 
 
 Este repositorio contiene la plataforma oficial de gestión de acuerdos de acceso y automatización de onboarding para los Closers y Alumnos de **Revolución Pineal**. El ecosistema está diseñado bajo una arquitectura de alto rendimiento con **Next.js 16**, **Supabase SSR** y flujos avanzados de orquestación en **n8n**.
 
