@@ -1,258 +1,112 @@
-'use client'
+'use client';
 
-import { useTransition, useState } from 'react'
-import { login } from '@/actions/auth'
-import { Lock, Mail, ArrowRight } from 'lucide-react'
-import { Box, Typography, TextField, Button, Card, InputAdornment, CircularProgress } from '@mui/material'
+import { useTransition, useState } from 'react';
+import { loginAction } from '@/actions/auth';
+import { Lock, Mail, ArrowRight, Loader2 } from 'lucide-react';
 
 export default function LoginPage() {
-  const [isPending, startTransition] = useTransition()
-  const [error, setError] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    setError(null)
-    const formData = new FormData(event.currentTarget)
+    event.preventDefault();
+    setError(null);
+    const formData = new FormData(event.currentTarget);
 
     startTransition(async () => {
-      const result = await login(formData)
-      if (result?.error) {
-        setError(result.error)
+      const result = await loginAction(formData);
+      if (result && !result.success && result.error) {
+        setError(result.error);
       }
-    })
-  }
+    });
+  };
 
   return (
-    <Box
-      component="main"
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        bgcolor: '#050505',
-        position: 'relative',
-        overflow: 'hidden',
-      }}
-    >
+    <main className="min-h-screen flex items-center justify-center bg-[#050505] relative overflow-hidden font-sans">
       {/* Background Orbs */}
-      <Box
-        sx={{
-          position: 'absolute',
-          top: '-10%',
-          left: '-10%',
-          width: '40%',
-          height: '40%',
-          bgcolor: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '50%',
-          filter: 'blur(120px)',
-        }}
-      />
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: '-10%',
-          right: '-10%',
-          width: '40%',
-          height: '40%',
-          bgcolor: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '50%',
-          filter: 'blur(120px)',
-        }}
-      />
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px]" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-white/5 rounded-full blur-[120px]" />
 
-      <Box sx={{ width: '100%', maxWidth: 448, p: 2, position: 'relative', zIndex: 10 }}>
-        <Card
-          sx={{
-            bgcolor: '#0a0a0a',
-            border: '1px solid rgba(255, 255, 255, 0.08)',
-            p: 5,
-            borderRadius: '2.5rem',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-            backdropFilter: 'blur(24px)',
-          }}
-        >
-          <Box sx={{ textAlign: 'center', mb: 5 }}>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                width: 64,
-                height: 64,
-                bgcolor: 'white',
-                borderRadius: '1rem',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 3,
-                boxShadow: '0 0 40px rgba(255,255,255,0.15)',
-              }}
-            >
-              <Typography variant="h5" sx={{ color: 'black', fontWeight: 900 }}>
-                RP
-              </Typography>
-            </Box>
-            <Typography variant="h5" color="white">
+      <div className="w-full max-w-md p-4 relative z-10">
+        <div className="bg-[#0a0a0a]/80 border border-white/[0.08] p-10 rounded-[2.5rem] shadow-2xl backdrop-blur-3xl">
+          {/* Logo / Header */}
+          <div className="text-center mb-8">
+            <div className="inline-flex w-16 h-16 bg-white rounded-2xl items-center justify-center mb-6 shadow-[0_0_40px_rgba(255,255,255,0.15)] transition-transform hover:scale-105 duration-300">
+              <span className="text-black text-xl font-black tracking-tighter">RP</span>
+            </div>
+            <h1 className="text-2xl font-extrabold text-white tracking-tight">
               Bienvenido de nuevo
-            </Typography>
-            <Typography variant="body2" color="grey.500" sx={{ mt: 1 }}>
+            </h1>
+            <p className="text-sm text-zinc-400 mt-2">
               Gestiona tus contratos con Revolución Pineal
-            </Typography>
-          </Box>
+            </p>
+          </div>
 
-          <form onSubmit={handleSubmit}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mb: error ? 2 : 4 }}>
-              <TextField
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="Tu correo electrónico"
-                variant="outlined"
-                fullWidth
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Mail size={20} color="grey" />
-                      </InputAdornment>
-                    ),
-                    sx: {
-                      bgcolor: 'rgba(255, 255, 255, 0.05)',
-                      color: 'white',
-                      borderRadius: '1rem',
-                      '& fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.05)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
-                      },
-                      '&.Mui-focused': {
-                        bgcolor: 'rgba(255, 255, 255, 0.08)',
-                      },
-                    }
-                  }
-                }}
-              />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-3">
+              {/* Email Input */}
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                  <Mail className="h-5 w-5 text-zinc-500" />
+                </div>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  placeholder="Tu correo electrónico"
+                  className="w-full h-12 bg-white/5 border border-white/5 rounded-2xl pl-12 pr-4 text-white text-sm font-medium transition-all placeholder:text-zinc-500 hover:bg-white/8 hover:border-white/10 focus:bg-white/8 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                />
+              </div>
 
-              <TextField
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="Tu contraseña"
-                variant="outlined"
-                fullWidth
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Lock size={20} color="grey" />
-                      </InputAdornment>
-                    ),
-                    sx: {
-                      bgcolor: 'rgba(255, 255, 255, 0.05)',
-                      color: 'white',
-                      borderRadius: '1rem',
-                      '& fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.05)',
-                      },
-                      '&:hover fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'rgba(255, 255, 255, 0.2)',
-                      },
-                      '&.Mui-focused': {
-                        bgcolor: 'rgba(255, 255, 255, 0.08)',
-                      },
-                    }
-                  }
-                }}
-              />
-            </Box>
+              {/* Password Input */}
+              <div className="relative">
+                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                  <Lock className="h-5 w-5 text-zinc-500" />
+                </div>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  placeholder="Tu contraseña"
+                  className="w-full h-12 bg-white/5 border border-white/5 rounded-2xl pl-12 pr-4 text-white text-sm font-medium transition-all placeholder:text-zinc-500 hover:bg-white/8 hover:border-white/10 focus:bg-white/8 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                />
+              </div>
+            </div>
 
+            {/* Error Message */}
             {error && (
-              <Box
-                sx={{
-                  color: '#f87171',
-                  fontSize: '0.75rem',
-                  bgcolor: 'rgba(248, 113, 113, 0.05)',
-                  p: 2,
-                  borderRadius: '0.75rem',
-                  border: '1px solid rgba(248, 113, 113, 0.1)',
-                  mb: 4,
-                  animation: 'fadeIn 0.3s ease-out',
-                  '@keyframes fadeIn': {
-                    from: { opacity: 0, transform: 'translateY(-8px)' },
-                    to: { opacity: 1, transform: 'translateY(0)' },
-                  },
-                }}
-              >
+              <div className="text-red-400 text-xs bg-red-400/5 p-3.5 rounded-xl border border-red-400/10 animate-fade-in">
                 {error}
-              </Box>
+              </div>
             )}
 
-            <Button
+            {/* Submit Button */}
+            <button
               type="submit"
               disabled={isPending}
-              fullWidth
-              sx={{
-                bgcolor: 'white',
-                color: 'black',
-                fontSize: '0.875rem',
-                fontWeight: 'bold',
-                borderRadius: '1rem',
-                py: 2,
-                textTransform: 'none',
-                boxShadow: '0 10px 30px rgba(255,255,255,0.1)',
-                '&:hover': {
-                  bgcolor: 'grey.200',
-                },
-                '&:active': {
-                  transform: 'scale(0.98)',
-                },
-                '&.Mui-disabled': {
-                  opacity: 0.5,
-                  bgcolor: 'white',
-                  color: 'black',
-                }
-              }}
+              className="w-full h-12 bg-white text-black text-sm font-bold rounded-2xl transition-all shadow-[0_10px_30px_rgba(255,255,255,0.1)] hover:bg-zinc-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 mt-2"
             >
               {isPending ? (
-                <CircularProgress size={20} color="inherit" />
+                <Loader2 className="h-5 w-5 animate-spin text-black" />
               ) : (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <>
                   Entrar al Panel
-                  <ArrowRight size={18} />
-                </Box>
+                  <ArrowRight className="h-[18px] w-[18px]" />
+                </>
               )}
-            </Button>
+            </button>
           </form>
 
-          <Box
-            sx={{
-              mt: 4,
-              pt: 4,
-              borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-              textAlign: 'center',
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                color: 'grey.600',
-                textTransform: 'uppercase',
-                letterSpacing: '0.1em',
-                fontWeight: 600,
-              }}
-            >
+          {/* Footer */}
+          <div className="mt-8 pt-6 border-t border-white/5 text-center">
+            <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">
               Exclusivo para Closers
-            </Typography>
-          </Box>
-        </Card>
-      </Box>
-    </Box>
-  )
+            </span>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }

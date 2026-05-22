@@ -1,92 +1,70 @@
 'use client';
 
 import { useState } from 'react';
-import { User, LogOut, ChevronDown } from 'lucide-react';
-import { signOut } from '@/actions/auth';
+import { LogOut, ChevronDown } from 'lucide-react';
+import { signOutAction } from '@/actions/auth';
 import { ThemeToggle } from '../ThemeToggle';
-import { AppBar, Toolbar, Box, Typography, Menu, MenuItem, Avatar, Fade } from '@mui/material';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Topbar({ userEmail }: { userEmail: string }) {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [open, setOpen] = useState(false);
 
   const handleSignOut = () => {
-    handleClose();
-    signOut();
+    signOutAction();
   };
 
-  return (
-    <AppBar
-      color='inherit'
-      elevation={0}
-      sx={{
-        bgcolor: 'background.paper',
-        borderBottom: '1px solid',
-        borderColor: 'divider',
-      }}
-    >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Box sx={{ flex: 1 }} />
-        
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <ThemeToggle />
-          
-          <Box
-            onClick={handleClick}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.5,
-              p: 1,
-              borderRadius: 3,
-              cursor: 'pointer',
-              transition: 'background-color 0.2s',
-              '&:hover': { bgcolor: 'action.hover' }
-            }}
-          >
-            <Avatar sx={{ width: 40, height: 40 }}>
-              <User size={20} />
-            </Avatar>
-            <Box sx={{ display: { xs: 'none', sm: 'block' }, textAlign: 'left' }}>
-              <Typography variant='subtitle2' sx={{ color: 'text.primary' }}>
-                Mi cuenta
-              </Typography>
-              <Typography variant='caption' sx={{ display: 'block', maxWidth: 120, overflow: 'hidden', textOverflow: 'ellipsis', color: 'text.secondary' }}>
-                {userEmail}
-              </Typography>
-            </Box>
-            <ChevronDown size={14} style={{ transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'none' }} />
-          </Box>
+  const initialLetter = userEmail ? userEmail.charAt(0).toUpperCase() : 'U';
 
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            slots={{ transition: Fade }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-            <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid', borderColor: 'divider', mb: 1 }}>
-              <Typography variant="caption" color="text.secondary">Conectado como</Typography>
-              <Typography variant="subtitle2" sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+  return (
+    <header className="fixed top-0 right-0 left-20 md:left-64 h-16 bg-background/80 backdrop-blur-md border-b border-border/50 z-40 flex items-center justify-between px-6 transition-all duration-300">
+      <div className="flex-1" />
+
+      <div className="flex items-center gap-4">
+        {/* Selector de Tema */}
+        <ThemeToggle />
+
+        {/* Menu de Perfil / Cuenta */}
+        <DropdownMenu onOpenChange={setOpen}>
+          <DropdownMenuTrigger className="flex items-center gap-2 p-1.5 rounded-xl cursor-pointer transition-all duration-300 hover:bg-accent border border-transparent hover:border-border/50 outline-none select-none">
+            <div className="w-9 h-9 rounded-lg bg-linear-to-tr from-primary to-purple-500 text-primary-foreground flex items-center justify-center font-bold text-sm shadow-sm">
+              {initialLetter}
+            </div>
+            <div className="hidden sm:block text-left">
+              <p className="text-xs font-semibold text-foreground/80 leading-none">Mi cuenta</p>
+              <p className="text-[10px] text-muted-foreground max-w-[120px] truncate leading-normal mt-0.5">
                 {userEmail}
-              </Typography>
-            </Box>
-            <MenuItem onClick={handleSignOut} sx={{ color: 'error.main', py: 1.5, px: 2, gap: 1.5 }}>
-              <LogOut size={16} />
+              </p>
+            </div>
+            <ChevronDown
+              className={`h-4 w-4 text-muted-foreground transition-transform duration-300 ${
+                open ? 'rotate-180' : 'none'
+              }`}
+            />
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent className="w-56 mt-2" align="end">
+            <div className="px-3 py-2 text-left">
+              <DropdownMenuLabel className="p-0">Conectado como</DropdownMenuLabel>
+              <p className="text-xs font-medium text-foreground truncate mt-0.5">{userEmail}</p>
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={handleSignOut}
+              className="text-destructive focus:bg-destructive/10 focus:text-destructive gap-2.5 py-2"
+            >
+              <LogOut className="h-4 w-4" />
               Cerrar Sesión
-            </MenuItem>
-          </Menu>
-        </Box>
-      </Toolbar>
-    </AppBar>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
   );
 }

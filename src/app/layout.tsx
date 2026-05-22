@@ -1,17 +1,18 @@
 import type { Metadata } from 'next';
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import { Inter } from 'next/font/google';
+import '@/app/globals.css';
+import { Toaster } from 'sonner';
+import { ThemeProvider } from '@/components/providers/ThemeProvider';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
 
 export const metadata: Metadata = {
-  title: 'Revolucion Pineal - Sistema de Firmas',
-  description: 'Revolucion Pineal - Sistema de Firmas',
+  title: 'Revolución Pineal - Sistema de Firmas',
+  description: 'Sistema administrativo y de firmas de Revolución Pineal',
 };
-
-import { Toaster } from 'sonner';
-import { InitColorSchemeScript } from '@mui/material';
-import ThemeMUIProvider from '@/components/providers/ThemeMUIProvider';
 
 export default function RootLayout({
   children,
@@ -19,15 +20,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='es' suppressHydrationWarning>
-      <body>
-        <InitColorSchemeScript attribute='class' defaultMode='light' />
-        <ThemeMUIProvider>
+    <html lang='es' suppressHydrationWarning className={inter.variable}>
+      <body className="antialiased min-h-screen bg-background font-sans text-foreground">
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
           {children}
           <Toaster position='top-right' theme='dark' />
-        </ThemeMUIProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
-

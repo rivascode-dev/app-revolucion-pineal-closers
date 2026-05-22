@@ -29,5 +29,5 @@ export default async function DashboardPage() {
 
   const { data: contracts } = await query;
 
-  return <DashboardView contracts={contracts} />;
+  return <DashboardView contracts={contracts} isCloser={isCloser} userId={user.id} />;
 }

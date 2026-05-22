@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache'
 /**
  * Handle user login with email and password
  */
-export async function login(formData: FormData) {
+export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const supabase = await createClient()
@@ -18,7 +18,7 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    return { error: error.message }
+    return { success: false, error: error.message }
   }
 
   revalidatePath('/', 'layout')
@@ -28,7 +28,7 @@ export async function login(formData: FormData) {
 /**
  * Handle user sign out
  */
-export async function signOut() {
+export async function signOutAction() {
   const supabase = await createClient()
   
   const { data: { user } } = await supabase.auth.getUser()

@@ -1,33 +1,38 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
-import { Sidebar } from '@/components/layout/Sidebar'
-import { Topbar } from '@/components/layout/Topbar'
-import { Box } from '@mui/material'
+import { createClient } from '@/lib/supabase/server';
+import { redirect } from 'next/navigation';
+import { Sidebar } from '@/components/layout/Sidebar';
+import { Topbar } from '@/components/layout/Topbar';
 
 export default async function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const supabase = await createClient()
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect('/login')
+    redirect('/login');
   }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
+    <div className="flex min-h-screen bg-background text-foreground">
+      {/* Sidebar - Componente estático/navegación lateral */}
       <Sidebar />
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+
+      {/* Contenedor Principal */}
+      <div className="flex-1 flex flex-col min-w-0 transition-all duration-300 pl-20 md:pl-64">
+        {/* Topbar - Navegación superior */}
         <Topbar userEmail={user.email || ''} />
-        <Box component="main" sx={{ flex: 1, p: { xs: 3, md: 5 } }}>
+
+        {/* Contenido Principal con Padding superior para compensar el Topbar fijo */}
+        <main className="flex-1 p-4 md:p-8 pt-20">
           {children}
-        </Box>
-      </Box>
-    </Box>
-  )
+        </main>
+      </div>
+    </div>
+  );
 }

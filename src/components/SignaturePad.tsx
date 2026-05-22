@@ -2,8 +2,8 @@
 
 import { useRef, useState } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
-import { Eraser, Check } from 'lucide-react';
-import { Box, Button, Typography, Stack, CircularProgress } from '@mui/material';
+import { Eraser, Check, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SignaturePadProps {
   onSign: (signatureData: string) => Promise<void>;
@@ -37,76 +37,48 @@ export function SignaturePad({ onSign, disabled = false }: SignaturePadProps) {
   };
 
   return (
-    <Stack spacing={3}>
-      <Box sx={{ position: 'relative', '&:hover .signature-glow': { opacity: 0.5, transitionDuration: '200ms' } }}>
-        <Box sx={{
-          position: 'absolute',
-          inset: -2,
-          background: 'linear-gradient(to right, var(--mui-palette-divider), transparent)',
-          borderRadius: 4,
-          filter: 'blur(8px)',
-          opacity: 0.3,
-          transition: 'opacity 1000ms',
-        }} className="signature-glow" />
-        <Box sx={{
-          position: 'relative',
-          border: '1px solid',
-          borderColor: 'divider',
-          borderRadius: 4,
-          bgcolor: 'background.paper',
-          overflow: 'hidden',
-          boxShadow: 1,
-        }}>
-          <Box sx={{
-            position: 'absolute',
-            top: 16,
-            left: 24,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            color: 'text.disabled',
-            userSelect: 'none',
-            pointerEvents: 'none'
-          }}>
-            <Typography variant="overline">
-              Firme aquí
-            </Typography>
-          </Box>
+    <div className="space-y-4">
+      <div className="relative group">
+        {/* Glow effect */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/30 to-violet-500/10 rounded-2xl blur-lg opacity-40 group-hover:opacity-60 transition-all duration-300 pointer-events-none" />
+        
+        <div className="relative rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.02)]">
+          <div className="absolute top-4 left-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest pointer-events-none select-none">
+            Firme aquí
+          </div>
           <SignatureCanvas
             ref={sigCanvas}
             onBegin={() => setIsEmpty(false)}
-            penColor='black'
+            penColor="black"
             canvasProps={{
               style: { width: '100%', height: '300px', cursor: 'crosshair' },
             }}
           />
-        </Box>
-      </Box>
+        </div>
+      </div>
 
-      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+      <div className="flex flex-col sm:flex-row gap-3">
         <Button
           onClick={clear}
-          variant="outlined"
-          color="inherit"
-          startIcon={<Eraser size={16} strokeWidth={3} />}
-          sx={{ flex: 1 }}
+          variant="outline"
+          className="flex-1 font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 border-slate-200 hover:bg-slate-50 text-slate-700 transition-all"
         >
+          <Eraser className="h-4 w-4" strokeWidth={3} />
           Limpiar Lienzo
         </Button>
         <Button
           onClick={handleSign}
           disabled={isEmpty || isSigning || disabled}
-          variant="contained"
-          sx={{ flex: 1.5 }}
-          startIcon={!isSigning && <Check size={18} strokeWidth={3} />}
+          className="flex-[1.5] font-bold py-2.5 rounded-xl flex items-center justify-center gap-2 transition-all"
         >
           {isSigning ? (
-            <CircularProgress size={20} color="inherit" />
+            <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            'Finalizar y Firmar'
+            <Check className="h-4 w-4" strokeWidth={3} />
           )}
+          {isSigning ? 'Firmando...' : 'Finalizar y Firmar'}
         </Button>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 }

@@ -192,3 +192,15 @@ Para garantizar una experiencia de usuario que se sienta premium, interactiva y 
   ```tailwind
   transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-md
   ```
+
+---
+
+## 6. Integración de Modo Oscuro (Dark Mode)
+
+- El manejo del tema debe respetar las variables CSS.
+- Se recomienda el uso de dependencias compatibles con App Router como `next-themes`, aplicando la clase `.dark` al elemento `html` para prevenir desajustes de hidratación.
+
+## 7. Responsive Design (Breakpoints)
+
+- **Mobile-First Estricto:** Define el layout base para móviles sin utilizar prefijos de breakpoint en primer nivel.
+- **Estandarización de Saltos:** Para reducir fragmentación visual, escala preferentemente usando saltos lógicos (`md:` para tablets y `lg:` para escritorio), evitando sobrecargar de breakpoints si no es necesario semánticamente.

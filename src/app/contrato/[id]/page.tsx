@@ -5,7 +5,6 @@ import { CheckCircle2 } from 'lucide-react';
 import { SignatureContainer } from '@/sections/contratos/SignatureContainer';
 import ReactMarkdown from 'react-markdown';
 import { PrintButton } from '@/components/PrintButton';
-import { Box, Container, Typography, Card, Stack, Paper } from '@mui/material';
 import { LightModeWrapper } from '@/sections/contratos/LightModeWrapper';
 
 interface PageProps {
@@ -43,342 +42,136 @@ export default async function ContractPage({ params }: PageProps) {
       new Date(contract.created_at).toLocaleDateString('es-ES'),
     );
 
+  const isFirmado = contract.estado === 'firmado';
+
   return (
     <LightModeWrapper>
-      <Container>
-        {/* Background patterns */}
-        {/* <Box
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            overflow: 'hidden',
-            pointerEvents: 'none',
-            opacity: 0.4,
-            '@media print': { display: 'none' },
-          }}
-        >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '-10%',
-              right: '-10%',
-              width: '50%',
-              height: '50%',
-              bgcolor: 'primary.light',
-              borderRadius: '50%',
-              filter: 'blur(120px)',
-              opacity: 0.5,
-            }}
-          />
-          <Box
-            sx={{
-              position: 'absolute',
-              bottom: '-10%',
-              left: '-10%',
-              width: '50%',
-              height: '50%',
-              bgcolor: 'secondary.light',
-              borderRadius: '50%',
-              filter: 'blur(120px)',
-              opacity: 0.5,
-            }}
-          />
-        </Box> */}
+      <div className="relative min-h-screen bg-slate-50/50 print:bg-white py-12 md:py-20 px-4 sm:px-6 lg:px-8 print:p-0">
+        
+        {/* Decorative background shapes */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30 print:hidden">
+          <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute -bottom-[10%] -left-[10%] w-[50%] h-[50%] bg-violet-400/10 rounded-full blur-[120px]" />
+        </div>
 
-        <Container
-          maxWidth='md'
-          sx={{
-            position: 'relative',
-            zIndex: 10,
-            '@media print': { boxShadow: 'none', maxWidth: 'none', px: 0 },
-          }}
-        >
-          <Stack
-            spacing={{ xs: 5, md: 10 }}
-            sx={{ '@media print': { spacing: 2 }, mt: { xs: 2, md: 2 } }}
-          >
+        <div className="relative max-w-3xl mx-auto z-10 print:max-w-none print:p-0">
+          <div className="space-y-8 md:space-y-12 print:space-y-6">
+            
             {/* Header */}
-            <Stack
-              spacing={2}
-              sx={{
-                alignItems: 'center',
-                textAlign: 'center',
-                '@media print': { spacing: 1 },
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 1,
-                  px: 2,
-                  py: 0.5,
-                  borderRadius: 10,
-                  bgcolor: 'background.paper',
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  boxShadow: 1,
-                  '@media print': { display: 'none' },
-                }}
-              >
-                <Box
-                  sx={{
-                    width: 6,
-                    height: 6,
-                    borderRadius: '50%',
-                    bgcolor: 'success.main',
-                  }}
-                />
-                <Typography variant='overline' color='portal'>
+            <div className="flex flex-col items-center text-center space-y-3 print:space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm print:hidden">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                   Portal Seguro de Firma
-                </Typography>
-              </Box>
-              <Typography variant='h2' component='h1' color='contract-title'>
+                </span>
+              </div>
+              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
                 Revolución Pineal
-              </Typography>
-              <Typography variant='subtitle1' color='contract-subtitle'>
+              </h1>
+              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">
                 Contrato de Formación Académica
-              </Typography>
-            </Stack>
+              </p>
+            </div>
 
-            {/* Contract Content */}
-            <Card>
-              <Box
-                sx={{
-                  p: { xs: 3, md: 6 },
-                  borderBottom: '1px solid',
-                  borderColor: 'divider',
-                  '@media print': { border: 'none', p: 0 },
-                }}
-              >
-                <Box
-                  sx={{
-                    '& h1, & h2, & h3, & h4, & h5, & h6': {
-                      color: 'text.primary',
-                      fontWeight: 900,
-                      letterSpacing: '-0.02em',
-                      mb: 2,
-                      mt: 4,
-                    },
-                    '& p': {
-                      color: 'text.primary',
-                      lineHeight: 1.8,
-                      mb: 2,
-                      opacity: 0.8,
-                    },
-                    '& strong': { color: 'text.primary', fontWeight: 'bold' },
-                    '& li': { color: 'text.primary', mb: 1, opacity: 0.8 },
-                    '& ul, & ol': { pl: 3, mb: 2 },
-                    '& ::selection': {
-                      bgcolor: 'text.primary',
-                      color: 'background.paper',
-                    },
-                    fontFamily: 'serif',
-                  }}
+            {/* Document Card */}
+            <div className="rounded-3xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden print:border-none print:shadow-none print:rounded-none">
+              
+              {/* Document Text */}
+              <div className="p-6 sm:p-12 border-b border-slate-100 print:border-none print:p-0">
+                <div className="font-serif text-slate-800 leading-loose text-sm md:text-base space-y-4 
+                  [&_h1]:text-2xl [&_h1]:font-black [&_h1]:tracking-tight [&_h1]:text-slate-900 [&_h1]:mt-8 [&_h1]:mb-4
+                  [&_h2]:text-xl [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-slate-900 [&_h2]:mt-6 [&_h2]:mb-3
+                  [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-slate-900 [&_h3]:mt-6 [&_h3]:mb-2
+                  [&_p]:text-slate-700 [&_p]:leading-relaxed [&_p]:mb-4 [&_p]:opacity-90
+                  [&_strong]:text-slate-900 [&_strong]:font-bold
+                  [&_li]:text-slate-700 [&_li]:mb-1.5 [&_li]:opacity-90 [&_li]:list-disc
+                  [&_ul]:pl-6 [&_ul]:mb-4
+                  [&_ol]:pl-6 [&_ol]:mb-4 [&_ol]:list-decimal"
                 >
                   <ReactMarkdown>{contractText}</ReactMarkdown>
-                </Box>
-              </Box>
+                </div>
+              </div>
 
-              {/* Signature Section */}
-              <Box
-                sx={{
-                  p: { xs: 4, md: 8 },
-                  bgcolor: 'action.hover',
-                  '@media print': { bgcolor: 'transparent', p: 0, mt: 4 },
-                }}
-              >
-                {contract.estado === 'firmado' ? (
-                  <Stack
-                    spacing={3}
-                    sx={{
-                      py: 2,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        position: 'relative',
-                        '@media print': { display: 'none' },
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          inset: -16,
-                          bgcolor: 'success.main',
-                          opacity: 0.1,
-                          borderRadius: '50%',
-                          filter: 'blur(20px)',
-                        }}
-                      />
-                      <Box
-                        sx={{
-                          position: 'relative',
-                          bgcolor: 'success.main',
-                          opacity: 0.2,
-                          p: 2,
-                          borderRadius: '50%',
-                          border: '1px solid',
-                          borderColor: 'success.light',
-                        }}
-                      >
-                        <CheckCircle2
-                          size={56}
-                          style={{ color: '#000' }}
-                          strokeWidth={3}
-                        />
-                      </Box>
-                    </Box>
-                    <Stack
-                      spacing={1}
-                      sx={{
-                        textAlign: 'center',
-                        '@media print': { display: 'none' },
-                      }}
-                    >
-                      <Typography variant='h5' color='text.primary'>
+              {/* Signature / Actions Pad Section */}
+              <div className="p-6 sm:p-12 bg-slate-50/50 border-t border-slate-100 print:bg-transparent print:border-none print:p-0 print:mt-8">
+                {isFirmado ? (
+                  <div className="py-2 flex flex-col items-center justify-center space-y-6">
+                    
+                    {/* Status Badge */}
+                    <div className="relative print:hidden">
+                      <div className="absolute -inset-4 bg-emerald-500/10 rounded-full blur-xl opacity-50" />
+                      <div className="relative w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-500 shadow-sm">
+                        <CheckCircle2 className="h-8 w-8" strokeWidth={3} />
+                      </div>
+                    </div>
+
+                    <div className="text-center space-y-2 print:hidden">
+                      <h3 className="text-xl font-extrabold text-slate-800">
                         ¡Contrato Firmado!
-                      </Typography>
-                      <Typography
-                        variant='body2'
-                        color='text.secondary'
-                        sx={{ maxWidth: '320px', mx: 'auto', lineHeight: 1.6 }}
-                      >
-                        Tu inscripción se ha procesado con éxito. En breve
-                        recibirás los accesos por WhatsApp.
-                      </Typography>
-                    </Stack>
+                      </h3>
+                      <p className="text-sm text-slate-500 max-w-sm mx-auto leading-relaxed">
+                        Tu inscripción se ha procesado con éxito. En breve recibirás los accesos por WhatsApp.
+                      </p>
+                    </div>
+
+                    {/* Signature Image and Certificate */}
                     {contract.firma_data && (
-                      <Box
-                        sx={{
-                          mt: 5,
-                          pt: 5,
-                          borderTop: '1px solid',
-                          borderColor: 'divider',
-                          width: '100%',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          alignItems: 'center',
-                          '@media print': { mt: 2, pt: 2 },
-                        }}
-                      >
-                        <Typography
-                          variant='overline'
-                          color='text.secondary'
-                          sx={{ mb: 3, '@media print': { mb: 1 } }}
-                        >
+                      <div className="pt-8 border-t border-slate-200/80 w-full flex flex-col items-center print:pt-4">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 print:mb-2">
                           Certificado de Firma
-                        </Typography>
-                        <Box
-                          component={Paper}
-                          variant='info'
-                          sx={{
-                            bgcolor: 'background.paper',
-                            p: 3,
-                            boxShadow: 1,
-                            '@media print': {
-                              border: 'none',
-                              p: 0,
-                              boxShadow: 'none',
-                            },
-                          }}
-                        >
+                        </p>
+                        
+                        <div className="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm print:border-none print:p-0 print:shadow-none">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={contract.firma_data}
-                            alt='Firma Digital'
-                            style={{
-                              maxHeight: 128,
-                              filter: 'grayscale(100%) brightness(0%)',
-                              opacity: 0.9,
-                            }}
+                            alt="Firma Digital"
+                            className="max-h-24 filter grayscale contrast-200 opacity-90 mx-auto"
                           />
-                        </Box>
-                        <Box sx={{ mt: 2, textAlign: 'center' }}>
-                          <Typography
-                            variant='body2'
-                            color='text.primary'
-                            sx={{
-                              fontWeight: 600,
-                              '@media print': { color: 'black' },
-                            }}
-                          >
+                        </div>
+
+                        <div className="mt-4 text-center space-y-1">
+                          <p className="text-sm font-bold text-slate-800 print:text-black">
                             Firmado por: {contract.nombre_cliente_contrato}
-                          </Typography>
-                          <Typography
-                            variant='caption'
-                            color='text.secondary'
-                            sx={{
-                              fontWeight: 'medium',
-                              '@media print': { color: 'black' },
-                            }}
-                          >
-                            Fecha de Nacimiento:{' '}
-                            {contract.fecha_nacimiento_cliente}
-                          </Typography>
-                        </Box>
-                      </Box>
+                          </p>
+                          <p className="text-xs text-slate-500 print:text-black">
+                            Fecha de Nacimiento: {contract.fecha_nacimiento_cliente}
+                          </p>
+                        </div>
+                      </div>
                     )}
-                    <Box sx={{ '@media print': { display: 'none' } }}>
+
+                    <div className="print:hidden">
                       <PrintButton />
-                    </Box>
-                  </Stack>
+                    </div>
+                  </div>
                 ) : (
-                  <Box sx={{ '@media print': { display: 'none' } }}>
+                  <div className="print:hidden">
                     <SignatureContainer id={id} />
-                  </Box>
+                  </div>
                 )}
-              </Box>
-            </Card>
+              </div>
+            </div>
 
             {/* Footer */}
-            <Stack
-              spacing={2}
-              sx={{
-                alignItems: 'center',
-                textAlign: 'center',
-                '@media print': { mt: 5 },
-              }}
-            >
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  color: 'text.disabled',
-                }}
-              >
-                <Typography variant='overline'>SECURE ENCRYPTION</Typography>
-                <Box
-                  sx={{
-                    width: 4,
-                    height: 4,
-                    borderRadius: '50%',
-                    bgcolor: 'divider',
-                  }}
-                />
-                <Typography variant='overline'>
+            <div className="flex flex-col items-center text-center space-y-3 pt-4 print:mt-12">
+              <div className="flex items-center gap-2 text-slate-400">
+                <span className="text-[10px] font-bold uppercase tracking-wider">
+                  SECURE ENCRYPTION
+                </span>
+                <span className="w-1.5 h-1.5 rounded-full bg-slate-200" />
+                <span className="text-[10px] font-bold uppercase tracking-wider">
                   ID: {id.split('-')[0].toUpperCase()}
-                </Typography>
-              </Box>
-              <Typography
-                variant='caption'
-                color='text.disabled'
-                sx={{ fontWeight: 'medium', maxWidth: 'sm' }}
-              >
-                Este documento tiene plena validez legal conforme a la Ley de
-                Servicios de la Sociedad de la Información y de Comercio
-                Electrónico.
-              </Typography>
-            </Stack>
-          </Stack>
-        </Container>
-      </Container>
+                </span>
+              </div>
+              <p className="text-[11px] font-medium text-slate-400 max-w-md leading-relaxed">
+                Este documento tiene plena validez legal conforme a la Ley de Servicios de la Sociedad de la Información y de Comercio Electrónico.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
     </LightModeWrapper>
   );
 }

@@ -1,183 +1,197 @@
 'use client';
 
-import { Plus, FileText, CheckCircle2, Clock, Filter } from 'lucide-react';
+import { Plus, FileText, CheckCircle2, Clock } from 'lucide-react';
 import Link from 'next/link';
 import { CopyButton } from '@/components/CopyButton';
 import { ContractSearch } from '@/sections/contratos/ContractSearch';
-import {
-  Box,
-  Typography,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Chip,
-  Avatar,
-  Stack,
-  IconButton,
-  Link as MuiLink,
-} from '@mui/material';
+import { Button } from '@/components/ui/button';
+import { Contract } from '@/types/contract';
+import { useContractsRealtime } from '@/hooks/useContractsRealtime';
+import { useSearchParams } from 'next/navigation';
 
 interface ContractsViewProps {
-  contracts: any[] | null;
+  contracts: Contract[] | null;
+  isCloser: boolean;
+  userId: string;
 }
 
-export default function ContractsView({ contracts }: ContractsViewProps) {
+export default function ContractsView({
+  contracts: initialContracts,
+  isCloser,
+  userId,
+}: ContractsViewProps) {
+  const searchParams = useSearchParams();
+  const search = searchParams.get('search') || undefined;
+  const contracts = useContractsRealtime(
+    initialContracts,
+    isCloser,
+    userId,
+    search,
+  );
   return (
-    <Stack spacing={4}>
-      <Stack
-        direction={{ xs: 'column', md: 'row' }}
-        sx={{ alignItems: { md: 'flex-end' }, justifyContent: 'space-between' }}
-        spacing={3}
-      >
-        <Box>
-          <Typography variant='h4'>Contratos</Typography>
-          <Typography variant='body1' color='text.secondary' sx={{ mt: 1 }}>
+    <div className='space-y-8 animate-fade-in'>
+      {/* Header Section */}
+      <div className='flex flex-col md:flex-row md:items-end justify-between gap-4'>
+        <div className='space-y-1 mt-10'>
+          <h2 className='text-3xl font-extrabold tracking-tight text-foreground'>
+            Contratos
+          </h2>
+          <p className='text-sm text-muted-foreground'>
             Gestiona, crea y comparte contratos con tus clientes.
-          </Typography>
-        </Box>
-        <Button
-          component={Link}
-          href='/dashboard/contratos/nuevo'
-          variant='contained'
-          startIcon={<Plus size={20} strokeWidth={3} />}
-        >
-          Nuevo Contrato
+          </p>
+        </div>
+        <Button asChild>
+          <Link href='/dashboard/contratos/nuevo'>
+            <Plus className='h-5 w-5' strokeWidth={3} />
+            Nuevo Contrato
+          </Link>
         </Button>
-      </Stack>
+      </div>
 
-      <Paper>
+      {/* Search Filter */}
+      <div className='p-1.5 rounded-2xl border border-border bg-card shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)]'>
         <ContractSearch />
-      </Paper>
+      </div>
 
-      <TableContainer component={Paper} elevation={4}>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              {['Cliente', 'Finanzas', 'Estado', 'Creación'].map((head) => (
-                <TableCell key={head}>{head}</TableCell>
-              ))}
-              <TableCell align='right'>Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {contracts?.map((contract) => (
-              <TableRow key={contract.id} hover>
-                <TableCell sx={{ p: 3 }}>
-                  <Stack
-                    direction='row'
-                    spacing={2}
-                    sx={{ alignItems: 'center' }}
-                  >
-                    <Avatar sx={{ width: 40, height: 40, borderRadius: 3 }}>
-                      <FileText size={20} />
-                    </Avatar>
-                    <Box>
-                      <Typography
-                        variant='subtitle2'
-                        color='text.primary'
-                        sx={{
-                          transition: 'transform 0.2s',
-                          '&:hover': { transform: 'translateX(4px)' },
-                        }}
-                      >
-                        {contract.nombre_cliente}
-                      </Typography>
-                      <Typography variant='caption' color='text.secondary'>
-                        {contract.telefono_cliente}
-                      </Typography>
-                    </Box>
-                  </Stack>
-                </TableCell>
-                <TableCell>
-                  <Typography variant='subtitle2' color='text.primary'>
-                    €{contract.importe_cuotas}
-                  </Typography>
-                  <Typography variant='overline' color='text.secondary'>
-                    {contract.numero_cuotas} cuotas
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Chip
-                    icon={
-                      contract.estado === 'firmado' ? (
-                        <CheckCircle2 size={12} strokeWidth={3} />
+      {/* Table Container */}
+      <div className='overflow-hidden rounded-2xl border border-border bg-card shadow-[0_8px_30px_rgb(0,0,0,0.02)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.15)]'>
+        <div className='overflow-x-auto'>
+          <table className='w-full border-collapse text-left'>
+            <thead>
+              <tr className='border-b border-border bg-muted/40 text-muted-foreground text-xs font-bold uppercase tracking-wider'>
+                <th className='px-6 py-4'>Cliente</th>
+                <th className='px-6 py-4'>Finanzas</th>
+                <th className='px-6 py-4'>Estado</th>
+                <th className='px-6 py-4'>Creación</th>
+                <th className='px-6 py-4 text-right'>Acciones</th>
+              </tr>
+            </thead>
+            <tbody className='divide-y divide-border text-sm'>
+              {contracts?.map((contract) => (
+                <tr
+                  key={contract.id}
+                  className='hover:bg-muted/30 transition-colors duration-200 group'
+                >
+                  {/* Cliente */}
+                  <td className='px-6 py-4'>
+                    <div className='flex items-center gap-3'>
+                      <div className='w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center font-bold shadow-inner'>
+                        <FileText className='h-5 w-5' />
+                      </div>
+                      <div>
+                        <span className='block font-bold text-foreground group-hover:translate-x-1 transition-transform duration-200'>
+                          {contract.nombre_cliente}
+                        </span>
+                        <span className='block text-xs text-muted-foreground mt-0.5'>
+                          {contract.telefono_cliente}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Finanzas */}
+                  <td className='px-6 py-4'>
+                    <div>
+                      <span className='block font-bold text-foreground'>
+                        {contract.numero_cuotas === 1
+                          ? '1 Cuota'
+                          : contract.numero_cuotas + ' Cuotas'}
+                      </span>
+                      <span className='block text-[10px] font-bold text-muted-foreground uppercase tracking-wider mt-0.5'>
+                        {contract.numero_cuotas === 1
+                          ? contract.importe_cuotas + ' ' + contract.moneda
+                          : contract.importe_cuotas +
+                            ' ' +
+                            contract.moneda +
+                            ' c/u'}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Estado */}
+                  <td className='px-6 py-4'>
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold border ${
+                        contract.estado === 'firmado'
+                          ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                          : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                      }`}
+                    >
+                      {contract.estado === 'firmado' ? (
+                        <CheckCircle2 className='h-3.5 w-3.5' strokeWidth={3} />
                       ) : (
-                        <Clock size={12} strokeWidth={3} />
-                      )
-                    }
-                    label={contract.estado}
-                    color={
-                      contract.estado === 'firmado' ? 'success' : 'warning'
-                    }
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography variant='body2' color='text.primary'>
-                    {new Date(contract.created_at).toLocaleDateString('es-ES')}
-                  </Typography>
-                  <Typography variant='caption' sx={{ mb: 0 }}>
-                    {new Date(contract.created_at).toLocaleTimeString('es-ES', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </Typography>
-                </TableCell>
-                <TableCell align='right'>
-                  <Stack
-                    direction='row'
-                    spacing={1}
-                    sx={{ justifyContent: 'flex-end', alignItems: 'center' }}
-                  >
-                    <CopyButton id={contract.id} />
-                    <IconButton
-                      component={Link}
-                      href={`/contrato/${contract.id}`}
-                      target='_blank'
-                      title='Ver Contrato'
-                    >
-                      <FileText size={18} />
-                    </IconButton>
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            ))}
-            {(!contracts || contracts.length === 0) && (
-              <TableRow>
-                <TableCell colSpan={5}>
-                  <Stack
-                    spacing={2}
-                    sx={{ alignItems: 'center', justifyContent: 'center', py: 10 }}
-                  >
-                    <Avatar
-                      sx={{
-                        width: 64,
-                        height: 64,
-                        bgcolor: 'action.hover',
-                        color: 'text.secondary',
-                        opacity: 0.3,
-                        borderRadius: 3,
-                      }}
-                    >
-                      <FileText size={32} />
-                    </Avatar>
-                    <Typography variant='body1' color='text.secondary'>
-                      No se encontraron contratos registrados.
-                    </Typography>
-                    <MuiLink component={Link} href='/dashboard/contratos/nuevo'>
-                      Crear el primero ahora
-                    </MuiLink>
-                  </Stack>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Stack>
+                        <Clock className='h-3.5 w-3.5' strokeWidth={3} />
+                      )}
+                      {contract.estado}
+                    </span>
+                  </td>
+
+                  {/* Creación */}
+                  <td className='px-6 py-4'>
+                    <div>
+                      <span className='block font-medium text-foreground'>
+                        {new Date(contract.created_at).toLocaleDateString(
+                          'es-ES',
+                        )}
+                      </span>
+                      <span className='block text-xs text-muted-foreground mt-0.5'>
+                        {new Date(contract.created_at).toLocaleTimeString(
+                          'es-ES',
+                          {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          },
+                        )}
+                      </span>
+                    </div>
+                  </td>
+
+                  {/* Acciones */}
+                  <td className='px-6 py-4 text-right'>
+                    <div className='flex items-center justify-end gap-2'>
+                      <CopyButton id={contract.id} />
+                      <Link
+                        href={`/contrato/${contract.id}`}
+                        target='_blank'
+                        className='p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors'
+                        title='Ver Contrato'
+                      >
+                        <FileText className='h-[18px] w-[18px]' />
+                      </Link>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+
+              {(!contracts || contracts.length === 0) && (
+                <tr>
+                  <td colSpan={5} className='px-6 py-16 text-center'>
+                    <div className='flex flex-col items-center justify-center space-y-4 max-w-sm mx-auto'>
+                      <div className='w-16 h-16 rounded-2xl bg-muted text-muted-foreground/40 flex items-center justify-center shadow-inner'>
+                        <FileText className='h-8 w-8' />
+                      </div>
+                      <div className='space-y-1'>
+                        <p className='font-bold text-foreground'>
+                          No se encontraron contratos registrados
+                        </p>
+                        <p className='text-xs text-muted-foreground'>
+                          Comienza creando un contrato personalizado para tu
+                          cliente.
+                        </p>
+                      </div>
+                      <Button asChild variant='outline' className='mt-2'>
+                        <Link href='/dashboard/contratos/nuevo'>
+                          Crear el primero ahora
+                        </Link>
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   );
 }

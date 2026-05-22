@@ -25,3 +25,10 @@ The project follows a modified Clean Architecture adapted for Next.js App Router
 - **Server Components (Default)**: Use for data fetching and static structure in `src/app`.
 - **Sections**: Move client-side interactive logic (forms, states, effects) to `src/sections/[feature]`.
 - **Props**: Use strict TypeScript interfaces for all component props.
+
+## 4. Routing, Proxy & Auth (Next.js 16)
+- **Proxy (`proxy.ts`)**: Actúa como el middleware principal para interceptar peticiones. Su alcance debe ser **estrictamente para control de acceso y verificación de sesión SSR de Supabase**. Está **prohibido** ejecutar consultas de base de datos directas (`select`, `insert`) dentro del proxy.
+
+## 5. Data Fetching, Caching & State
+- **Caching**: Al mutar datos en Supabase vía Server Actions, usar utilidades de Next.js (`revalidatePath`, `revalidateTag`) para actualizar la UI dinámicamente.
+- **State Management**: Priorizar URL Search Params para estado compartible o SSR-friendly. Limitar el uso de contexto o `useState` a interactividad rica y aislada en `src/sections/`.

@@ -13,6 +13,8 @@
   - **Interfaces/Props**: Prefix `on` (e.g., `onClick`, `onSubmit`).
   - **Implementations**: Prefix `handle` (e.g., `handleClick`, `handleSubmit`).
 - **Database Mapping**: Use real database table names in queries (e.g., `seguimientos_iniciacion`), but map them to English interfaces (e.g., `FollowUpInitiation`).
+- **Server Actions**: Prefix with `action` (e.g., `actionCreateContract`) or suffix with `Action` (e.g., `createContractAction`) to differentiate from client functions.
+- **UI vs Sections**: Both use `PascalCase`. Reusable primitives go to `src/components/ui/`. Feature-specific UI goes to `src/sections/`.
 
 ## 3. Syntax & Style
 - **Strings**: Use single quotes (`'`) for code. Double quotes (`"`) only for JSON or JSX attributes if forced by standard.

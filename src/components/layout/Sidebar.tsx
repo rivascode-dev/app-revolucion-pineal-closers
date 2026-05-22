@@ -3,165 +3,73 @@
 import { LayoutDashboard, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Box,
-  Typography,
-} from '@mui/material';
 
 const MENU_ITEMS = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Contratos', href: '/dashboard/contratos', icon: FileText },
 ];
 
-const DRAWER_WIDTH = 256;
-const MINI_DRAWER_WIDTH = 80;
-
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: { xs: MINI_DRAWER_WIDTH, md: DRAWER_WIDTH },
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: { xs: MINI_DRAWER_WIDTH, md: DRAWER_WIDTH },
-          boxSizing: 'border-box',
-          overflowX: 'hidden',
-        },
-      }}
-    >
-      <Box
-        sx={{
-          p: { xs: 2, md: 3 },
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          justifyContent: { xs: 'center', md: 'flex-start' },
-        }}
-      >
-        <Box
-          sx={{
-            width: 40,
-            height: 40,
-            bgcolor: 'text.primary',
-            color: 'background.paper',
-            borderRadius: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            boxShadow: 2,
-          }}
-        >
-          <Typography variant="h6" color="inherit">
-            RP
-          </Typography>
-        </Box>
-        <Box sx={{ textAlign: 'left', display: { xs: 'none', md: 'block' } }}>
-          <Typography
-            variant="subtitle1"
-            sx={{ fontWeight: 900, lineHeight: 1.1 }}
-          >
+    <aside className="fixed left-0 top-0 bottom-0 h-screen w-20 md:w-64 bg-card border-r border-border/50 z-50 flex flex-col transition-all duration-300">
+      {/* Logo Container */}
+      <div className="p-4 md:p-6 flex items-center gap-3 justify-center md:justify-start">
+        <div className="w-10 h-10 rounded-xl bg-foreground text-background flex items-center justify-center font-black text-lg shadow-md hover:scale-105 transition-transform duration-300">
+          RP
+        </div>
+        <div className="hidden md:block text-left">
+          <h1 className="font-extrabold text-sm tracking-tight text-foreground leading-none">
             REVOLUCIÓN PINEAL
-          </Typography>
-          <Typography variant="overline" color="text.secondary">
+          </h1>
+          <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1 block">
             Closers App
-          </Typography>
-        </Box>
-      </Box>
+          </span>
+        </div>
+      </div>
 
-      <Box sx={{ px: 4, pt: 2, pb: 1, display: { xs: 'none', md: 'block' } }}>
-        <Typography variant="overline" color="text.secondary">
+      {/* Navigation Label */}
+      <div className="hidden md:block px-6 pt-6 pb-2">
+        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
           Navegación
-        </Typography>
-      </Box>
+        </span>
+      </div>
 
-      <List sx={{ px: { xs: 1, md: 2 }, mt: { xs: 2, md: 0 }, flex: 1 }}>
+      {/* Navigation Menu */}
+      <nav className="flex-1 px-3 md:px-4 py-2 space-y-1">
         {MENU_ITEMS.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <ListItem key={item.href} disablePadding sx={{ mb: 1 }}>
-              <ListItemButton
-                component={Link}
-                href={item.href}
-                selected={isActive}
-                sx={{
-                  justifyContent: { xs: 'center', md: 'flex-start' },
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: { xs: 0, md: 2 },
-                    color: 'inherit',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <item.icon size={20} />
-                </ListItemIcon>
-                <ListItemText
-                  sx={{ display: { xs: 'none', md: 'block' } }}
-                  primary={
-                    <Typography
-                      sx={{
-                        fontWeight: isActive ? 600 : 500,
-                        fontSize: '0.95rem',
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                  }
-                />
-              </ListItemButton>
-            </ListItem>
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 group ${
+                isActive
+                  ? 'bg-primary text-primary-foreground shadow-md shadow-primary/20'
+                  : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+              }`}
+            >
+              <item.icon
+                className={`h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110 ${
+                  isActive ? 'text-primary-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                }`}
+              />
+              <span className="hidden md:inline truncate">{item.name}</span>
+            </Link>
           );
         })}
-      </List>
+      </nav>
 
-      <Box sx={{ p: 2, display: { xs: 'none', md: 'block' } }}>
-        <Box
-          sx={{
-            p: 2,
-            bgcolor: 'action.hover',
-            borderRadius: 4,
-            border: '1px solid',
-            borderColor: 'divider',
-          }}
-        >
-          <Typography
-            variant="caption"
-            sx={{ color: 'text.secondary', mb: 1.5, display: 'block' }}
-          >
-            Revolución Pineal v1.0
-          </Typography>
-          <Box
-            sx={{
-              height: 4,
-              width: '100%',
-              bgcolor: 'divider',
-              borderRadius: 2,
-              overflow: 'hidden',
-            }}
-          >
-            <Box
-              sx={{
-                height: '100%',
-                width: '66%',
-                bgcolor: 'text.primary',
-                borderRadius: 2,
-              }}
-            />
-          </Box>
-        </Box>
-      </Box>
-    </Drawer>
+      {/* Sidebar Footer */}
+      <div className="hidden md:block p-4 m-4 rounded-2xl bg-accent/50 border border-border/50">
+        <span className="text-[10px] font-semibold text-muted-foreground block mb-1.5">
+          Revolución Pineal v1.0
+        </span>
+        <div className="h-1.5 w-full bg-border rounded-full overflow-hidden">
+          <div className="h-full w-2/3 bg-primary rounded-full" />
+        </div>
+      </div>
+    </aside>
   );
 }

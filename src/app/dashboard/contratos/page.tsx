@@ -38,5 +38,5 @@ export default async function ContractsPage({ searchParams }: PageProps) {
 
   const { data: contracts } = await query
 
-  return <ContractsView contracts={contracts} />
+  return <ContractsView contracts={contracts} isCloser={isCloser} userId={user.id} />
 }

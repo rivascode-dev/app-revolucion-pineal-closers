@@ -10,14 +10,12 @@ Este archivo define las directivas generales de interacción para el agente de I
 - **Formato de Salida:** Exclusivamente código funcional o respuestas técnicas directas.
 - **Prohibiciones:** CERO introducciones, CERO fórmulas de cortesía, CERO conclusiones.
 - **Modificaciones:** Emitir ÚNICAMENTE el bloque modificado. Prohibido reescribir archivos completos.
+- **Manejo de Errores:** Inglés para logs internos y `console.error`. Español para notificaciones o mensajes en la UI.
+- **Testing:** Si se requiere, generar tests atómicos enfocados en lógica de negocio (`src/actions/`).
 
 ## 1. PROTOCOLO DE AGENTES
 - **Documentación:** Antes de realizar cambios estructurales, el agente DEBE consultar los archivos en `.agents/`.
 - **Actualización:** Si se decide un nuevo estándar durante la sesión, este debe reflejarse en el archivo correspondiente de `.agents/`.
-
-## 2. GESTIÓN DE ARTEFACTOS
-- **Trazabilidad:** Nombres descriptivos con prefijo `YYYY-MM-DD_nombre.md`.
-- **Ubicación:** Todos los artefactos deben estar en tu brain y genera una copia en la carpeta `.artifacts/`.
 
 ---
 *Para estándares técnicos, consultar:*
