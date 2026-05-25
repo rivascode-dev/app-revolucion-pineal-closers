@@ -46,8 +46,8 @@ export default async function ContractPage({ params }: PageProps) {
 
   return (
     <LightModeWrapper>
-      <div className="relative min-h-screen bg-slate-50/50 print:bg-white py-12 md:py-20 px-4 sm:px-6 lg:px-8 print:p-0">
-        
+      <div className="relative min-h-screen bg-slate-50/50 print:bg-white py-10 md:py-10 px-4 sm:px-6 lg:px-8 print:p-0">
+
         {/* Decorative background shapes */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none opacity-30 print:hidden">
           <div className="absolute -top-[10%] -right-[10%] w-[50%] h-[50%] bg-primary/10 rounded-full blur-[120px]" />
@@ -55,8 +55,8 @@ export default async function ContractPage({ params }: PageProps) {
         </div>
 
         <div className="relative max-w-3xl mx-auto z-10 print:max-w-none print:p-0">
-          <div className="space-y-8 md:space-y-12 print:space-y-6">
-            
+          <div className="space-y-4 md:space-y-4 print:space-y-6">
+
             {/* Header */}
             <div className="flex flex-col items-center text-center space-y-3 print:space-y-2">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm print:hidden">
@@ -65,17 +65,12 @@ export default async function ContractPage({ params }: PageProps) {
                   Portal Seguro de Firma
                 </span>
               </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                Revolución Pineal
-              </h1>
-              <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">
-                Contrato de Formación Académica
-              </p>
+
             </div>
 
             {/* Document Card */}
             <div className="rounded-3xl border border-slate-200/80 bg-white shadow-[0_10px_40px_rgba(0,0,0,0.02)] overflow-hidden print:border-none print:shadow-none print:rounded-none">
-              
+
               {/* Document Text */}
               <div className="p-6 sm:p-12 border-b border-slate-100 print:border-none print:p-0">
                 <div className="font-serif text-slate-800 leading-loose text-sm md:text-base space-y-4 
@@ -96,7 +91,7 @@ export default async function ContractPage({ params }: PageProps) {
               <div className="p-6 sm:p-12 bg-slate-50/50 border-t border-slate-100 print:bg-transparent print:border-none print:p-0 print:mt-8">
                 {isFirmado ? (
                   <div className="py-2 flex flex-col items-center justify-center space-y-6">
-                    
+
                     {/* Status Badge */}
                     <div className="relative print:hidden">
                       <div className="absolute -inset-4 bg-emerald-500/10 rounded-full blur-xl opacity-50" />
@@ -120,7 +115,7 @@ export default async function ContractPage({ params }: PageProps) {
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4 print:mb-2">
                           Certificado de Firma
                         </p>
-                        
+
                         <div className="p-4 rounded-2xl border border-slate-200/60 bg-white shadow-sm print:border-none print:p-0 print:shadow-none">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
