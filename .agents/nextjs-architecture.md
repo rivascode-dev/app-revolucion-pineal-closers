@@ -1,8 +1,8 @@
 # Next.js Architecture Standards
 
 > [!WARNING]
-> **Esta versión de Next.js tiene cambios disruptivos.** 
-> Las APIs, convenciones y estructura de archivos pueden diferir de los datos de entrenamiento estándar de la IA. Consulta siempre `node_modules/next/dist/docs/` y respeta los avisos de depreciación.
+> **This Next.js version contains breaking changes.**
+> APIs, conventions, and file structures may differ from standard AI training data. Always consult `node_modules/next/dist/docs/` and respect deprecation warnings.
 
 ## 1. Project Structure
 The project follows a modified Clean Architecture adapted for Next.js App Router:
@@ -27,8 +27,8 @@ The project follows a modified Clean Architecture adapted for Next.js App Router
 - **Props**: Use strict TypeScript interfaces for all component props.
 
 ## 4. Routing, Proxy & Auth (Next.js 16)
-- **Proxy (`proxy.ts`)**: Actúa como el middleware principal para interceptar peticiones. Su alcance debe ser **estrictamente para control de acceso y verificación de sesión SSR de Supabase**. Está **prohibido** ejecutar consultas de base de datos directas (`select`, `insert`) dentro del proxy.
+- **Proxy (`proxy.ts`)**: Acts as the main middleware to intercept requests. Its scope is **strictly for access control and Supabase SSR session verification**. Executing direct database queries (`select`, `insert`) within the proxy is **strictly prohibited**.
 
 ## 5. Data Fetching, Caching & State
-- **Caching**: Al mutar datos en Supabase vía Server Actions, usar utilidades de Next.js (`revalidatePath`, `revalidateTag`) para actualizar la UI dinámicamente.
-- **State Management**: Priorizar URL Search Params para estado compartible o SSR-friendly. Limitar el uso de contexto o `useState` a interactividad rica y aislada en `src/sections/`.
+- **Caching**: When mutating data in Supabase via Server Actions, use Next.js utilities (`revalidatePath`, `revalidateTag`) to update the UI dynamically.
+- **State Management**: Prioritize URL Search Params for shareable or SSR-friendly state. Limit the use of Context or `useState` to rich, isolated interactivity in `src/sections/`.

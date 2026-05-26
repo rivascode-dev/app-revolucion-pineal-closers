@@ -28,6 +28,7 @@ export default function ContractsView({
     userId,
     search,
   );
+  console.log('🚀 ~ ContractsView ~ contracts:', contracts);
   return (
     <div className='space-y-8 animate-fade-in'>
       {/* Header Section */}
@@ -62,7 +63,10 @@ export default function ContractsView({
                 <th className='px-6 py-4'>Cliente</th>
                 <th className='px-6 py-4'>Finanzas</th>
                 <th className='px-6 py-4'>Estado</th>
+                <th className='px-6 py-4'>Closer</th>
+
                 <th className='px-6 py-4'>Creación</th>
+
                 <th className='px-6 py-4 text-right'>Acciones</th>
               </tr>
             </thead>
@@ -124,6 +128,17 @@ export default function ContractsView({
                       )}
                       {contract.estado}
                     </span>
+                  </td>
+
+                  {/* Closer */}
+                  <td className='px-6 py-4'>
+                    <div className='flex items-center gap-3'>
+                      <div>
+                        <span className='block font-bold text-foreground group-hover:translate-x-1 transition-transform duration-200'>
+                          {contract.user_profiles?.closer_name || 'Sin asignar'}
+                        </span>
+                      </div>
+                    </div>
                   </td>
 
                   {/* Creación */}

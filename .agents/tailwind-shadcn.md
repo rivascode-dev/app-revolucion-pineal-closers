@@ -1,29 +1,29 @@
-# Estándares de Diseño y Buenas Prácticas: Tailwind CSS v4 y Shadcn/ui
+# Design Standards and Best Practices: Tailwind CSS v4 and Shadcn/ui
 
-Este documento define las directrices y estándares de desarrollo para la capa de presentación utilizando **Tailwind CSS v4** y **Shadcn/ui** en aplicaciones **Next.js 16** con **React 19**.
-
----
-
-## 1. Filosofía de Estilizado
-
-Priorizamos interfaces fluidas, ligeras y con una estética premium que resulte atractiva en el primer impacto visual.
-
-1. **Compilación Estática:** Se debe delegar todo el procesamiento de estilos al compilador en tiempo de compilación. Prohibido el uso de librerías CSS-in-JS que procesen estilos en tiempo de ejecución (runtime) como Emotion o Styled Components.
-2. **Mobile-First Estricto:** Todos los diseños y clases de componentes deben estructurarse pensando primero en dispositivos móviles, aplicando los breakpoints (`sm:`, `md:`, `lg:`, `xl:`) únicamente para adaptar el layout progresivamente a pantallas más grandes.
-3. **Consistencia Semántica:** El uso de colores, bordes y fuentes debe basarse exclusivamente en las variables CSS semánticas del sistema de diseño (evitar clases fijas como `bg-[#123456]` para colores clave).
+This document defines the development guidelines and standards for the presentation layer using **Tailwind CSS v4** and **Shadcn/ui** in **Next.js 16** applications with **React 19**.
 
 ---
 
-## 2. Gestión de Clases Dinámicas (`cn` Utility)
+## 1. Styling Philosophy
 
-Para combinar clases de Tailwind de forma dinámica e inteligente, se debe usar la utilidad `cn` (basada en `clsx` y `tailwind-merge`) ubicada en `src/lib/utils.ts`.
+We prioritize fluid, lightweight interfaces with a premium aesthetic that creates a strong visual impact upon first load.
 
-### Directrices:
-- Usar `cn` para cualquier componente que acepte un `className` externo.
-- Asegurar que `tailwind-merge` resuelva colisiones de clases en lugar de concatenar cadenas simples.
+1. **Static Compilation**: All style processing must be delegated to the compiler at build time. The use of runtime CSS-in-JS libraries (such as Emotion or Styled Components) is strictly prohibited.
+2. **Strict Mobile-First**: All layouts and component classes must be structured thinking first of mobile devices, applying responsive breakpoints (`sm:`, `md:`, `lg:`, `xl:`) only to progressively adapt the layout to larger screens.
+3. **Semantic Consistency**: The use of colors, borders, and typography must be strictly based on the design system's semantic CSS variables (avoid hardcoded classes like `bg-[#123456]` for key branding colors).
+
+---
+
+## 2. Dynamic Class Management (`cn` Utility)
+
+To combine Tailwind classes dynamically and intelligently, always use the `cn` utility (built on `clsx` and `tailwind-merge`) located in `src/lib/utils.ts`.
+
+### Guidelines:
+- Use `cn` for any component that accepts an external `className` prop.
+- Ensure `tailwind-merge` resolves utility class collisions instead of relying on simple string concatenation.
 
 ```tsx
-// Correcto (Implementación Limpia)
+// Correct (Clean Implementation)
 import { cn } from '@/lib/utils';
 
 interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -46,16 +46,16 @@ export function Card({ className, isActive, ...props }: CardProps) {
 
 ---
 
-## 3. Configuración y Temas en Tailwind CSS v4
+## 3. Configuration and Themes in Tailwind CSS v4
 
-En **Tailwind CSS v4**, la configuración del tema no se realiza en un archivo `tailwind.config.js`. Se define de manera declarativa directamente en el archivo CSS global (`src/app/globals.css`) usando la directiva `@theme`.
+In **Tailwind CSS v4**, theme configuration is not defined in a `tailwind.config.js` file. Instead, it is configured declaratively inside the global CSS file (`src/app/globals.css`) using the `@theme` directive.
 
-### Estructura de `src/app/globals.css`:
+### Structure of `src/app/globals.css`:
 ```css
 @import "tailwindcss";
 
 @theme {
-  /* Extensión y redefinición del sistema de tokens */
+  /* Extension and redefinition of the token system */
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
@@ -89,7 +89,7 @@ En **Tailwind CSS v4**, la configuración del tema no se realiza en un archivo `
   --card-foreground: 240 10% 3.9%;
   --border: 240 5.9% 90%;
   --input: 240 5.9% 90%;
-  --primary: 262.1 83.3% 57.8%; /* Violeta Premium */
+  --primary: 262.1 83.3% 57.8%; /* Premium Violet */
   --primary-foreground: 210 20% 98%;
   --secondary: 240 4.8% 95.9%;
   --secondary-foreground: 240 5.9% 10%;
@@ -120,16 +120,16 @@ En **Tailwind CSS v4**, la configuración del tema no se realiza en un archivo `
 
 ---
 
-## 4. Estándares para Componentes Shadcn/ui
+## 4. Standards for Shadcn/ui Components
 
-Los componentes de Shadcn/ui son la base atómica de la interfaz. Deben residir siempre en `src/components/ui/` y seguir estrictamente estas pautas:
+Shadcn/ui components are the atomic foundation of our user interface. They must always reside in `src/components/ui/` and strictly follow these rules:
 
-1. **Uso de Radix UI:** Mantener las primitivas de accesibilidad de Radix UI sin alterar sus atributos `aria-*`.
-2. **Prop `asChild`:** Utilizar la propiedad `asChild` de Radix UI cuando se requiera anidar elementos interactivos (por ejemplo, renderizar un botón de Shadcn como un componente `Link` de Next.js para evitar etiquetas anidadas inválidas en HTML como `<a><button>`).
-3. **Paso de Props de React 19:** Con React 19, las `refs` se pasan directamente como una prop convencional (`ref={ref}`). No se requiere el uso de `React.forwardRef`.
+1. **Radix UI Integration**: Maintain the accessibility primitives of Radix UI without altering their default `aria-*` attributes.
+2. **`asChild` Prop**: Use Radix UI's `asChild` property when nesting interactive elements (e.g., rendering a Shadcn Button component as a Next.js `Link` to avoid invalid HTML nesting like `<a><button>`).
+3. **React 19 Ref Passing**: In React 19, DOM and component `refs` are passed directly as a conventional prop (`ref={ref}`). The use of `React.forwardRef` is no longer required or recommended.
 
 ```tsx
-// Ejemplo de botón premium alineado a React 19 y Shadcn
+// Example of a premium button aligned with React 19 and Shadcn
 import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
@@ -176,31 +176,32 @@ export function Button({ className, variant, size, asChild = false, ref, ...prop
 
 ---
 
-## 5. Principios de Estética y Animaciones Premium
+## 5. Premium Aesthetics and Animations
 
-Para garantizar una experiencia de usuario que se sienta premium, interactiva y fluida:
+To ensure a user experience that feels state-of-the-art, interactive, and fluid:
 
-- **Efecto de Cristal (Glassmorphism):** Úsalo en paneles superiores (`Topbar`) o modales para integrarlos armónicamente sobre el fondo.
-  ```tailwind
+- **Glassmorphism Effect**: Use on headers (`Topbar`) or modals to blend them seamlessly over the background.
+  ```css
+  /* Example utility classes */
   bg-background/80 backdrop-blur-md border-b border-border/50
   ```
-- **Sombras sutiles:** Evita sombras duras u oscuras. Utiliza sombras difusas con opacidad baja.
-  ```tailwind
+- **Subtle Shadows**: Avoid harsh or dark drop shadows. Use diffused shadows with very low opacity.
+  ```css
   shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.2)]
   ```
-- **Transiciones fluidas:** Aplica siempre tiempos de transición lógicos (`duration-300` o `duration-200`) junto con `ease-in-out` en todas las interacciones de hover o transformaciones.
-  ```tailwind
+- **Fluid Transitions**: Always apply transition times (`duration-300` or `duration-200`) coupled with `ease-in-out` on all hover states and visual transformations.
+  ```css
   transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-md
   ```
 
 ---
 
-## 6. Integración de Modo Oscuro (Dark Mode)
+## 6. Dark Mode Integration
 
-- El manejo del tema debe respetar las variables CSS.
-- Se recomienda el uso de dependencias compatibles con App Router como `next-themes`, aplicando la clase `.dark` al elemento `html` para prevenir desajustes de hidratación.
+- Theme management must strictly leverage CSS HSL custom variables.
+- We recommend using App Router-compatible packages like `next-themes`, applying the `.dark` class directly to the `html` element to prevent hydration mismatches.
 
 ## 7. Responsive Design (Breakpoints)
 
-- **Mobile-First Estricto:** Define el layout base para móviles sin utilizar prefijos de breakpoint en primer nivel.
-- **Estandarización de Saltos:** Para reducir fragmentación visual, escala preferentemente usando saltos lógicos (`md:` para tablets y `lg:` para escritorio), evitando sobrecargar de breakpoints si no es necesario semánticamente.
+- **Strict Mobile-First**: Define the base layout and utilities targeting mobile devices without screen-size prefixes.
+- **Standardized Step Breakpoints**: To reduce visual fragmentation, scale layouts primarily using logical breakpoints (`md:` for tablets and `lg:` for desktop screens), avoiding intermediate breakpoint overrides unless strictly required by the design context.

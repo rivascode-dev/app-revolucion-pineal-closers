@@ -5,15 +5,46 @@ import { SignaturePad } from '@/components/SignaturePad';
 import { signContractAction } from '@/actions/contracts';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const signatureSchema = z.object({
+  nombre: z.string()
+    .min(1, 'El nombre completo es requerido'),
+  fecha: z.string()
+    .min(1, 'La fecha de nacimiento es requerida')
+    .refine((val) => {
+      const parsedDate = new Date(val);
+      const today = new Date();
+      today.setHours(23, 59, 59, 999);
+      return !isNaN(parsedDate.getTime()) && parsedDate <= today;
+    }, 'La fecha de nacimiento no puede ser en el futuro'),
+});
+
+type SignatureFormValues = z.infer<typeof signatureSchema>;
 
 export function SignatureContainer({ id }: { id: string }) {
   const router = useRouter();
-  const [nombre, setNombre] = useState('');
-  const [fecha, setFecha] = useState('');
   const [chkNombre, setChkNombre] = useState(false);
   const [chkCompleta, setChkCompleta] = useState(false);
 
-  const isFormValid = nombre.trim() !== '' && fecha.trim() !== '';
+  const {
+    register,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<SignatureFormValues>({
+    resolver: zodResolver(signatureSchema),
+    mode: 'onTouched',
+    defaultValues: {
+      nombre: '',
+      fecha: '',
+    },
+  });
+
+  const nombre = watch('nombre');
+  const fecha = watch('fecha');
+  const isFormValid = isValid;
 
   const handleSign = async (signatureData: string) => {
     const result = await signContractAction(id, signatureData, nombre, fecha);
@@ -24,6 +55,12 @@ export function SignatureContainer({ id }: { id: string }) {
       toast.success('Contrato firmado correctamente');
       router.refresh();
     }
+  };
+
+  const getInputClassName = (fieldName: keyof SignatureFormValues) => {
+    const base = 'w-full px-4 py-3 rounded-xl border bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-slate-400 text-sm';
+    const hasError = !!errors[fieldName];
+    return `${base} ${hasError ? 'border-red-500/80 focus:border-red-500 focus:ring-red-500/20' : 'border-slate-200'}`;
   };
 
   return (
@@ -49,14 +86,16 @@ export function SignatureContainer({ id }: { id: string }) {
             </label>
             <input
               id="nombre_cliente_contrato"
-              name="nombre_cliente_contrato"
               type="text"
-              required
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
               placeholder="Ej: Juan Antonio Pérez"
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all placeholder:text-slate-400 text-sm"
+              className={getInputClassName('nombre')}
+              {...register('nombre')}
             />
+            {errors.nombre && (
+              <span className="text-[11px] font-semibold text-red-500 mt-1 block">
+                {errors.nombre.message}
+              </span>
+            )}
           </div>
 
           <div className="space-y-1.5">
@@ -68,13 +107,16 @@ export function SignatureContainer({ id }: { id: string }) {
             </label>
             <input
               id="fecha_nacimiento_cliente"
-              name="fecha_nacimiento_cliente"
               type="date"
-              required
-              value={fecha}
-              onChange={(e) => setFecha(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-sm"
+              className={getInputClassName('fecha')}
+              style={{ colorScheme: 'light' }}
+              {...register('fecha')}
             />
+            {errors.fecha && (
+              <span className="text-[11px] font-semibold text-red-500 mt-1 block">
+                {errors.fecha.message}
+              </span>
+            )}
           </div>
         </div>
       </div>
@@ -138,6 +180,7 @@ export function SignatureContainer({ id }: { id: string }) {
               onChange={(e) => setChkNombre(e.target.checked)}
               disabled={!isFormValid}
               className="mt-0.5 h-4.5 w-4.5 rounded border border-slate-300 bg-white text-primary focus:ring-primary/20 focus:ring-offset-0 focus:ring-2 cursor-pointer transition-all accent-primary"
+              style={{ colorScheme: 'light' }}
             />
             <span>
               He ingresado mi/s nombre/s y apellido/s tal como aparecen en mi documento de identidad
@@ -156,6 +199,7 @@ export function SignatureContainer({ id }: { id: string }) {
               onChange={(e) => setChkCompleta(e.target.checked)}
               disabled={!isFormValid}
               className="mt-0.5 h-4.5 w-4.5 rounded border border-slate-300 bg-white text-primary focus:ring-primary/20 focus:ring-offset-0 focus:ring-2 cursor-pointer transition-all accent-primary"
+              style={{ colorScheme: 'light' }}
             />
             <span>He introducido mi firma completa</span>
           </label>

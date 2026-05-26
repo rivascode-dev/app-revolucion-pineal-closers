@@ -16,4 +16,7 @@ export interface Contract {
   signer_ip?: string;
   signed_at?: string;
   moneda?: string;
+  user_profiles?: {
+    closer_name: string;
+  } | null;
 }

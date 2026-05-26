@@ -80,3 +80,19 @@ body {
   color: var(--color-foreground);
 }
 
+/* Ensure WebKit date input calendar picker indicator is visible, uses light scheme, and has a pointer cursor */
+input[type="date"] {
+  color-scheme: light !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  display: block !important;
+  opacity: 1 !important;
+  cursor: pointer !important;
+}
+
+/* Ensure checkboxes always render in light color scheme */
+input[type="checkbox"] {
+  color-scheme: light !important;
+}
+

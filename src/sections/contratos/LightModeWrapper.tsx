@@ -13,6 +13,10 @@ export function LightModeWrapper({ children }: { children: React.ReactNode }) {
       html.classList.remove('dark');
     }
 
+    // Force light color scheme to avoid dark-mode styled native inputs (like date picker)
+    const originalColorScheme = html.style.colorScheme;
+    html.style.colorScheme = 'light';
+
     // Set up a MutationObserver to block any attempts to add the 'dark' class
     // This handles cases where MUI or next-themes tries to re-apply it after hydration
     const observer = new MutationObserver((mutations) => {
@@ -30,6 +34,11 @@ export function LightModeWrapper({ children }: { children: React.ReactNode }) {
       // Restore dark mode if it was active before navigating to this page
       if (wasDark) {
         html.classList.add('dark');
+      }
+      if (originalColorScheme) {
+        html.style.colorScheme = originalColorScheme;
+      } else {
+        html.style.removeProperty('color-scheme');
       }
     };
   }, []);

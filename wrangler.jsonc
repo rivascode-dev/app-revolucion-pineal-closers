@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "revolucion-pineal-closers-app",
+  "keep_names": false,
+  // Set this to today's date
+  "compatibility_date": "2026-05-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "vars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://jnjnrapkwbulhipmqfam.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impuam5yYXBrd2J1bGhpcG1xZmFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3NTA2MDUsImV4cCI6MjA4ODMyNjYwNX0.Mod1akONSmFPG_ATG5-qzPM4fQagqCDBSrgSIdHZD9w",
+    "NEXT_PRIVATE_MINIMAL_MODE": "1"
+  }
+}

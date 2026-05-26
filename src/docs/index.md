@@ -50,6 +50,12 @@ Navega a través de los diferentes módulos técnicos para comprender o realizar
 * **Agente AI con OpenAI** para la extracción analítica de Objetivos, Dolores y Deseos desde la transcripción de la llamada.
 * Envío automatizado de mensajes de bienvenida y enlaces de onboarding por WhatsApp mediante **WasenderAPI** (lógica por closer y onboarding de Raffaele).
 
+### 🚀 [4. Guía de Despliegue en Cloudflare](file:///d:/devWork/lucem/proyects/revolucion-pineal-closers-app/src/docs/despliegue-cloudflare.md)
+*Detalle completo del empaquetamiento y publicación:*
+* Configuración de **OpenNext** y el archivo `wrangler.jsonc`.
+* Solución a incompatibilidades del Edge Runtime de Next.js 16 y el empaquetado de Webpack en Windows.
+* Configuración segura de secretos y variables de entorno Supabase/n8n en la nube.
+
 ---
 
 ## 🛠️ Tecnologías Clave

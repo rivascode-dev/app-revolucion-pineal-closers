@@ -26,7 +26,7 @@ export function useContractsRealtime(
           schema: 'public',
           table: 'contratos',
         },
-        (payload) => {
+        async (payload) => {
           if (payload.eventType === 'INSERT') {
             const newContract = payload.new as Contract;
             if (isCloser && userId && newContract.user_id !== userId) {
@@ -35,6 +35,20 @@ export function useContractsRealtime(
             if (searchQuery && !newContract.nombre_cliente.toLowerCase().includes(searchQuery.toLowerCase())) {
               return;
             }
+
+            // Fetch the closer name in real-time to complete the relation
+            let closerName = 'Sin asignar';
+            if (newContract.user_id) {
+              const { data } = await supabase
+                .from('user_profiles')
+                .select('closer_name')
+                .eq('id', newContract.user_id)
+                .single();
+              if (data?.closer_name) {
+                closerName = data.closer_name;
+              }
+            }
+            newContract.user_profiles = { closer_name: closerName };
 
             setContracts((prev) => {
               if (prev.some((c) => c.id === newContract.id)) return prev;
@@ -49,6 +63,20 @@ export function useContractsRealtime(
               setContracts((prev) => prev.filter((c) => c.id !== updatedContract.id));
               return;
             }
+
+            // Fetch the closer name in real-time to complete the relation
+            let closerName = 'Sin asignar';
+            if (updatedContract.user_id) {
+              const { data } = await supabase
+                .from('user_profiles')
+                .select('closer_name')
+                .eq('id', updatedContract.user_id)
+                .single();
+              if (data?.closer_name) {
+                closerName = data.closer_name;
+              }
+            }
+            updatedContract.user_profiles = { closer_name: closerName };
 
             setContracts((prev) =>
               prev.map((c) => (c.id === updatedContract.id ? updatedContract : c))

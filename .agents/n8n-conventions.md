@@ -1,38 +1,38 @@
 # n8n Team Development Conventions (Lucem)
 
-Este documento define los estándares obligatorios para la creación de flujos en n8n. El objetivo es garantizar que cualquier miembro del equipo (o agente de IA) pueda leer, mantener e invocar nodos sin errores de sintaxis.
+This document defines the mandatory standards for creating and managing n8n workflows. The goal is to ensure that any team member (or AI agent) can easily read, maintain, and execute nodes without syntax or naming issues.
 
-## 1. Nomenclatura de Nodos (ID de Referencia)
-Los nombres de los nodos deben ser técnicos, en **inglés**, usar **`snake_case`** y comenzar con un prefijo funcional. **Prohibido usar espacios o caracteres especiales (: / -).**
+## 1. Node Naming Conventions (Reference ID)
+Node names must be technical, written in **English**, use **`snake_case`**, and start with a functional prefix. **Spaces or special characters (: / -) are strictly prohibited.**
 
-| Prefijo | Categoría | Descripción | Ejemplo |
+| Prefix | Category | Description | Example |
 | :--- | :--- | :--- | :--- |
-| `trig_` | **Trigger** | Nodos de inicio (Schedule, Webhook, Form). | `trig_daily_8am` |
-| `get_` | **Read** | Consultas a APIs, Bases de Datos o Sheets. | `get_stripe_data` |
-| `post_` | **Write** | Creación de registros o envío de mensajes. | `post_whatsapp_msg` |
-| `calc_` | **Logic** | Transformaciones de datos (Code, Set, Edit). | `calc_date_params` |
-| `flow_` | **Flow** | Control de ejecución (Wait, If, Loop, Switch). | `flow_wait_7s` |
-| `sub_` | **Subflow** | Ejecución de flujos secundarios. | `sub_clean_lead` |
+| `trig_` | **Trigger** | Entry points (Schedule, Webhook, Form). | `trig_daily_8am` |
+| `get_` | **Read** | Queries to APIs, Databases, or Sheets. | `get_stripe_data` |
+| `post_` | **Write** | Record creation or sending messages. | `post_whatsapp_msg` |
+| `calc_` | **Logic** | Data transformations (Code, Set, Edit). | `calc_date_params` |
+| `flow_` | **Flow** | Execution control (Wait, If, Loop, Switch). | `flow_wait_7s` |
+| `sub_` | **Subflow** | Sub-workflow execution. | `sub_clean_lead` |
 
-## 2. Nomenclatura de Variables (Datos Internos)
-Dentro de los nodos de código (`Code`) y en las llaves de salida de los objetos JSON, se debe usar **`camelCase`** descriptivo en **inglés**.
+## 2. Variable Naming (Internal Data)
+Within Code nodes and in JSON output object keys, use descriptive **`camelCase`** in **English**.
 
-- **Fechas:** Usar sufijo `Date` para strings formateados.
-    - ✅ `yesterdayDate`, `eventTimestamp`
-    - ❌ `fecha_ayer`, `yesterday` (ambiguo)
-- **Booleanos:** Usar prefijos de estado.
-    - ✅ `isPaymentValid`, `hasEmail`
-- **Métricas:** Ser específico con el estado.
-    - ✅ `totalCalls`, `cancelByCloser`, `noShowCount`
+- **Dates**: Use `Date` suffix for formatted strings.
+  - ✅ `yesterdayDate`, `eventTimestamp`
+  - ❌ `fecha_ayer`, `yesterday` (ambiguous)
+- **Booleans**: Use state prefixes.
+  - ✅ `isPaymentValid`, `hasEmail`
+- **Metrics**: Be specific with the metric state.
+  - ✅ `totalCalls`, `cancelByCloser`, `noShowCount`
 
-## 3. Mejores Prácticas de Resiliencia
-- **Anti-Spam:** Todo nodo de envío (WhatsApp/Email) debe ir precedido por un `flow_wait` de al menos 5-7 segundos si está dentro de un bucle.
-- **Invocación Segura:** Para referenciar datos de otros nodos, usa siempre la sintaxis de ID:
-    - ✅ `{{ $('get_stripe_data').item.json.amount }}`
-- **Descriptividad:** Si la lógica interna de un nodo es compleja, utiliza la propiedad **"Description"** del nodo o coloca una **"Sticky Note"** informativa.
+## 3. Resilience and Best Practices
+- **Anti-Spam**: Every message-sending node (WhatsApp/Email) must be preceded by a `flow_wait` of at least 5-7 seconds when placed inside a loop.
+- **Secure References**: To reference data from other nodes, always use the secure node ID syntax:
+  - ✅ `{{ $('get_stripe_data').item.json.amount }}`
+- **Documentation**: If the internal logic of a node is complex, utilize the node's **"Description"** property or add an informative **"Sticky Note"** in the workflow canvas.
 
-## 4. Notas para Agentes de IA (Gemini/Cursor)
-Al generar nuevos flujos o modificar existentes:
-1. Lee siempre este archivo para aplicar la nomenclatura `prefix_name`.
-2. Prioriza el uso de `DateTime` de Luxon para manejo de fechas.
-3. Asegura que todas las conexiones (`connections`) coincidan con los nuevos nombres de los nodos.
+## 4. Guidelines for AI Agents (Gemini/Cursor)
+When generating new workflows or modifying existing ones:
+1. Always read this conventions file to strictly apply the `prefix_name` schema.
+2. Prioritize using Luxon's `DateTime` for date and timezone handling.
+3. Ensure all connections in the workflow JSON match the newly renamed node IDs.
