@@ -3,7 +3,7 @@
     {
       "parameters": {
         "dataType": "string",
-        "value1": "={{ $json.body.closer_name }}",
+        "value1": "={{ $json.closer_name }}",
         "rules": {
           "rules": [
             {
@@ -16,6 +16,10 @@
             {
               "value2": "Nathalia",
               "output": 2
+            },
+            {
+              "value2": "Desconocido",
+              "output": 3
             }
           ]
         }
@@ -25,8 +29,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
       "position": [
-        -1328,
-        -304
+        -1952,
+        -224
       ]
     },
     {
@@ -40,11 +44,11 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $json.body.telefono_cliente }}"
+              "value": "={{ $('Edit Fields').item.json.telefono_alumno }}"
             },
             {
               "name": "text",
-              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+              "value": "={{ $('Edit Fields').item.json.mensaje }}"
             }
           ]
         },
@@ -55,8 +59,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -896,
-        -608
+        -1696,
+        -432
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -79,11 +83,11 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $json.body.telefono_cliente }}"
+              "value": "={{ $('Edit Fields').item.json.telefono_alumno }}"
             },
             {
               "name": "text",
-              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+              "value": "={{ $('Edit Fields').item.json.mensaje }}"
             }
           ]
         },
@@ -94,8 +98,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -880,
-        -368
+        -1696,
+        -208
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -118,11 +122,11 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $json.body.telefono_cliente }}"
+              "value": "={{ $('Edit Fields').item.json.telefono_alumno }}"
             },
             {
               "name": "text",
-              "value": "={{ 'Hola ' + $json.body.nombre_cliente + ', aquí tienes el acuerdo de acceso: ' + $json.body.link_contrato }}"
+              "value": "={{ $('Edit Fields').item.json.mensaje }}"
             }
           ]
         },
@@ -133,8 +137,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -864,
-        -128
+        -1696,
+        32
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -155,12 +159,86 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1600,
-        -272
+        -2384,
+        -192
       ],
       "id": "c6093da7-4fe4-4c8a-aa17-e49ec64ac3e1",
       "name": "trig_webhook_welcome",
       "webhookId": "ea7e22da-5247-4422-afd6-e7825a8bae27"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/send-message",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "to",
+              "value": "={{ $json.telefono_alumno }}"
+            },
+            {
+              "name": "text",
+              "value": "={{ $json.mensaje }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f77a525b-ae12-419c-b375-01bfbf35f95e",
+      "name": "post_whatsapp_nathatia2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1952,
+        128
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "2f8MA96Nn3KRDTQQ",
+          "name": "WasernderAPI - Lucem (secundario)"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a825cd9e-2994-48f0-987d-964249a08f57",
+              "name": "mensaje",
+              "value": "=Hola {{ $json.body.nombre_cliente }}, aquí tienes el acuerdo de acceso:\n\n{{ $json.body.link_contrato }}\n\nLeelo con calma y en cuanto termines, el equipo de la escuela te contactará y te enviarán los accesos",
+              "type": "string"
+            },
+            {
+              "id": "be789929-19b0-4cf5-9bcc-492995c04322",
+              "name": "closer_name",
+              "value": "={{ $json.body.closer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "38f2307a-698b-47f4-864b-61d56be8f718",
+              "name": "telefono_alumno",
+              "value": "={{ $json.body.telefono_cliente }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2176,
+        -192
+      ],
+      "id": "74888f59-c160-45df-9378-0d2b7ecd3bde",
+      "name": "Edit Fields"
     }
   ],
   "connections": {
@@ -186,10 +264,28 @@
             "type": "main",
             "index": 0
           }
+        ],
+        [
+          {
+            "node": "post_whatsapp_nathatia2",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "trig_webhook_welcome": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
       "main": [
         [
           {
@@ -203,6 +299,7 @@
   },
   "pinData": {},
   "meta": {
+    "templateCredsSetupCompleted": true,
     "instanceId": "5fb31353bf4dc16311b0347ead4b884fad18ae1960ff4cbda8f09bf4a2cad0c8"
   }
 }

@@ -9,47 +9,12 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -1808,
-        848
+        -2704,
+        1136
       ],
       "id": "c214ca8b-3a42-42d0-9626-38cba9e7b33a",
       "name": "trig_webhook_sign",
       "webhookId": "be674b0d-5b4c-4990-90b3-e0dc23f9161b"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "8457b9ec-4d60-46e1-9b85-d11a33ce32ef",
-              "name": "parent_folder_id",
-              "value": "12kp9ZpSkU8EIGwr0vyWStCO3_PpmwCy-",
-              "type": "string"
-            },
-            {
-              "id": "49040048-065b-4b63-892a-65d4e68099f5",
-              "name": "file_name",
-              "value": "={{ $('trig_webhook_sign').item.json.body.pdf_name.replace('.pdf', '').replace('.html', '') }}",
-              "type": "string"
-            },
-            {
-              "id": "2d57c51f-c2e3-493f-8d2f-4222c94f7876",
-              "name": "doc_html",
-              "value": "={{ $('trig_webhook_sign').item.json.body.html_contrato }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -1584,
-        848
-      ],
-      "id": "0bcdc876-067b-4f61-a5c2-e35ee9d9d394",
-      "name": "set_vars_html_doc"
     },
     {
       "parameters": {
@@ -66,8 +31,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1424,
-        720
+        -1984,
+        1136
       ],
       "id": "9ce522cd-0a9e-4cf5-9b45-7b3aa0d691b5",
       "name": "html_to_google_doc",
@@ -83,8 +48,8 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -1264,
-        848
+        -1744,
+        1136
       ],
       "id": "5ba58554-2d78-4781-b8d4-d71e107178b4",
       "name": "wait_5_seconds",
@@ -109,8 +74,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -1120,
-        752
+        -1504,
+        1136
       ],
       "id": "0a64529a-a0b2-4408-acf6-3987fb917a18",
       "name": "download_doc_as_pdf",
@@ -138,8 +103,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -944,
-        848
+        -1280,
+        1136
       ],
       "id": "14bcc71f-24a7-4d60-a75f-837c67eeecd7",
       "name": "upload_pdf_to_drive",
@@ -163,8 +128,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -768,
-        848
+        -1056,
+        1136
       ],
       "id": "1f864f31-ee43-403b-87e7-e54dad420b51",
       "name": "delete_temp_google_doc",
@@ -199,7 +164,7 @@
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
             "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
-            "Pais": "={{ $('trig_webhook_sign').item.json.body.pais }}",
+            "Pais": "={{ $('calc_country_detect').item.json.countryName }}",
             "Fecha de inicio": "={{ $('trig_webhook_sign').item.json.body.fecha_inicio }}",
             "Doc.Acuerdos": "={{ $('upload_pdf_to_drive').item.json.webViewLink }}"
           },
@@ -308,6 +273,16 @@
               "removed": true
             },
             {
+              "id": "Facebook",
+              "displayName": "Facebook",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
               "id": "Avatar",
               "displayName": "Avatar",
               "required": false,
@@ -356,8 +331,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -544,
-        400
+        -592,
+        816
       ],
       "id": "491ddc1d-804c-46a0-9e85-70648bcd87be",
       "name": "post_sheets_alumnos",
@@ -396,7 +371,9 @@
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
             "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
-            "Grupo": "={{ $('trig_webhook_sign').item.json.body.grupo }}"
+            "Grupo": "={{ $('calc_grupos').item.json.grupos }}",
+            "Estado": "Activo",
+            "Estado (I)": "Correcto"
           },
           "matchingColumns": [
             "row_number"
@@ -410,7 +387,7 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": true
+              "removed": false
             },
             {
               "id": "Nombre",
@@ -485,7 +462,7 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": true
+              "removed": false
             },
             {
               "id": "Notas (I)",
@@ -586,8 +563,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -528,
-        640
+        -128,
+        816
       ],
       "id": "5a35c9c2-57b2-4f34-b863-4a091f6b0ca1",
       "name": "post_sheets_seguimiento",
@@ -626,7 +603,8 @@
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
             "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
-            "Plan": "={{ $('trig_webhook_sign').item.json.body.plan }}"
+            "Plan": "={{ $('calc_grupos').item.json.plan }}",
+            "Estado": "Pendiente"
           },
           "matchingColumns": [
             "row_number"
@@ -640,7 +618,7 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": true
+              "removed": false
             },
             {
               "id": "Nombre",
@@ -695,7 +673,8 @@
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": true
             },
             {
               "id": "Plan",
@@ -785,8 +764,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -528,
-        848
+        144,
+        816
       ],
       "id": "be2880d0-0b5c-495f-9517-a304cae36ff4",
       "name": "post_sheets_pagos",
@@ -816,7 +795,8 @@
               "leftValue": "={{ ['alquimia_vital_eca', 'alquimia_vilal_eca'].includes($('trig_webhook_sign').item.json.body.tipo_contrato) }}",
               "operator": {
                 "type": "boolean",
-                "operation": "true"
+                "operation": "true",
+                "singleValue": true
               }
             }
           ],
@@ -827,8 +807,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.1,
       "position": [
-        -288,
-        848
+        400,
+        816
       ],
       "id": "7c7bdf2d-51ee-4689-9461-e08cfefc0e00",
       "name": "flow_check_contrato"
@@ -849,8 +829,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -16,
-        672
+        688,
+        640
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -878,7 +858,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        400,
+        992,
         832
       ],
       "retryOnFail": true,
@@ -905,35 +885,32 @@
           "cachedResultName": "Informes",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MtZZo07pFWAy5RxqU6CqJ6Oz8ufR4iKo6UWs8xJUGzo/edit#gid=1266441844"
         },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "telefono_lead",
+              "lookupValue": "={{ $('trig_webhook_sign').item.json.body.telefono_cliente }}"
+            }
+          ]
+        },
         "options": {}
       },
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -544,
-        1280
+        -832,
+        1344
       ],
       "id": "db5a5a3f-506e-4d77-af4e-8a1a89429689",
       "name": "get_sheet_informes",
+      "alwaysOutputData": true,
+      "executeOnce": false,
       "credentials": {
         "googleSheetsOAuth2Api": {
           "id": "HWj8LA3sWiJiLx8Y",
           "name": "Google Sheets - Lucem"
         }
       }
-    },
-    {
-      "parameters": {
-        "jsCode": "const clientPhone = $('trig_webhook_sign').item.json.body.telefono || $('trig_webhook_sign').item.json.body.telefono_cliente || '';\nconst cleanClientPhone = String(clientPhone).replace(/\\D/g, '');\n\nif (!cleanClientPhone) {\n  throw new Error(\"No se encontró el teléfono del cliente en el Webhook\");\n}\n\nlet matchedRow = null;\nfor (const item of $input.all()) {\n  const row = item.json;\n  for (const key in row) {\n    const val = row[key];\n    if (val !== null && val !== undefined) {\n      const cleanVal = String(val).replace(/\\D/g, '');\n      if (cleanVal.length >= 8 && (cleanVal.endsWith(cleanClientPhone) || cleanClientPhone.endsWith(cleanVal))) {\n        matchedRow = row;\n        break;\n      }\n    }\n  }\n  if (matchedRow) break;\n}\n\nif (!matchedRow) {\n  // Fallback: Buscar por nombre del alumno\n  const clientName = ($('trig_webhook_sign').item.json.body.nombre || '').toLowerCase().trim();\n  if (clientName) {\n    for (const item of $input.all()) {\n      const row = item.json;\n      for (const key in row) {\n        const val = row[key];\n        if (val !== null && val !== undefined && String(val).toLowerCase().includes(clientName)) {\n          matchedRow = row;\n          break;\n        }\n      }\n      if (matchedRow) break;\n    }\n  }\n}\n\nif (matchedRow) {\n  let transLink = '';\n  for (const key in matchedRow) {\n    const normKey = key.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '');\n    if (normKey === 'transcripcion') {\n      transLink = String(matchedRow[key]);\n      break;\n    }\n  }\n  if (!transLink) {\n    transLink = matchedRow['Transcripción'] || matchedRow['Transcripcion'] || matchedRow['transcripcion'] || '';\n  }\n  let docId = '';\n  const match = String(transLink).match(/\\/d\\/([a-zA-Z0-9-_]+)/);\n  if (match && match[1]) {\n    docId = match[1];\n  }\n  return {\n    json: {\n      ...matchedRow,\n      docId,\n      hasDoc: docId !== ''\n    }\n  };\n}\n\nreturn {\n  json: {\n    notFound: true,\n    message: `No matched row for phone ${clientPhone}`,\n    docId: '',\n    hasDoc: false\n  }\n};"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        -336,
-        1280
-      ],
-      "id": "75fe3a71-5f4f-471c-9d3a-a452cb70a099",
-      "name": "find_client_row"
     },
     {
       "parameters": {
@@ -947,10 +924,11 @@
           "conditions": [
             {
               "id": "b3e0c7a5-c2d1-4b14-8f0a-115f22ad89de",
-              "leftValue": "={{ $json.hasDoc }}",
+              "leftValue": "={{ !$json.transcripcion }}",
               "operator": {
                 "type": "boolean",
-                "operation": "true"
+                "operation": "false",
+                "singleValue": true
               }
             }
           ],
@@ -961,76 +939,11 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.1,
       "position": [
-        -144,
-        1280
+        -400,
+        1344
       ],
       "id": "54e7035e-6771-48e8-9eb6-cc4bb33bd46b",
       "name": "check_has_doc"
-    },
-    {
-      "parameters": {
-        "url": "=https://docs.googleapis.com/v1/documents/{{ $json.docId }}?includeTabsContent=true",
-        "authentication": "predefinedCredentialType",
-        "nodeCredentialType": "googleDriveOAuth2Api",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        16,
-        1120
-      ],
-      "id": "1977c382-01a5-43d6-a636-363e1ccd077d",
-      "name": "get_google_doc_text",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "U3gk9gfW9ynkKc2U",
-          "name": "Google Drive - Lucem"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "const items = $input.all();\nif (items.length === 0) {\n  return { json: { documentId: '', text: '' } };\n}\nconst docData = items[0].json;\n\nfunction extractTextFromContent(contentArray) {\n  if (!contentArray || !Array.isArray(contentArray)) return '';\n  let text = '';\n  for (const element of contentArray) {\n    if (element.paragraph) {\n      if (element.paragraph.elements) {\n        for (const el of element.paragraph.elements) {\n          if (el.textRun && el.textRun.content) {\n            text += el.textRun.content;\n          }\n        }\n      }\n    } else if (element.table) {\n      if (element.table.tableRows) {\n        for (const row of element.table.tableRows) {\n          if (row.tableCells) {\n            for (const cell of row.tableCells) {\n              text += extractTextFromContent(cell.content) + ' ';\n            }\n          }\n        }\n      }\n    } else if (element.tableOfContents) {\n      text += extractTextFromContent(element.tableOfContents.content);\n    }\n  }\n  return text;\n}\n\nfunction findTabByTitle(tabs, targetTitle) {\n  if (!tabs || !Array.isArray(tabs)) return null;\n  const normalize = (str) => String(str).toLowerCase().normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").trim();\n  const targetNorm = normalize(targetTitle);\n  for (const tab of tabs) {\n    const title = (tab.tabProperties && tab.tabProperties.title) || (tab.tabHeader && tab.tabHeader.title) || '';\n    if (title) {\n      const tabNorm = normalize(title);\n      if (tabNorm === targetNorm || tabNorm.includes(targetNorm)) {\n        return tab;\n      }\n    }\n  }\n  for (const tab of tabs) {\n    if (tab.childTabs && tab.childTabs.length > 0) {\n      const found = findTabByTitle(tab.childTabs, targetTitle);\n      if (found) return found;\n    }\n  }\n  return null;\n}\n\nlet bodyToParse = null;\n\nif (docData.tabs && docData.tabs.length > 0) {\n  let targetTab = findTabByTitle(docData.tabs, 'Transcripción');\n  if (!targetTab) {\n    targetTab = findTabByTitle(docData.tabs, 'trans');\n  }\n  if (!targetTab) {\n    const findFirstDocTab = (tabsList) => {\n      for (const tab of tabsList) {\n        if (tab.documentTab && tab.documentTab.body) return tab;\n        if (tab.childTabs && tab.childTabs.length > 0) {\n          const found = findFirstDocTab(tab.childTabs);\n          if (found) return found;\n        }\n      }\n      return null;\n    };\n    targetTab = findFirstDocTab(docData.tabs);\n  }\n  if (targetTab && targetTab.documentTab && targetTab.documentTab.body) {\n    bodyToParse = targetTab.documentTab.body;\n  }\n}\n\nif (!bodyToParse && docData.body) {\n  bodyToParse = docData.body;\n}\n\nconst text = bodyToParse ? extractTextFromContent(bodyToParse.content) : '';\n\nreturn {\n  json: {\n    documentId: docData.documentId || '',\n    text: text.trim()\n  }\n};"
-      },
-      "id": "2e4bece0-5382-44c9-b16e-59310a0d3978",
-      "name": "parse_google_doc_json",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        112,
-        1344
-      ]
-    },
-    {
-      "parameters": {
-        "resource": "chat",
-        "chatModel": "gpt-4o-mini",
-        "prompt": {
-          "messages": [
-            {
-              "role": "system",
-              "content": "=Eres un asistente experto en ventas y análisis de clientes. Analiza la siguiente transcripción completa de una llamada de venta y extrae detalladamente en español: 1. **Objetivos**: Qué metas o resultados busca conseguir el alumno. 2. **Dolores**: Qué frustraciones, miedos o problemas actuales tiene. 3. **Deseos**: Qué transformación o estado futuro ideal anhela.  Estructura el resultado con viñetas claras y profesionales, listas para ser enviadas por WhatsApp. Sin saludos ni introduciones.  Transcripción de la llamada: {{ $json.text || \"No disponible.\" }}"
-            }
-          ]
-        },
-        "options": {},
-        "requestOptions": {}
-      },
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.1,
-      "position": [
-        304,
-        1200
-      ],
-      "id": "cf940bdb-fce7-42ac-92fc-d4ac41364fc6",
-      "name": "agent_extract_objectives",
-      "credentials": {
-        "openAiApi": {
-          "id": "M9J3rAIJNEjdyXGG",
-          "name": "Cerebro"
-        }
-      }
     },
     {
       "parameters": {
@@ -1049,8 +962,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        112,
-        1584
+        64,
+        1632
       ],
       "id": "503ff336-5dfa-4669-be16-ffe3ce42fc2e",
       "name": "set_empty_objectives"
@@ -1058,7 +971,7 @@
     {
       "parameters": {
         "dataType": "string",
-        "value1": "={{ $('trig_webhook_sign').first().json.body.closer_name }}",
+        "value1": "={{ $('trig_webhook_sign').item.json.body.closer_name }}",
         "rules": {
           "rules": [
             {
@@ -1078,7 +991,7 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 1,
       "position": [
-        512,
+        1088,
         1280
       ],
       "id": "fa0669d4-b691-4d66-8256-587a2aadc61b",
@@ -1095,11 +1008,11 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $('trig_webhook_sign').first().json.body.telefono }}"
+              "value": "393762131734"
             },
             {
               "name": "text",
-              "value": "=const shortName = \n*¡NUEVO ALUMNO! *\n\n*👤 Datos del Alumno:*\n• *Nombre:* {{ $('trig_webhook_sign').first().json.body.nombre }} {{ $('trig_webhook_sign').first().json.body.apellidos }}\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }}\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}\n\n*📝 Contrato en PDF (Google Drive):*\n{{ $('upload_pdf_to_drive').first().json.webViewLink }}\n\n*🎯 Objetivos, Dolores y Deseos:*\n{{ $json.message.content }}"
+              "value": "={{ $json.mensaje }}"
             }
           ]
         },
@@ -1110,8 +1023,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        768,
-        1120
+        1360,
+        1072
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1134,7 +1047,7 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $('trig_webhook_sign').first().json.body.telefono }} "
+              "value": "=393762131734"
             },
             {
               "name": "text",
@@ -1149,8 +1062,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        768,
-        1344
+        1360,
+        1296
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1173,7 +1086,7 @@
           "parameters": [
             {
               "name": "to",
-              "value": "={{ $('trig_webhook_sign').first().json.body.telefono }} "
+              "value": "=393762131734"
             },
             {
               "name": "text",
@@ -1188,8 +1101,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        784,
-        1568
+        1360,
+        1504
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1227,8 +1140,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        1152,
-        1344
+        1632,
+        1296
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1239,6 +1152,204 @@
           "name": "WasenderAPI- Rafaelle"
         }
       }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Mejora la tipografia del documento antes de convertirlo a Google Doc.\n// Google Docs IGNORA el bloque <style>; solo respeta estilos inline en cada etiqueta.\n// Por eso quitamos el <style> y aplicamos los estilos directamente en cada tag.\nconst SERIF = '\"Times New Roman\", serif';\nconst NAVY = '#1f3864';\nconst TEXT = '#1a1a1a';\n\nreturn $input.all().map(item => {\n  let html = item.json.doc_html || '';\n\n  // Quitar el bloque <style> (causa del texto justificado en Arial)\n  html = html.replace(/<style[\\s\\S]*?<\\/style>/gi, '');\n\n  // Encabezados: serif, azul marino, negrita\n  html = html.replace(/<h1\\b(?![^>]*\\bstyle=)/gi, `<h1 style='font-family:${SERIF};font-size:20pt;font-weight:bold;color:${NAVY};margin-top:18pt;margin-bottom:8pt;'`);\n  html = html.replace(/<h2\\b(?![^>]*\\bstyle=)/gi, `<h2 style='font-family:${SERIF};font-size:16pt;font-weight:bold;color:${NAVY};margin-top:16pt;margin-bottom:6pt;'`);\n  html = html.replace(/<h3\\b(?![^>]*\\bstyle=)/gi, `<h3 style='font-family:${SERIF};font-size:13pt;font-weight:bold;color:${NAVY};margin-top:12pt;margin-bottom:4pt;'`);\n\n  // Parrafos: serif, alineado a la izquierda, interlineado comodo\n  html = html.replace(/<p\\b(?![^>]*\\bstyle=)/gi, `<p style='font-family:${SERIF};font-size:12pt;color:${TEXT};line-height:1.5;text-align:left;margin-bottom:10pt;'`);\n\n  // Vinetas\n  html = html.replace(/<li\\b(?![^>]*\\bstyle=)/gi, `<li style='font-family:${SERIF};font-size:12pt;color:${TEXT};line-height:1.5;text-align:left;margin-bottom:6pt;'`);\n\n  // Negritas resaltadas en azul marino\n  html = html.replace(/<strong\\b(?![^>]*\\bstyle=)/gi, `<strong style='font-family:${SERIF};color:${NAVY};'`);\n\n  // Limitar el tamano de la imagen de la firma\n  html = html.replace(/<img\\b(?![^>]*\\bstyle=)/gi, `<img style='height:90px;'`);\n\n  return { json: { ...item.json, doc_html: html }, pairedItem: { item: 0 } };\n});\n"
+      },
+      "id": "e1ebb105-8337-4c6d-bd92-0ca6c4310e9a",
+      "name": "style_html_doc",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -2240,
+        1136
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8457b9ec-4d60-46e1-9b85-d11a33ce32ef",
+              "name": "parent_folder_id",
+              "value": "12kp9ZpSkU8EIGwr0vyWStCO3_PpmwCy-",
+              "type": "string"
+            },
+            {
+              "id": "49040048-065b-4b63-892a-65d4e68099f5",
+              "name": "file_name",
+              "value": "={{ $('trig_webhook_sign').item.json.body.pdf_name.replace('.pdf', '').replace('.html', '') }}",
+              "type": "string"
+            },
+            {
+              "id": "2d57c51f-c2e3-493f-8d2f-4222c94f7876",
+              "name": "doc_html",
+              "value": "={{ $('trig_webhook_sign').item.json.body.html_contrato }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2480,
+        1136
+      ],
+      "id": "0bcdc876-067b-4f61-a5c2-e35ee9d9d394",
+      "name": "set_vars_html_doc"
+    },
+    {
+      "parameters": {
+        "jsCode": "const dialMap = [\n  // ======= LATAM =======\n  { code: '598', countryName: 'Uruguay',   countryCode: 'UY', timeZone: 'America/Montevideo' },\n  { code: '597', countryName: 'Surinam',   countryCode: 'SR', timeZone: 'America/Paramaribo' },\n  { code: '596', countryName: 'Martinica', countryCode: 'MQ', timeZone: 'America/Martinique' },\n  { code: '595', countryName: 'Paraguay',  countryCode: 'PY', timeZone: 'America/Asuncion' },\n  { code: '594', countryName: 'Guayana Francesa', countryCode: 'GF', timeZone: 'America/Cayenne' },\n  { code: '593', countryName: 'Ecuador',   countryCode: 'EC', timeZone: 'America/Guayaquil' },\n  { code: '592', countryName: 'Guyana',    countryCode: 'GY', timeZone: 'America/Guyana' },\n  { code: '591', countryName: 'Bolivia',   countryCode: 'BO', timeZone: 'America/La_Paz' },\n  { code: '590', countryName: 'Guadalupe', countryCode: 'GP', timeZone: 'America/Guadeloupe' },\n  { code: '58',  countryName: 'Venezuela', countryCode: 'VE', timeZone: 'America/Caracas' },\n  { code: '57',  countryName: 'Colombia',  countryCode: 'CO', timeZone: 'America/Bogota' },\n  { code: '56',  countryName: 'Chile',     countryCode: 'CL', timeZone: 'America/Santiago' },\n  { code: '55',  countryName: 'Brasil',    countryCode: 'BR', timeZone: 'America/Sao_Paulo' },\n  { code: '54',  countryName: 'Argentina', countryCode: 'AR', timeZone: 'America/Argentina/Buenos_Aires' },\n  { code: '53',  countryName: 'Cuba',      countryCode: 'CU', timeZone: 'America/Havana' },\n  { code: '52',  countryName: 'México',    countryCode: 'MX', timeZone: 'America/Mexico_City' },\n  { code: '51',  countryName: 'Perú',      countryCode: 'PE', timeZone: 'America/Lima' },\n  { code: '507', countryName: 'Panamá',    countryCode: 'PA', timeZone: 'America/Panama' },\n  { code: '506', countryName: 'Costa Rica', countryCode: 'CR', timeZone: 'America/Costa_Rica' },\n  { code: '505', countryName: 'Nicaragua', countryCode: 'NI', timeZone: 'America/Managua' },\n  { code: '504', countryName: 'Honduras',  countryCode: 'HN', timeZone: 'America/Tegucigalpa' },\n  { code: '503', countryName: 'El Salvador', countryCode: 'SV', timeZone: 'America/El_Salvador' },\n  { code: '502', countryName: 'Guatemala', countryCode: 'GT', timeZone: 'America/Guatemala' },\n  { code: '501', countryName: 'Belice',    countryCode: 'BZ', timeZone: 'America/Belize' },\n  { code: '1',   countryName: 'NANP (EE. UU./Canadá/Caribe)', countryCode: 'NANP', timeZone: 'America/New_York' },\n\n  // ======= EUROPA =======\n  { code: '386', countryName: 'Eslovenia', countryCode: 'SI', timeZone: 'Europe/Ljubljana' },\n  { code: '385', countryName: 'Croacia',   countryCode: 'HR', timeZone: 'Europe/Zagreb' },\n  { code: '383', countryName: 'Kosovo',    countryCode: 'XK', timeZone: 'Europe/Belgrade' },\n  { code: '382', countryName: 'Montenegro', countryCode: 'ME', timeZone: 'Europe/Podgorica' },\n  { code: '381', countryName: 'Serbia',    countryCode: 'RS', timeZone: 'Europe/Belgrade' },\n  { code: '380', countryName: 'Ucrania',   countryCode: 'UA', timeZone: 'Europe/Kyiv' },\n  { code: '378', countryName: 'San Marino', countryCode: 'SM', timeZone: 'Europe/Rome' },\n  { code: '377', countryName: 'Mónaco',    countryCode: 'MC', timeZone: 'Europe/Monaco' },\n  { code: '376', countryName: 'Andorra',   countryCode: 'AD', timeZone: 'Europe/Andorra' },\n  { code: '375', countryName: 'Bielorrusia', countryCode: 'BY', timeZone: 'Europe/Minsk' },\n  { code: '374', countryName: 'Armenia',   countryCode: 'AM', timeZone: 'Asia/Yerevan' },\n  { code: '373', countryName: 'Moldavia',  countryCode: 'MD', timeZone: 'Europe/Chisinau' },\n  { code: '372', countryName: 'Estonia',   countryCode: 'EE', timeZone: 'Europe/Tallinn' },\n  { code: '371', countryName: 'Letonia',   countryCode: 'LV', timeZone: 'Europe/Riga' },\n  { code: '370', countryName: 'Lituania',  countryCode: 'LT', timeZone: 'Europe/Vilnius' },\n  { code: '359', countryName: 'Bulgaria',  countryCode: 'BG', timeZone: 'Europe/Sofia' },\n  { code: '358', countryName: 'Finlandia', countryCode: 'FI', timeZone: 'Europe/Helsinki' },\n  { code: '357', countryName: 'Chipre',    countryCode: 'CY', timeZone: 'Asia/Nicosia' },\n  { code: '356', countryName: 'Malta',     countryCode: 'MT', timeZone: 'Europe/Malta' },\n  { code: '355', countryName: 'Albania',   countryCode: 'AL', timeZone: 'Europe/Tirane' },\n  { code: '354', countryName: 'Islandia',  countryCode: 'IS', timeZone: 'Atlantic/Reykjavik' },\n  { code: '353', countryName: 'Irlanda',   countryCode: 'IE', timeZone: 'Europe/Dublin' },\n  { code: '352', countryName: 'Luxemburgo', countryCode: 'LU', timeZone: 'Europe/Luxembourg' },\n  { code: '351', countryName: 'Portugal',  countryCode: 'PT', timeZone: 'Europe/Lisbon' },\n  { code: '49',  countryName: 'Alemania',  countryCode: 'DE', timeZone: 'Europe/Berlin' },\n  { code: '48',  countryName: 'Polonia',   countryCode: 'PL', timeZone: 'Europe/Warsaw' },\n  { code: '47',  countryName: 'Noruega',   countryCode: 'NO', timeZone: 'Europe/Oslo' },\n  { code: '46',  countryName: 'Suecia',    countryCode: 'SE', timeZone: 'Europe/Stockholm' },\n  { code: '45',  countryName: 'Dinamarca', countryCode: 'DK', timeZone: 'Europe/Copenhagen' },\n  { code: '44',  countryName: 'Reino Unido', countryCode: 'GB', timeZone: 'Europe/London' },\n  { code: '43',  countryName: 'Austria',   countryCode: 'AT', timeZone: 'Europe/Vienna' },\n  { code: '41',  countryName: 'Suiza',     countryCode: 'CH', timeZone: 'Europe/Zurich' },\n  { code: '40',  countryName: 'Rumanía',   countryCode: 'RO', timeZone: 'Europe/Bucharest' },\n  { code: '39',  countryName: 'Italia',    countryCode: 'IT', timeZone: 'Europe/Rome' },\n  { code: '38',  countryName: 'Ex-Yugoslavia (legacy)', countryCode: 'YU', timeZone: 'Europe/Belgrade' },\n  { code: '37',  countryName: 'Bálticos (legacy)', countryCode: 'BAL', timeZone: 'Europe/Vilnius' },\n  { code: '36',  countryName: 'Hungría',   countryCode: 'HU', timeZone: 'Europe/Budapest' },\n  { code: '35',  countryName: 'Europa Este (legacy)', countryCode: 'EEAST', timeZone: 'Europe/Prague' },\n  { code: '34',  countryName: 'España',    countryCode: 'ES', timeZone: 'Europe/Madrid' },\n  { code: '33',  countryName: 'Francia',   countryCode: 'FR', timeZone: 'Europe/Paris' },\n  { code: '32',  countryName: 'Bélgica',   countryCode: 'BE', timeZone: 'Europe/Brussels' },\n  { code: '31',  countryName: 'Países Bajos', countryCode: 'NL', timeZone: 'Europe/Amsterdam' },\n  { code: '30',  countryName: 'Grecia',    countryCode: 'GR', timeZone: 'Europe/Athens' },\n\n  // ======= ASIA-PACÍFICO =======\n  { code: '886', countryName: 'Taiwán',           countryCode: 'TW', timeZone: 'Asia/Taipei' },\n  { code: '853', countryName: 'Macao',             countryCode: 'MO', timeZone: 'Asia/Macau' },\n  { code: '852', countryName: 'Hong Kong',         countryCode: 'HK', timeZone: 'Asia/Hong_Kong' },\n  { code: '689', countryName: 'Polinesia Francesa',countryCode: 'PF', timeZone: 'Pacific/Tahiti' },\n  { code: '685', countryName: 'Samoa',             countryCode: 'WS', timeZone: 'Pacific/Apia' },\n  { code: '679', countryName: 'Fiyi',              countryCode: 'FJ', timeZone: 'Pacific/Fiji' },\n  { code: '673', countryName: 'Brunéi',            countryCode: 'BN', timeZone: 'Asia/Brunei' },\n  { code: '65',  countryName: 'Singapur',          countryCode: 'SG', timeZone: 'Asia/Singapore' },\n  { code: '64',  countryName: 'Nueva Zelanda',     countryCode: 'NZ', timeZone: 'Pacific/Auckland' },\n  { code: '63',  countryName: 'Filipinas',         countryCode: 'PH', timeZone: 'Asia/Manila' },\n  { code: '62',  countryName: 'Indonesia',         countryCode: 'ID', timeZone: 'Asia/Jakarta' },\n  { code: '61',  countryName: 'Australia',         countryCode: 'AU', timeZone: 'Australia/Sydney' },\n  { code: '60',  countryName: 'Malasia',           countryCode: 'MY', timeZone: 'Asia/Kuala_Lumpur' },\n  { code: '972', countryName: 'Israel',            countryCode: 'IL', timeZone: 'Asia/Jerusalem' },\n  { code: '971', countryName: 'Emiratos Árabes Unidos', countryCode: 'AE', timeZone: 'Asia/Dubai' },\n  { code: '968', countryName: 'Omán',              countryCode: 'OM', timeZone: 'Asia/Muscat' },\n  { code: '966', countryName: 'Arabia Saudita',    countryCode: 'SA', timeZone: 'Asia/Riyadh' },\n  { code: '965', countryName: 'Kuwait',            countryCode: 'KW', timeZone: 'Asia/Kuwait' },\n  { code: '964', countryName: 'Irak',              countryCode: 'IQ', timeZone: 'Asia/Baghdad' },\n  { code: '963', countryName: 'Siria',             countryCode: 'SY', timeZone: 'Asia/Damascus' },\n  { code: '962', countryName: 'Jordania',          countryCode: 'JO', timeZone: 'Asia/Amman' },\n  { code: '961', countryName: 'Líbano',            countryCode: 'LB', timeZone: 'Asia/Beirut' },\n  { code: '974', countryName: 'Qatar',             countryCode: 'QA', timeZone: 'Asia/Qatar' },\n  { code: '973', countryName: 'Baréin',            countryCode: 'BH', timeZone: 'Asia/Bahrain' },\n  { code: '82',  countryName: 'Corea del Sur',     countryCode: 'KR', timeZone: 'Asia/Seoul' },\n  { code: '81',  countryName: 'Japón',             countryCode: 'JP', timeZone: 'Asia/Tokyo' },\n  { code: '86',  countryName: 'China',             countryCode: 'CN', timeZone: 'Asia/Shanghai' },\n  { code: '7',   countryName: 'Rusia/Kazajistán',  countryCode: 'RU', timeZone: 'Europe/Moscow' },\n  { code: '90',  countryName: 'Turquía',           countryCode: 'TR', timeZone: 'Europe/Istanbul' },\n];\n\nfunction normalizePhone(p) {\n  if (!p) return '';\n  let s = String(p);\n  s = s.replace(/\\D/g, '');  // deja solo dígitos\n  if (s.startsWith('00')) s = s.slice(2); // 00xx -> xx\n  return s;\n}\n\nfunction detectByPrefix(digits) {\n  // probar prefijo más largo primero\n  const sorted = [...dialMap].sort((a,b) => b.code.length - a.code.length);\n  for (const entry of sorted) {\n    if (digits.startsWith(entry.code)) return entry;\n  }\n  return { code: '', countryName: 'Desconocido', countryCode: '', timeZone: 'UTC' };\n}\n\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  // Obtener el teléfono con plus del nodo anterior\n  const raw = $('trig_webhook_sign').first().json.body.telefono || $('trig_webhook_sign').first().json.body.telefono_cliente || item.json.telefono || '';\n  \n  let digits = normalizePhone(raw);\n\n  // Normalizar dígito extra móvil AR/MX (mismo criterio que datos_v2 del setter)\n  // WhatsApp/algunos leads añaden un 1 tras 52 (MX) o un 9 tras 54 (AR). El CRM debe\n  // guardar el formato canónico sin ese dígito para que el matching con el setter funcione.\n  if (digits.length === 13 && digits.startsWith('521')) digits = '52' + digits.slice(3);\n  if (digits.length === 13 && digits.startsWith('549')) digits = '54' + digits.slice(3);\n\n  const match = detectByPrefix(digits);\n\n  const nationalNumber = match.code && digits.startsWith(match.code)\n    ? digits.slice(match.code.length)\n    : digits;\n\n  // Solo devolver los campos de país\n  results.push({\n    json: {\n      phone_e164: digits,\n      dialCode: match.code,\n      countryName: match.countryName,\n      countryCode: match.countryCode,\n      timeZone: match.timeZone || 'UTC',\n      nationalNumber: nationalNumber\n    },\n    pairedItem: { item: 0 }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        816
+      ],
+      "id": "b21e18de-d014-4263-8445-47167a2a5932",
+      "name": "calc_country_detect"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Calcula los grupos del alumno segun el tipo de contrato.\n// Se guarda como texto separado por comas para la celda de seleccion multiple del Sheet.\nconst t = String($('trig_webhook_sign').first().json.body.tipo_contrato || '').toLowerCase().trim();\n\n// Todos los alumnos pertenecen a Iniciacion\nconst grupos = ['Iniciación'];\n\n// Advanced Healers: advanced healers, eca y energy master\nif (['acuerdo_acceso_advanced_healers', 'alquimia_vital_eca', 'alquimia_vilal_eca', 'alquimia_vital_energy_master', 'alquimia_vilal_energy_master'].includes(t)) {\n  grupos.push('Advanced Healers');\n}\n\n// Emprende con Alma: solo ECA\nif (t === 'alquimia_vital_eca' || t === 'alquimia_vilal_eca') {\n  grupos.push('Emprende con Alma');\n}\n\n// Energy Masters: solo energy master\nif (t === 'alquimia_vital_energy_master' || t === 'alquimia_vilal_energy_master') {\n  grupos.push('Energy Masters');\n}\n\n// oferta_iniciacion_vitaliza y resto: solo Iniciacion (ya incluido)\n\nreturn [{ json: { tipo_contrato: t, grupos: grupos.join(', '), grupos_lista: grupos, plan: grupos[grupos.length - 1] }, pairedItem: { item: 0 } }];\n"
+      },
+      "id": "a0b4d1b1-ac8b-4e6a-aa3e-2239a9ec32b4",
+      "name": "calc_grupos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -368,
+        816
+      ]
+    },
+    {
+      "parameters": {
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        1344
+      ],
+      "id": "c5b8fb8d-93e6-488a-8f62-635754c30b31",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.transcripcion }}",
+          "mode": "url"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -144,
+        1328
+      ],
+      "id": "1698d8a2-eacb-4b7c-8fee-3356e4ea9a7d",
+      "name": "descargar_doc_n",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "U3gk9gfW9ynkKc2U",
+          "name": "Google Drive - Lucem"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        64,
+        1328
+      ],
+      "id": "4039d4ff-91b7-4df7-a18c-0bc172aff410",
+      "name": "extraer_contenido_n"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "id"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Transcripción de la llamada:\n{{ $json.text }}"
+            },
+            {
+              "role": "system",
+              "content": "Eres un asistente experto en ventas y análisis de clientes. Analiza la siguiente transcripción completa de una llamada de venta y extrae detalladamente en español: \n\n1. **Objetivos**: Qué metas o resultados busca conseguir el alumno. \n\n2. **Dolores**: Qué frustraciones, miedos o problemas actuales tiene. \n\n3. **Deseos**: Qué transformación o estado futuro ideal anhela.  Estructura el resultado con viñetas claras y profesionales, listas para ser enviadas por WhatsApp. Sin saludos ni introducciones.  "
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"objetivos\": {\n      \"type\": \"string\"\n    },\n    \"dolores\": {\n      \"type\": \"string\"\n    },\n    \"deseos\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"objetivos\", \"dolores\", \"deseos\"]\n}"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        256,
+        1328
+      ],
+      "id": "a4397377-c77b-460f-8408-672a7912d10b",
+      "name": "agente_objetivos",
+      "credentials": {
+        "openAiApi": {
+          "id": "M9J3rAIJNEjdyXGG",
+          "name": "Cerebro"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "53291598-1bb7-4975-adb0-4aa19685b6b8",
+              "name": "mensaje",
+              "value": "=*¡NUEVO ALUMNO! *  \n\n*👤 Datos del Alumno:* \n\n• *Nombre:* {{ $('trig_webhook_sign').item.json.body.nombre_cliente_contrato }}\n\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }} \n\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}  \n\n*📝 Contrato en PDF (Google Drive):* {{ $('upload_pdf_to_drive').first().json.webViewLink }}  \n\n*🎯 Objetivos:* \n{{ $json.output[0].content[0].text.objetivos }}   \n\n*🎯 Dolores:* \n{{ $json.output[0].content[0].text.dolores }}\n\n*🎯 Deseos:* \n{{ $json.output[0].content[0].text.deseos }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        624,
+        1328
+      ],
+      "id": "658a26e1-d839-489d-b249-f061c3502057",
+      "name": "Edit Fields1"
     }
   ],
   "connections": {
@@ -1247,17 +1358,6 @@
         [
           {
             "node": "set_vars_html_doc",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "set_vars_html_doc": {
-      "main": [
-        [
-          {
-            "node": "html_to_google_doc",
             "type": "main",
             "index": 0
           }
@@ -1312,7 +1412,7 @@
       "main": [
         [
           {
-            "node": "post_sheets_alumnos",
+            "node": "calc_country_detect",
             "type": "main",
             "index": 0
           },
@@ -1328,7 +1428,7 @@
       "main": [
         [
           {
-            "node": "post_sheets_seguimiento",
+            "node": "calc_grupos",
             "type": "main",
             "index": 0
           }
@@ -1390,18 +1490,7 @@
       "main": [
         [
           {
-            "node": "find_client_row",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "find_client_row": {
-      "main": [
-        [
-          {
-            "node": "check_has_doc",
+            "node": "Limit",
             "type": "main",
             "index": 0
           }
@@ -1412,7 +1501,7 @@
       "main": [
         [
           {
-            "node": "get_google_doc_text",
+            "node": "descargar_doc_n",
             "type": "main",
             "index": 0
           }
@@ -1420,39 +1509,6 @@
         [
           {
             "node": "set_empty_objectives",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "get_google_doc_text": {
-      "main": [
-        [
-          {
-            "node": "parse_google_doc_json",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "parse_google_doc_json": {
-      "main": [
-        [
-          {
-            "node": "agent_extract_objectives",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "agent_extract_objectives": {
-      "main": [
-        [
-          {
-            "node": "switch_closer_notify",
             "type": "main",
             "index": 0
           }
@@ -1522,6 +1578,105 @@
         [
           {
             "node": "post_whatsapp_rafaelle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "style_html_doc": {
+      "main": [
+        [
+          {
+            "node": "html_to_google_doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set_vars_html_doc": {
+      "main": [
+        [
+          {
+            "node": "style_html_doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calc_country_detect": {
+      "main": [
+        [
+          {
+            "node": "post_sheets_alumnos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calc_grupos": {
+      "main": [
+        [
+          {
+            "node": "post_sheets_seguimiento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "check_has_doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "descargar_doc_n": {
+      "main": [
+        [
+          {
+            "node": "extraer_contenido_n",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extraer_contenido_n": {
+      "main": [
+        [
+          {
+            "node": "agente_objetivos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "agente_objetivos": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "switch_closer_notify",
             "type": "main",
             "index": 0
           }
