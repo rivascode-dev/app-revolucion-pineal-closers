@@ -28,7 +28,7 @@ export default function ContractsView({
     userId,
     search,
   );
-  console.log('🚀 ~ ContractsView ~ contracts:', contracts);
+
   return (
     <div className='space-y-8 animate-fade-in'>
       {/* Header Section */}

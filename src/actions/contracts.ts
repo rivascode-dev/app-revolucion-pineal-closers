@@ -8,7 +8,10 @@ import { headers } from 'next/headers';
 /**
  * Splits a full name into first name and last names.
  */
-function splitFullName(fullName: string): { nombre: string; apellidos: string } {
+function splitFullName(fullName: string): {
+  nombre: string;
+  apellidos: string;
+} {
   const parts = fullName.trim().split(/\s+/);
   if (parts.length === 0) {
     return { nombre: '', apellidos: '' };
@@ -25,36 +28,35 @@ function splitFullName(fullName: string): { nombre: string; apellidos: string } 
  * Maps common international phone prefixes to country names.
  */
 function getCountryByPhone(phone: string): string {
-  const cleanPhone = phone.replace(/[^\d+]/g, '');
-  if (!cleanPhone.startsWith('+')) {
-    return 'Desconocido';
-  }
+  const cleanPhone = phone.replace(/\D/g, '');
 
   const countryPrefixes = [
-    { prefix: '+34', country: 'España' },
-    { prefix: '+54', country: 'Argentina' },
-    { prefix: '+56', country: 'Chile' },
-    { prefix: '+52', country: 'México' },
-    { prefix: '+57', country: 'Colombia' },
-    { prefix: '+51', country: 'Perú' },
-    { prefix: '+58', country: 'Venezuela' },
-    { prefix: '+593', country: 'Ecuador' },
-    { prefix: '+595', country: 'Paraguay' },
-    { prefix: '+598', country: 'Uruguay' },
-    { prefix: '+591', country: 'Bolivia' },
-    { prefix: '+506', country: 'Costa Rica' },
-    { prefix: '+507', country: 'Panamá' },
-    { prefix: '+502', country: 'Guatemala' },
-    { prefix: '+503', country: 'El Salvador' },
-    { prefix: '+504', country: 'Honduras' },
-    { prefix: '+505', country: 'Nicaragua' },
-    { prefix: '+599', country: 'Antillas Holandesas' },
-    { prefix: '+53', country: 'Cuba' },
-    { prefix: '+509', country: 'Haití' },
-    { prefix: '+1', country: 'Estados Unidos / Canadá' }
+    { prefix: '34', country: 'España' },
+    { prefix: '54', country: 'Argentina' },
+    { prefix: '56', country: 'Chile' },
+    { prefix: '52', country: 'México' },
+    { prefix: '57', country: 'Colombia' },
+    { prefix: '51', country: 'Perú' },
+    { prefix: '58', country: 'Venezuela' },
+    { prefix: '593', country: 'Ecuador' },
+    { prefix: '595', country: 'Paraguay' },
+    { prefix: '598', country: 'Uruguay' },
+    { prefix: '591', country: 'Bolivia' },
+    { prefix: '506', country: 'Costa Rica' },
+    { prefix: '507', country: 'Panamá' },
+    { prefix: '502', country: 'Guatemala' },
+    { prefix: '503', country: 'El Salvador' },
+    { prefix: '504', country: 'Honduras' },
+    { prefix: '505', country: 'Nicaragua' },
+    { prefix: '599', country: 'Antillas Holandesas' },
+    { prefix: '53', country: 'Cuba' },
+    { prefix: '509', country: 'Haití' },
+    { prefix: '1', country: 'Estados Unidos / Canadá' },
   ];
 
-  const sortedPrefixes = [...countryPrefixes].sort((a, b) => b.prefix.length - a.prefix.length);
+  const sortedPrefixes = [...countryPrefixes].sort(
+    (a, b) => b.prefix.length - a.prefix.length,
+  );
 
   for (const item of sortedPrefixes) {
     if (cleanPhone.startsWith(item.prefix)) {
@@ -83,7 +85,11 @@ function markdownToHtml(markdown: string): string {
 
   html = html.replace(/(<li>[\s\S]*?<\/li>)+/g, (match) => `<ul>${match}</ul>`);
 
-  if (!html.startsWith('<h') && !html.startsWith('<p') && !html.startsWith('<ul')) {
+  if (
+    !html.startsWith('<h') &&
+    !html.startsWith('<p') &&
+    !html.startsWith('<ul')
+  ) {
     html = `<p>${html}</p>`;
   }
 
