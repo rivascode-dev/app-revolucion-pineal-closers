@@ -17,14 +17,14 @@ export function Sidebar() {
       {/* Logo Container */}
       <div className='p-4 md:p-6 flex items-center gap-3 justify-center md:justify-start'>
         <div className='w-10 h-10 rounded-xl bg-foreground text-background flex items-center justify-center font-black text-lg shadow-md hover:scale-105 transition-transform duration-300'>
-          RP
+          AV
         </div>
         <div className='hidden md:block text-left'>
           <h1 className='font-extrabold text-sm tracking-tight text-foreground leading-none'>
-            REVOLUCIÓN PINEAL
+            ALQUIMIA VITAL
           </h1>
           <span className='text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mt-1 block'>
-            Closers App
+            Contratos App
           </span>
         </div>
       </div>
@@ -66,11 +66,8 @@ export function Sidebar() {
       {/* Sidebar Footer */}
       <div className='hidden md:block p-4 m-4 rounded-2xl bg-accent/50 border border-border/50'>
         <span className='text-[10px] text-center font-semibold text-muted-foreground block'>
-          Revolución Pineal v1.0
+          Alquimia Vital - Contratos App v1.0
         </span>
-        {/* <div className='h-1.5 w-full bg-border rounded-full overflow-hidden'>
-          <div className='h-full w-1/3 bg-primary rounded-full' />
-        </div> */}
       </div>
     </aside>
   );

@@ -28,7 +28,8 @@ export async function createContract(formData: FormData) {
     telefono_cliente: formData.get('telefono_cliente') as string,
     email_cliente: formData.get('email_cliente') as string,
     numero_cuotas: parseInt(formData.get('numero_cuotas') as string),
-    importe_cuotas: parseFloat(formData.get('importe') as string),
+    importe_cuotas: parseFloat(formData.get('importe_cuotas') as string),
+    importe_total: parseFloat(formData.get('importe_total') as string),
     dia_cobro: parseInt(formData.get('dia_cobro') as string),
     moneda: formData.get('moneda') as string,
     tipo_contrato: formData.get('tipo_contrato') as string,
@@ -43,6 +44,7 @@ export async function createContract(formData: FormData) {
     !rawData.email_cliente ||
     isNaN(rawData.numero_cuotas) ||
     isNaN(rawData.importe_cuotas) ||
+    isNaN(rawData.importe_total) ||
     isNaN(rawData.dia_cobro)
   ) {
     return { error: 'Todos los campos son obligatorios y deben ser válidos' };

@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Revolución Pineal - Sistema de Firmas',
-  description: 'Sistema administrativo y de firmas de Revolución Pineal',
+  title: 'Alquimia Vital - Contratos',
+  description: 'Sistema de contratos de Alquimia Vital',
 };
 
 export default function RootLayout({
@@ -21,10 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='es' suppressHydrationWarning className={inter.variable}>
-      <body className="antialiased min-h-screen bg-background font-sans text-foreground">
+      <body className='antialiased min-h-screen bg-background font-sans text-foreground'>
         <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
+          attribute='class'
+          defaultTheme='dark'
           enableSystem
           disableTransitionOnChange
         >

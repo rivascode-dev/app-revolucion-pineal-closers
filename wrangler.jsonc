@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "main": ".open-next/worker.js",
-  "name": "revolucion-pineal-closers-app",
+  "name": "alquimia-vital-contratos",
   "keep_names": false,
   // Set this to today's date
   "compatibility_date": "2026-05-25",

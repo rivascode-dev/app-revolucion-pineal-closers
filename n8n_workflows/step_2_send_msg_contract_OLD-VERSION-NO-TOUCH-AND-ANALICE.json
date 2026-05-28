@@ -9,7 +9,7 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2.1,
       "position": [
-        -3712,
+        -2704,
         1136
       ],
       "id": "c214ca8b-3a42-42d0-9626-38cba9e7b33a",
@@ -31,7 +31,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -2992,
+        -1984,
         1136
       ],
       "id": "9ce522cd-0a9e-4cf5-9b45-7b3aa0d691b5",
@@ -48,7 +48,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        -2752,
+        -1744,
         1136
       ],
       "id": "5ba58554-2d78-4781-b8d4-d71e107178b4",
@@ -74,7 +74,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -2512,
+        -1504,
         1136
       ],
       "id": "0a64529a-a0b2-4408-acf6-3987fb917a18",
@@ -103,7 +103,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -2288,
+        -1280,
         1136
       ],
       "id": "14bcc71f-24a7-4d60-a75f-837c67eeecd7",
@@ -128,7 +128,7 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -2064,
+        -1056,
         1136
       ],
       "id": "1f864f31-ee43-403b-87e7-e54dad420b51",
@@ -163,9 +163,9 @@
             "Nombre": "={{ $('trig_webhook_sign').item.json.body.nombre }}",
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
-            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email_cliente }}",
+            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
             "Pais": "={{ $('calc_country_detect').item.json.countryName }}",
-            "Fecha de inicio": "={{ $('trig_webhook_sign').item.json.body.fecha_contrato }}",
+            "Fecha de inicio": "={{ $('trig_webhook_sign').item.json.body.fecha_inicio }}",
             "Doc.Acuerdos": "={{ $('upload_pdf_to_drive').item.json.webViewLink }}"
           },
           "matchingColumns": [
@@ -331,8 +331,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -3424,
-        1568
+        -592,
+        816
       ],
       "id": "491ddc1d-804c-46a0-9e85-70648bcd87be",
       "name": "post_sheets_alumnos",
@@ -370,7 +370,7 @@
             "Nombre": "={{ $('trig_webhook_sign').item.json.body.nombre }}",
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
-            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email_cliente }}",
+            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
             "Grupo": "={{ $('calc_grupos').item.json.grupos }}",
             "Estado": "Activo",
             "Estado (I)": "Correcto"
@@ -563,8 +563,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2960,
-        1568
+        -128,
+        816
       ],
       "id": "5a35c9c2-57b2-4f34-b863-4a091f6b0ca1",
       "name": "post_sheets_seguimiento",
@@ -602,8 +602,9 @@
             "Nombre": "={{ $('trig_webhook_sign').item.json.body.nombre }}",
             "Apellidos": "={{ $('trig_webhook_sign').item.json.body.apellidos }}",
             "Teléfono": "={{ $('trig_webhook_sign').item.json.body.telefono }}",
-            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email_cliente }}",
-            "Plan": "={{ $('calc_grupos').item.json.plan }}"
+            "Correo electrónico": "={{ $('trig_webhook_sign').item.json.body.email }}",
+            "Plan": "={{ $('calc_grupos').item.json.plan }}",
+            "Estado": "Pendiente"
           },
           "matchingColumns": [
             "row_number"
@@ -617,7 +618,7 @@
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
-              "removed": true
+              "removed": false
             },
             {
               "id": "Nombre",
@@ -763,8 +764,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -2688,
-        1568
+        144,
+        816
       ],
       "id": "be2880d0-0b5c-495f-9517-a304cae36ff4",
       "name": "post_sheets_pagos",
@@ -806,11 +807,40 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.1,
       "position": [
-        -2432,
-        1568
+        400,
+        816
       ],
       "id": "7c7bdf2d-51ee-4689-9461-e08cfefc0e00",
       "name": "flow_check_contrato"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://wasenderapi.com/api/groups/120363424654026759@g.us/participants/add",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"participants\": [ \"{{ $('trig_webhook_sign').item.json.body.telefono_cliente }}\" ] }",
+        "options": {}
+      },
+      "id": "c2699576-6194-437b-bc80-8517150c0a2d",
+      "name": "post_whatsapp_group_alma",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        688,
+        640
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpBearerAuth": {
+          "id": "bBcrdGrIXhIAjFzs",
+          "name": "WasenderAPI - Lucem (Principal)"
+        }
+      }
     },
     {
       "parameters": {
@@ -828,8 +858,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1808,
-        1584
+        992,
+        832
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -868,8 +898,8 @@
       "type": "n8n-nodes-base.googleSheets",
       "typeVersion": 4.7,
       "position": [
-        -1568,
-        1584
+        -832,
+        1344
       ],
       "id": "db5a5a3f-506e-4d77-af4e-8a1a89429689",
       "name": "get_sheet_informes",
@@ -909,8 +939,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.1,
       "position": [
-        -3440,
-        2064
+        -400,
+        1344
       ],
       "id": "54e7035e-6771-48e8-9eb6-cc4bb33bd46b",
       "name": "check_has_doc"
@@ -921,8 +951,8 @@
           "assignments": [
             {
               "id": "e2ba8c91-fd4d-4a1d-aefb-b9fc2ed3a2df",
-              "name": "perfil",
-              "value": "No hubo transcripción de la llamada por lo tanto no se pudo obtener sus dolores, deseos y objetivos.",
+              "name": "output",
+              "value": "No se encontró una transcripción o documento de llamada asociado a este alumno.",
               "type": "string"
             }
           ]
@@ -932,11 +962,40 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -2880,
-        2352
+        64,
+        1632
       ],
       "id": "503ff336-5dfa-4669-be16-ffe3ce42fc2e",
       "name": "set_empty_objectives"
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $('trig_webhook_sign').item.json.body.closer_name }}",
+        "rules": {
+          "rules": [
+            {
+              "value2": "Daniel"
+            },
+            {
+              "value2": "Albert",
+              "output": 1
+            },
+            {
+              "value2": "Nathalia",
+              "output": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        1280
+      ],
+      "id": "fa0669d4-b691-4d66-8256-587a2aadc61b",
+      "name": "switch_closer_notify"
     },
     {
       "parameters": {
@@ -964,8 +1023,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1792,
-        2048
+        1360,
+        1072
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -992,7 +1051,7 @@
             },
             {
               "name": "text",
-              "value": "={{ $json.mensaje }}"
+              "value": "=*¡NUEVO ALUMNO! *\n\n*👤 Datos del Alumno:*\n• *Nombre:* {{ $('trig_webhook_sign').first().json.body.nombre }} {{ $('trig_webhook_sign').first().json.body.apellidos }}\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }}\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}\n\n*📝 Contrato en PDF (Google Drive):*\n{{ $('upload_pdf_to_drive').first().json.webViewLink }}\n\n*🎯 Objetivos, Dolores y Deseos:*\n{{ $json.message.content }}"
             }
           ]
         },
@@ -1003,8 +1062,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1776,
-        2256
+        1360,
+        1296
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1031,7 +1090,7 @@
             },
             {
               "name": "text",
-              "value": "={{ $json.mensaje }}"
+              "value": "=*¡NUEVO ALUMNO! *\n\n*👤 Datos del Alumno:*\n• *Nombre:* {{ $('trig_webhook_sign').first().json.body.nombre }} {{ $('trig_webhook_sign').first().json.body.apellidos }}\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }}\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}\n\n*📝 Contrato en PDF (Google Drive):*\n{{ $('upload_pdf_to_drive').first().json.webViewLink }}\n\n*🎯 Objetivos, Dolores y Deseos:*\n{{ $json.message.content }}"
             }
           ]
         },
@@ -1042,8 +1101,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1792,
-        1840
+        1360,
+        1504
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1081,8 +1140,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -1504,
-        2048
+        1632,
+        1296
       ],
       "retryOnFail": true,
       "maxTries": 3,
@@ -1103,7 +1162,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3248,
+        -2240,
         1136
       ]
     },
@@ -1136,7 +1195,7 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -3488,
+        -2480,
         1136
       ],
       "id": "0bcdc876-067b-4f61-a5c2-e35ee9d9d394",
@@ -1144,13 +1203,13 @@
     },
     {
       "parameters": {
-        "jsCode": "const dialMap = [\n  // ======= LATAM =======\n  { code: '598', countryName: 'Uruguay',   countryCode: 'UY', timeZone: 'America/Montevideo' },\n  { code: '597', countryName: 'Surinam',   countryCode: 'SR', timeZone: 'America/Paramaribo' },\n  { code: '596', countryName: 'Martinica', countryCode: 'MQ', timeZone: 'America/Martinique' },\n  { code: '595', countryName: 'Paraguay',  countryCode: 'PY', timeZone: 'America/Asuncion' },\n  { code: '594', countryName: 'Guayana Francesa', countryCode: 'GF', timeZone: 'America/Cayenne' },\n  { code: '593', countryName: 'Ecuador',   countryCode: 'EC', timeZone: 'America/Guayaquil' },\n  { code: '592', countryName: 'Guyana',    countryCode: 'GY', timeZone: 'America/Guyana' },\n  { code: '591', countryName: 'Bolivia',   countryCode: 'BO', timeZone: 'America/La_Paz' },\n  { code: '590', countryName: 'Guadalupe', countryCode: 'GP', timeZone: 'America/Guadeloupe' },\n  { code: '58',  countryName: 'Venezuela', countryCode: 'VE', timeZone: 'America/Caracas' },\n  { code: '57',  countryName: 'Colombia',  countryCode: 'CO', timeZone: 'America/Bogota' },\n  { code: '56',  countryName: 'Chile',     countryCode: 'CL', timeZone: 'America/Santiago' },\n  { code: '55',  countryName: 'Brasil',    countryCode: 'BR', timeZone: 'America/Sao_Paulo' },\n  { code: '54',  countryName: 'Argentina', countryCode: 'AR', timeZone: 'America/Argentina/Buenos_Aires' },\n  { code: '53',  countryName: 'Cuba',      countryCode: 'CU', timeZone: 'America/Havana' },\n  { code: '52',  countryName: 'México',    countryCode: 'MX', timeZone: 'America/Mexico_City' },\n  { code: '51',  countryName: 'Perú',      countryCode: 'PE', timeZone: 'America/Lima' },\n  { code: '507', countryName: 'Panamá',    countryCode: 'PA', timeZone: 'America/Panama' },\n  { code: '506', countryName: 'Costa Rica', countryCode: 'CR', timeZone: 'America/Costa_Rica' },\n  { code: '505', countryName: 'Nicaragua', countryCode: 'NI', timeZone: 'America/Managua' },\n  { code: '504', countryName: 'Honduras',  countryCode: 'HN', timeZone: 'America/Tegucigalpa' },\n  { code: '503', countryName: 'El Salvador', countryCode: 'SV', timeZone: 'America/El_Salvador' },\n  { code: '502', countryName: 'Guatemala', countryCode: 'GT', timeZone: 'America/Guatemala' },\n  { code: '501', countryName: 'Belice',    countryCode: 'BZ', timeZone: 'America/Belize' },\n  { code: '1',   countryName: 'NANP (EE. UU./Canadá/Caribe)', countryCode: 'NANP', timeZone: 'America/New_York' },\n\n  // ======= EUROPA =======\n  { code: '386', countryName: 'Eslovenia', countryCode: 'SI', timeZone: 'Europe/Ljubljana' },\n  { code: '385', countryName: 'Croacia',   countryCode: 'HR', timeZone: 'Europe/Zagreb' },\n  { code: '383', countryName: 'Kosovo',    countryCode: 'XK', timeZone: 'Europe/Belgrade' },\n  { code: '382', countryName: 'Montenegro', countryCode: 'ME', timeZone: 'Europe/Podgorica' },\n  { code: '381', countryName: 'Serbia',    countryCode: 'RS', timeZone: 'Europe/Belgrade' },\n  { code: '380', countryName: 'Ucrania',   countryCode: 'UA', timeZone: 'Europe/Kyiv' },\n  { code: '378', countryName: 'San Marino', countryCode: 'SM', timeZone: 'Europe/Rome' },\n  { code: '377', countryName: 'Mónaco',    countryCode: 'MC', timeZone: 'Europe/Monaco' },\n  { code: '376', countryName: 'Andorra',   countryCode: 'AD', timeZone: 'Europe/Andorra' },\n  { code: '375', countryName: 'Bielorrusia', countryCode: 'BY', timeZone: 'Europe/Minsk' },\n  { code: '374', countryName: 'Armenia',   countryCode: 'AM', timeZone: 'Asia/Yerevan' },\n  { code: '373', countryName: 'Moldavia',  countryCode: 'MD', timeZone: 'Europe/Chisinau' },\n  { code: '372', countryName: 'Estonia',   countryCode: 'EE', timeZone: 'Europe/Tallinn' },\n  { code: '371', countryName: 'Letonia',   countryCode: 'LV', timeZone: 'Europe/Riga' },\n  { code: '370', countryName: 'Lituania',  countryCode: 'LT', timeZone: 'Europe/Vilnius' },\n  { code: '359', countryName: 'Bulgaria',  countryCode: 'BG', timeZone: 'Europe/Sofia' },\n  { code: '358', countryName: 'Finlandia', countryCode: 'FI', timeZone: 'Europe/Helsinki' },\n  { code: '357', countryName: 'Chipre',    countryCode: 'CY', timeZone: 'Asia/Nicosia' },\n  { code: '356', countryName: 'Malta',     countryCode: 'MT', timeZone: 'Europe/Malta' },\n  { code: '355', countryName: 'Albania',   countryCode: 'AL', timeZone: 'Europe/Tirane' },\n  { code: '354', countryName: 'Islandia',  countryCode: 'IS', timeZone: 'Atlantic/Reykjavik' },\n  { code: '353', countryName: 'Irlanda',   countryCode: 'IE', timeZone: 'Europe/Dublin' },\n  { code: '352', countryName: 'Luxemburgo', countryCode: 'LU', timeZone: 'Europe/Luxembourg' },\n  { code: '351', countryName: 'Portugal',  countryCode: 'PT', timeZone: 'Europe/Lisbon' },\n  { code: '49',  countryName: 'Alemania',  countryCode: 'DE', timeZone: 'Europe/Berlin' },\n  { code: '48',  countryName: 'Polonia',   countryCode: 'PL', timeZone: 'Europe/Warsaw' },\n  { code: '47',  countryName: 'Noruega',   countryCode: 'NO', timeZone: 'Europe/Oslo' },\n  { code: '46',  countryName: 'Suecia',    countryCode: 'SE', timeZone: 'Europe/Stockholm' },\n  { code: '45',  countryName: 'Dinamarca', countryCode: 'DK', timeZone: 'Europe/Copenhagen' },\n  { code: '44',  countryName: 'Reino Unido', countryCode: 'GB', timeZone: 'Europe/London' },\n  { code: '43',  countryName: 'Austria',   countryCode: 'AT', timeZone: 'Europe/Vienna' },\n  { code: '41',  countryName: 'Suiza',     countryCode: 'CH', timeZone: 'Europe/Zurich' },\n  { code: '40',  countryName: 'Rumanía',   countryCode: 'RO', timeZone: 'Europe/Bucharest' },\n  { code: '39',  countryName: 'Italia',    countryCode: 'IT', timeZone: 'Europe/Rome' },\n  { code: '38',  countryName: 'Ex-Yugoslavia (legacy)', countryCode: 'YU', timeZone: 'Europe/Belgrade' },\n  { code: '37',  countryName: 'Bálticos (legacy)', countryCode: 'BAL', timeZone: 'Europe/Vilnius' },\n  { code: '36',  countryName: 'Hungría',   countryCode: 'HU', timeZone: 'Europe/Budapest' },\n  { code: '35',  countryName: 'Europa Este (legacy)', countryCode: 'EEAST', timeZone: 'Europe/Prague' },\n  { code: '34',  countryName: 'España',    countryCode: 'ES', timeZone: 'Europe/Madrid' },\n  { code: '33',  countryName: 'Francia',   countryCode: 'FR', timeZone: 'Europe/Paris' },\n  { code: '32',  countryName: 'Bélgica',   countryCode: 'BE', timeZone: 'Europe/Brussels' },\n  { code: '31',  countryName: 'Países Bajos', countryCode: 'NL', timeZone: 'Europe/Amsterdam' },\n  { code: '30',  countryName: 'Grecia',    countryCode: 'GR', timeZone: 'Europe/Athens' },\n\n  // ======= ASIA-PACÍFICO =======\n  { code: '886', countryName: 'Taiwán',           countryCode: 'TW', timeZone: 'Asia/Taipei' },\n  { code: '853', countryName: 'Macao',             countryCode: 'MO', timeZone: 'Asia/Macau' },\n  { code: '852', countryName: 'Hong Kong',         countryCode: 'HK', timeZone: 'Asia/Hong_Kong' },\n  { code: '689', countryName: 'Polinesia Francesa',countryCode: 'PF', timeZone: 'Pacific/Tahiti' },\n  { code: '685', countryName: 'Samoa',             countryCode: 'WS', timeZone: 'Pacific/Apia' },\n  { code: '679', countryName: 'Fiyi',              countryCode: 'FJ', timeZone: 'Pacific/Fiji' },\n  { code: '673', countryName: 'Brunéi',            countryCode: 'BN', timeZone: 'Asia/Brunei' },\n  { code: '65',  countryName: 'Singapur',          countryCode: 'SG', timeZone: 'Asia/Singapore' },\n  { code: '64',  countryName: 'Nueva Zelanda',     countryCode: 'NZ', timeZone: 'Pacific/Auckland' },\n  { code: '63',  countryName: 'Filipinas',         countryCode: 'PH', timeZone: 'Asia/Manila' },\n  { code: '62',  countryName: 'Indonesia',         countryCode: 'ID', timeZone: 'Asia/Jakarta' },\n  { code: '61',  countryName: 'Australia',         countryCode: 'AU', timeZone: 'Australia/Sydney' },\n  { code: '60',  countryName: 'Malasia',           countryCode: 'MY', timeZone: 'Asia/Kuala_Lumpur' },\n  { code: '972', countryName: 'Israel',            countryCode: 'IL', timeZone: 'Asia/Jerusalem' },\n  { code: '971', countryName: 'Emiratos Árabes Unidos', countryCode: 'AE', timeZone: 'Asia/Dubai' },\n  { code: '968', countryName: 'Omán',              countryCode: 'OM', timeZone: 'Asia/Muscat' },\n  { code: '966', countryName: 'Arabia Saudita',    countryCode: 'SA', timeZone: 'Asia/Riyadh' },\n  { code: '965', countryName: 'Kuwait',            countryCode: 'KW', timeZone: 'Asia/Kuwait' },\n  { code: '964', countryName: 'Irak',              countryCode: 'IQ', timeZone: 'Asia/Baghdad' },\n  { code: '963', countryName: 'Siria',             countryCode: 'SY', timeZone: 'Asia/Damascus' },\n  { code: '962', countryName: 'Jordania',          countryCode: 'JO', timeZone: 'Asia/Amman' },\n  { code: '961', countryName: 'Líbano',            countryCode: 'LB', timeZone: 'Asia/Beirut' },\n  { code: '974', countryName: 'Qatar',             countryCode: 'QA', timeZone: 'Asia/Qatar' },\n  { code: '973', countryName: 'Baréin',            countryCode: 'BH', timeZone: 'Asia/Bahrain' },\n  { code: '82',  countryName: 'Corea del Sur',     countryCode: 'KR', timeZone: 'Asia/Seoul' },\n  { code: '81',  countryName: 'Japón',             countryCode: 'JP', timeZone: 'Asia/Tokyo' },\n  { code: '86',  countryName: 'China',             countryCode: 'CN', timeZone: 'Asia/Shanghai' },\n  { code: '7',   countryName: 'Rusia/Kazajistán',  countryCode: 'RU', timeZone: 'Europe/Moscow' },\n  { code: '90',  countryName: 'Turquía',           countryCode: 'TR', timeZone: 'Europe/Istanbul' },\n];\n\nfunction normalizePhone(p) {\n  if (!p) return '';\n  let s = String(p);\n  s = s.replace(/\\D/g, '');  // deja solo dígitos\n  if (s.startsWith('00')) s = s.slice(2); // 00xx -> xx\n  return s;\n}\n\nfunction detectByPrefix(digits) {\n  // probar prefijo más largo primero\n  const sorted = [...dialMap].sort((a,b) => b.code.length - a.code.length);\n  for (const entry of sorted) {\n    if (digits.startsWith(entry.code)) return entry;\n  }\n  return { code: '', countryName: 'Desconocido', countryCode: '', timeZone: 'UTC' };\n}\n\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  // Obtener el teléfono con plus del nodo anterior\n  const raw = $('trig_webhook_sign').first().json.body.telefono_cliente || item.json.telefono || '';\n  \n  let digits = normalizePhone(raw);\n\n  // Normalizar dígito extra móvil AR/MX (mismo criterio que datos_v2 del setter)\n  // WhatsApp/algunos leads añaden un 1 tras 52 (MX) o un 9 tras 54 (AR). El CRM debe\n  // guardar el formato canónico sin ese dígito para que el matching con el setter funcione.\n  if (digits.length === 13 && digits.startsWith('521')) digits = '52' + digits.slice(3);\n  if (digits.length === 13 && digits.startsWith('549')) digits = '54' + digits.slice(3);\n\n  const match = detectByPrefix(digits);\n\n  const nationalNumber = match.code && digits.startsWith(match.code)\n    ? digits.slice(match.code.length)\n    : digits;\n\n  // Solo devolver los campos de país\n  results.push({\n    json: {\n      phone_e164: digits,\n      dialCode: match.code,\n      countryName: match.countryName,\n      countryCode: match.countryCode,\n      timeZone: match.timeZone || 'UTC',\n      nationalNumber: nationalNumber\n    },\n    pairedItem: { item: 0 }\n  });\n}\n\nreturn results;"
+        "jsCode": "const dialMap = [\n  // ======= LATAM =======\n  { code: '598', countryName: 'Uruguay',   countryCode: 'UY', timeZone: 'America/Montevideo' },\n  { code: '597', countryName: 'Surinam',   countryCode: 'SR', timeZone: 'America/Paramaribo' },\n  { code: '596', countryName: 'Martinica', countryCode: 'MQ', timeZone: 'America/Martinique' },\n  { code: '595', countryName: 'Paraguay',  countryCode: 'PY', timeZone: 'America/Asuncion' },\n  { code: '594', countryName: 'Guayana Francesa', countryCode: 'GF', timeZone: 'America/Cayenne' },\n  { code: '593', countryName: 'Ecuador',   countryCode: 'EC', timeZone: 'America/Guayaquil' },\n  { code: '592', countryName: 'Guyana',    countryCode: 'GY', timeZone: 'America/Guyana' },\n  { code: '591', countryName: 'Bolivia',   countryCode: 'BO', timeZone: 'America/La_Paz' },\n  { code: '590', countryName: 'Guadalupe', countryCode: 'GP', timeZone: 'America/Guadeloupe' },\n  { code: '58',  countryName: 'Venezuela', countryCode: 'VE', timeZone: 'America/Caracas' },\n  { code: '57',  countryName: 'Colombia',  countryCode: 'CO', timeZone: 'America/Bogota' },\n  { code: '56',  countryName: 'Chile',     countryCode: 'CL', timeZone: 'America/Santiago' },\n  { code: '55',  countryName: 'Brasil',    countryCode: 'BR', timeZone: 'America/Sao_Paulo' },\n  { code: '54',  countryName: 'Argentina', countryCode: 'AR', timeZone: 'America/Argentina/Buenos_Aires' },\n  { code: '53',  countryName: 'Cuba',      countryCode: 'CU', timeZone: 'America/Havana' },\n  { code: '52',  countryName: 'México',    countryCode: 'MX', timeZone: 'America/Mexico_City' },\n  { code: '51',  countryName: 'Perú',      countryCode: 'PE', timeZone: 'America/Lima' },\n  { code: '507', countryName: 'Panamá',    countryCode: 'PA', timeZone: 'America/Panama' },\n  { code: '506', countryName: 'Costa Rica', countryCode: 'CR', timeZone: 'America/Costa_Rica' },\n  { code: '505', countryName: 'Nicaragua', countryCode: 'NI', timeZone: 'America/Managua' },\n  { code: '504', countryName: 'Honduras',  countryCode: 'HN', timeZone: 'America/Tegucigalpa' },\n  { code: '503', countryName: 'El Salvador', countryCode: 'SV', timeZone: 'America/El_Salvador' },\n  { code: '502', countryName: 'Guatemala', countryCode: 'GT', timeZone: 'America/Guatemala' },\n  { code: '501', countryName: 'Belice',    countryCode: 'BZ', timeZone: 'America/Belize' },\n  { code: '1',   countryName: 'NANP (EE. UU./Canadá/Caribe)', countryCode: 'NANP', timeZone: 'America/New_York' },\n\n  // ======= EUROPA =======\n  { code: '386', countryName: 'Eslovenia', countryCode: 'SI', timeZone: 'Europe/Ljubljana' },\n  { code: '385', countryName: 'Croacia',   countryCode: 'HR', timeZone: 'Europe/Zagreb' },\n  { code: '383', countryName: 'Kosovo',    countryCode: 'XK', timeZone: 'Europe/Belgrade' },\n  { code: '382', countryName: 'Montenegro', countryCode: 'ME', timeZone: 'Europe/Podgorica' },\n  { code: '381', countryName: 'Serbia',    countryCode: 'RS', timeZone: 'Europe/Belgrade' },\n  { code: '380', countryName: 'Ucrania',   countryCode: 'UA', timeZone: 'Europe/Kyiv' },\n  { code: '378', countryName: 'San Marino', countryCode: 'SM', timeZone: 'Europe/Rome' },\n  { code: '377', countryName: 'Mónaco',    countryCode: 'MC', timeZone: 'Europe/Monaco' },\n  { code: '376', countryName: 'Andorra',   countryCode: 'AD', timeZone: 'Europe/Andorra' },\n  { code: '375', countryName: 'Bielorrusia', countryCode: 'BY', timeZone: 'Europe/Minsk' },\n  { code: '374', countryName: 'Armenia',   countryCode: 'AM', timeZone: 'Asia/Yerevan' },\n  { code: '373', countryName: 'Moldavia',  countryCode: 'MD', timeZone: 'Europe/Chisinau' },\n  { code: '372', countryName: 'Estonia',   countryCode: 'EE', timeZone: 'Europe/Tallinn' },\n  { code: '371', countryName: 'Letonia',   countryCode: 'LV', timeZone: 'Europe/Riga' },\n  { code: '370', countryName: 'Lituania',  countryCode: 'LT', timeZone: 'Europe/Vilnius' },\n  { code: '359', countryName: 'Bulgaria',  countryCode: 'BG', timeZone: 'Europe/Sofia' },\n  { code: '358', countryName: 'Finlandia', countryCode: 'FI', timeZone: 'Europe/Helsinki' },\n  { code: '357', countryName: 'Chipre',    countryCode: 'CY', timeZone: 'Asia/Nicosia' },\n  { code: '356', countryName: 'Malta',     countryCode: 'MT', timeZone: 'Europe/Malta' },\n  { code: '355', countryName: 'Albania',   countryCode: 'AL', timeZone: 'Europe/Tirane' },\n  { code: '354', countryName: 'Islandia',  countryCode: 'IS', timeZone: 'Atlantic/Reykjavik' },\n  { code: '353', countryName: 'Irlanda',   countryCode: 'IE', timeZone: 'Europe/Dublin' },\n  { code: '352', countryName: 'Luxemburgo', countryCode: 'LU', timeZone: 'Europe/Luxembourg' },\n  { code: '351', countryName: 'Portugal',  countryCode: 'PT', timeZone: 'Europe/Lisbon' },\n  { code: '49',  countryName: 'Alemania',  countryCode: 'DE', timeZone: 'Europe/Berlin' },\n  { code: '48',  countryName: 'Polonia',   countryCode: 'PL', timeZone: 'Europe/Warsaw' },\n  { code: '47',  countryName: 'Noruega',   countryCode: 'NO', timeZone: 'Europe/Oslo' },\n  { code: '46',  countryName: 'Suecia',    countryCode: 'SE', timeZone: 'Europe/Stockholm' },\n  { code: '45',  countryName: 'Dinamarca', countryCode: 'DK', timeZone: 'Europe/Copenhagen' },\n  { code: '44',  countryName: 'Reino Unido', countryCode: 'GB', timeZone: 'Europe/London' },\n  { code: '43',  countryName: 'Austria',   countryCode: 'AT', timeZone: 'Europe/Vienna' },\n  { code: '41',  countryName: 'Suiza',     countryCode: 'CH', timeZone: 'Europe/Zurich' },\n  { code: '40',  countryName: 'Rumanía',   countryCode: 'RO', timeZone: 'Europe/Bucharest' },\n  { code: '39',  countryName: 'Italia',    countryCode: 'IT', timeZone: 'Europe/Rome' },\n  { code: '38',  countryName: 'Ex-Yugoslavia (legacy)', countryCode: 'YU', timeZone: 'Europe/Belgrade' },\n  { code: '37',  countryName: 'Bálticos (legacy)', countryCode: 'BAL', timeZone: 'Europe/Vilnius' },\n  { code: '36',  countryName: 'Hungría',   countryCode: 'HU', timeZone: 'Europe/Budapest' },\n  { code: '35',  countryName: 'Europa Este (legacy)', countryCode: 'EEAST', timeZone: 'Europe/Prague' },\n  { code: '34',  countryName: 'España',    countryCode: 'ES', timeZone: 'Europe/Madrid' },\n  { code: '33',  countryName: 'Francia',   countryCode: 'FR', timeZone: 'Europe/Paris' },\n  { code: '32',  countryName: 'Bélgica',   countryCode: 'BE', timeZone: 'Europe/Brussels' },\n  { code: '31',  countryName: 'Países Bajos', countryCode: 'NL', timeZone: 'Europe/Amsterdam' },\n  { code: '30',  countryName: 'Grecia',    countryCode: 'GR', timeZone: 'Europe/Athens' },\n\n  // ======= ASIA-PACÍFICO =======\n  { code: '886', countryName: 'Taiwán',           countryCode: 'TW', timeZone: 'Asia/Taipei' },\n  { code: '853', countryName: 'Macao',             countryCode: 'MO', timeZone: 'Asia/Macau' },\n  { code: '852', countryName: 'Hong Kong',         countryCode: 'HK', timeZone: 'Asia/Hong_Kong' },\n  { code: '689', countryName: 'Polinesia Francesa',countryCode: 'PF', timeZone: 'Pacific/Tahiti' },\n  { code: '685', countryName: 'Samoa',             countryCode: 'WS', timeZone: 'Pacific/Apia' },\n  { code: '679', countryName: 'Fiyi',              countryCode: 'FJ', timeZone: 'Pacific/Fiji' },\n  { code: '673', countryName: 'Brunéi',            countryCode: 'BN', timeZone: 'Asia/Brunei' },\n  { code: '65',  countryName: 'Singapur',          countryCode: 'SG', timeZone: 'Asia/Singapore' },\n  { code: '64',  countryName: 'Nueva Zelanda',     countryCode: 'NZ', timeZone: 'Pacific/Auckland' },\n  { code: '63',  countryName: 'Filipinas',         countryCode: 'PH', timeZone: 'Asia/Manila' },\n  { code: '62',  countryName: 'Indonesia',         countryCode: 'ID', timeZone: 'Asia/Jakarta' },\n  { code: '61',  countryName: 'Australia',         countryCode: 'AU', timeZone: 'Australia/Sydney' },\n  { code: '60',  countryName: 'Malasia',           countryCode: 'MY', timeZone: 'Asia/Kuala_Lumpur' },\n  { code: '972', countryName: 'Israel',            countryCode: 'IL', timeZone: 'Asia/Jerusalem' },\n  { code: '971', countryName: 'Emiratos Árabes Unidos', countryCode: 'AE', timeZone: 'Asia/Dubai' },\n  { code: '968', countryName: 'Omán',              countryCode: 'OM', timeZone: 'Asia/Muscat' },\n  { code: '966', countryName: 'Arabia Saudita',    countryCode: 'SA', timeZone: 'Asia/Riyadh' },\n  { code: '965', countryName: 'Kuwait',            countryCode: 'KW', timeZone: 'Asia/Kuwait' },\n  { code: '964', countryName: 'Irak',              countryCode: 'IQ', timeZone: 'Asia/Baghdad' },\n  { code: '963', countryName: 'Siria',             countryCode: 'SY', timeZone: 'Asia/Damascus' },\n  { code: '962', countryName: 'Jordania',          countryCode: 'JO', timeZone: 'Asia/Amman' },\n  { code: '961', countryName: 'Líbano',            countryCode: 'LB', timeZone: 'Asia/Beirut' },\n  { code: '974', countryName: 'Qatar',             countryCode: 'QA', timeZone: 'Asia/Qatar' },\n  { code: '973', countryName: 'Baréin',            countryCode: 'BH', timeZone: 'Asia/Bahrain' },\n  { code: '82',  countryName: 'Corea del Sur',     countryCode: 'KR', timeZone: 'Asia/Seoul' },\n  { code: '81',  countryName: 'Japón',             countryCode: 'JP', timeZone: 'Asia/Tokyo' },\n  { code: '86',  countryName: 'China',             countryCode: 'CN', timeZone: 'Asia/Shanghai' },\n  { code: '7',   countryName: 'Rusia/Kazajistán',  countryCode: 'RU', timeZone: 'Europe/Moscow' },\n  { code: '90',  countryName: 'Turquía',           countryCode: 'TR', timeZone: 'Europe/Istanbul' },\n];\n\nfunction normalizePhone(p) {\n  if (!p) return '';\n  let s = String(p);\n  s = s.replace(/\\D/g, '');  // deja solo dígitos\n  if (s.startsWith('00')) s = s.slice(2); // 00xx -> xx\n  return s;\n}\n\nfunction detectByPrefix(digits) {\n  // probar prefijo más largo primero\n  const sorted = [...dialMap].sort((a,b) => b.code.length - a.code.length);\n  for (const entry of sorted) {\n    if (digits.startsWith(entry.code)) return entry;\n  }\n  return { code: '', countryName: 'Desconocido', countryCode: '', timeZone: 'UTC' };\n}\n\nconst items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  // Obtener el teléfono con plus del nodo anterior\n  const raw = $('trig_webhook_sign').first().json.body.telefono || $('trig_webhook_sign').first().json.body.telefono_cliente || item.json.telefono || '';\n  \n  let digits = normalizePhone(raw);\n\n  // Normalizar dígito extra móvil AR/MX (mismo criterio que datos_v2 del setter)\n  // WhatsApp/algunos leads añaden un 1 tras 52 (MX) o un 9 tras 54 (AR). El CRM debe\n  // guardar el formato canónico sin ese dígito para que el matching con el setter funcione.\n  if (digits.length === 13 && digits.startsWith('521')) digits = '52' + digits.slice(3);\n  if (digits.length === 13 && digits.startsWith('549')) digits = '54' + digits.slice(3);\n\n  const match = detectByPrefix(digits);\n\n  const nationalNumber = match.code && digits.startsWith(match.code)\n    ? digits.slice(match.code.length)\n    : digits;\n\n  // Solo devolver los campos de país\n  results.push({\n    json: {\n      phone_e164: digits,\n      dialCode: match.code,\n      countryName: match.countryName,\n      countryCode: match.countryCode,\n      timeZone: match.timeZone || 'UTC',\n      nationalNumber: nationalNumber\n    },\n    pairedItem: { item: 0 }\n  });\n}\n\nreturn results;"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3664,
-        1568
+        -832,
+        816
       ],
       "id": "b21e18de-d014-4263-8445-47167a2a5932",
       "name": "calc_country_detect"
@@ -1164,8 +1223,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3200,
-        1568
+        -368,
+        816
       ]
     },
     {
@@ -1175,8 +1234,8 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        -3664,
-        2064
+        -624,
+        1344
       ],
       "id": "c5b8fb8d-93e6-488a-8f62-635754c30b31",
       "name": "Limit"
@@ -1200,8 +1259,8 @@
       "type": "n8n-nodes-base.googleDrive",
       "typeVersion": 3,
       "position": [
-        -3184,
-        2048
+        -144,
+        1328
       ],
       "id": "1698d8a2-eacb-4b7c-8fee-3356e4ea9a7d",
       "name": "descargar_doc_n",
@@ -1220,8 +1279,8 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        -2976,
-        2048
+        64,
+        1328
       ],
       "id": "4039d4ff-91b7-4df7-a18c-0bc172aff410",
       "name": "extraer_contenido_n"
@@ -1240,18 +1299,25 @@
             },
             {
               "role": "system",
-              "content": "Eres un asistente experto en ventas y análisis de clientes. Analiza la transcripción completa de una llamada de venta y devuelve EXACTAMENTE este formato en español, sin saludos ni introducciones:\n\n*🎯 Objetivos:*\n(viñetas con las metas o resultados que busca conseguir el alumno)\n\n*🎯 Dolores:*\n(viñetas con sus frustraciones, miedos o problemas actuales)\n\n*🎯 Deseos:*\n(viñetas con la transformación o estado futuro ideal que anhela)\n\nUsa viñetas con el símbolo • , claras y profesionales, listas para enviarse por WhatsApp."
+              "content": "Eres un asistente experto en ventas y análisis de clientes. Analiza la siguiente transcripción completa de una llamada de venta y extrae detalladamente en español: \n\n1. **Objetivos**: Qué metas o resultados busca conseguir el alumno. \n\n2. **Dolores**: Qué frustraciones, miedos o problemas actuales tiene. \n\n3. **Deseos**: Qué transformación o estado futuro ideal anhela.  Estructura el resultado con viñetas claras y profesionales, listas para ser enviadas por WhatsApp. Sin saludos ni introducciones.  "
             }
           ]
         },
         "builtInTools": {},
-        "options": {}
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema",
+              "schema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"objetivos\": {\n      \"type\": \"string\"\n    },\n    \"dolores\": {\n      \"type\": \"string\"\n    },\n    \"deseos\": {\n      \"type\": \"string\"\n    }\n  },\n  \"additionalProperties\": false,\n  \"required\": [\"objetivos\", \"dolores\", \"deseos\"]\n}"
+            }
+          }
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.openAi",
       "typeVersion": 2.1,
       "position": [
-        -2784,
-        2048
+        256,
+        1328
       ],
       "id": "a4397377-c77b-460f-8408-672a7912d10b",
       "name": "agente_objetivos",
@@ -1269,7 +1335,7 @@
             {
               "id": "53291598-1bb7-4975-adb0-4aa19685b6b8",
               "name": "mensaje",
-              "value": "=*¡NUEVO ALUMNO! *  \n\n*👤 Datos del Alumno:* \n\n• *Nombre:* {{ $('trig_webhook_sign').item.json.body.nombre_cliente_contrato }}\n\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }} \n\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}  \n\n*📝 Contrato en PDF (Google Drive):* {{ $('upload_pdf_to_drive').first().json.webViewLink }}  \n\n\n*Datos de interés*\n{{ $json.perfil }}",
+              "value": "=*¡NUEVO ALUMNO! *  \n\n*👤 Datos del Alumno:* \n\n• *Nombre:* {{ $('trig_webhook_sign').item.json.body.nombre_cliente_contrato }}\n\n• *WhatsApp:* {{'https://wa.me/'+ $('trig_webhook_sign').first().json.body.telefono }} \n\n• *Email:* {{ $('trig_webhook_sign').first().json.body.email_cliente }}  \n\n*📝 Contrato en PDF (Google Drive):* {{ $('upload_pdf_to_drive').first().json.webViewLink }}  \n\n*🎯 Objetivos:* \n{{ $json.output[0].content[0].text.objetivos }}   \n\n*🎯 Dolores:* \n{{ $json.output[0].content[0].text.dolores }}\n\n*🎯 Deseos:* \n{{ $json.output[0].content[0].text.deseos }}",
               "type": "string"
             }
           ]
@@ -1279,229 +1345,23 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -2256,
-        2048
+        624,
+        1328
       ],
       "id": "658a26e1-d839-489d-b249-f061c3502057",
       "name": "Edit Fields1"
-    },
-    {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "a1111111-2222-3333-4444-555555555555",
-              "name": "perfil",
-              "value": "={{ $json.output[0].content[0].text }}",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "id": "74d6a53c-d1df-418f-b700-9a1be9602b00",
-      "name": "set_perfil",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        -2432,
-        2048
-      ]
-    },
-    {
-      "parameters": {
-        "sendTo": "={{ $('trig_webhook_sign').item.json.body.email_cliente }}",
-        "subject": "Tu copia del contrato firmado - Alquimia Vital",
-        "message": "=<p>Hola {{ $('trig_webhook_sign').item.json.body.nombre.split(' ')[0] }},</p>\n\n<p>Te enviamos tu copia del contrato, \nya firmado, para que lo tengas guardado.</p>\n\n<p>Guárdalo en un lugar seguro. Si tienes cualquier duda, \nestamos aquí para ayudarte.</p>\n\n<p style=\"margin: 24px 0;\">\n  <a href=\"{{ $('upload_pdf_to_drive').item.json.webViewLink }}\" \n     style=\"background-color:#6b21a8; color:#ffffff; padding:12px 24px; \n            text-decoration:none; border-radius:6px; font-weight:bold;\">\n    📄 Ver mi contrato firmado\n  </a>\n</p>\n\n<p>Con amor,<br>\n<strong>El equipo de Alquimia Vital</strong></p>",
-        "options": {
-          "appendAttribution": false
-        }
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.2,
-      "position": [
-        -1632,
-        1136
-      ],
-      "id": "13e9865d-dc77-46c4-bb19-50a8aac4c365",
-      "name": "enviar_contrato",
-      "webhookId": "249bccfd-ec65-4d57-ad62-182ed84a9dc1",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "Fj2GHGqWsdYy0u6U",
-          "name": "Gmail - Lucem"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "share",
-        "fileId": {
-          "__rl": true,
-          "value": "={{ $('upload_pdf_to_drive').item.json.id }}",
-          "mode": "id"
-        },
-        "permissionsUi": {
-          "permissionsValues": {
-            "role": "reader",
-            "type": "user",
-            "emailAddress": "={{ $('trig_webhook_sign').item.json.body.email_cliente }}"
-          }
-        },
-        "options": {
-          "sendNotificationEmail": false
-        }
-      },
-      "type": "n8n-nodes-base.googleDrive",
-      "typeVersion": 3,
-      "position": [
-        -1856,
-        1136
-      ],
-      "id": "d4a9ed96-be70-450d-9c72-45a1afeb6394",
-      "name": "compartir_contrato",
-      "credentials": {
-        "googleDriveOAuth2Api": {
-          "id": "U3gk9gfW9ynkKc2U",
-          "name": "Google Drive - Lucem"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://wasenderapi.com/api/groups/120363424654026759@g.us/participants/add",
-        "authentication": "genericCredentialType",
-        "genericAuthType": "httpBearerAuth",
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={ \"participants\": [ \"{{ $('trig_webhook_sign').item.json.body.telefono_cliente }}\" ] }",
-        "options": {}
-      },
-      "id": "c2699576-6194-437b-bc80-8517150c0a2d",
-      "name": "post_whatsapp_group_eca",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [
-        -2224,
-        1424
-      ],
-      "retryOnFail": true,
-      "maxTries": 3,
-      "waitBetweenTries": 5000,
-      "credentials": {
-        "httpBearerAuth": {
-          "id": "bBcrdGrIXhIAjFzs",
-          "name": "WasenderAPI - Lucem (Principal)"
-        }
-      }
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.wait",
-      "typeVersion": 1.1,
-      "position": [
-        -2016,
-        1424
-      ],
-      "id": "049ab594-d83e-4846-b620-db712d4bbe14",
-      "name": "Wait",
-      "webhookId": "36fb7bff-307f-4293-845e-4e41a4890f82"
-    },
-    {
-      "parameters": {
-        "rules": {
-          "values": [
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "leftValue": "={{ $('trig_webhook_sign').item.json.body.closer_name }}",
-                    "rightValue": "",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    },
-                    "id": "7c06afab-d64c-4f02-873a-074166d3dd4a"
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Nathalia"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "4d3fe044-8fd7-414f-8c9f-8f28cd59fb95",
-                    "leftValue": "={{ $('trig_webhook_sign').item.json.body.closer_name }}",
-                    "rightValue": "Daniel",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Daniel"
-            },
-            {
-              "conditions": {
-                "options": {
-                  "caseSensitive": true,
-                  "leftValue": "",
-                  "typeValidation": "strict",
-                  "version": 3
-                },
-                "conditions": [
-                  {
-                    "id": "3c8b4f28-45c8-4916-84ee-ce7e83f3d97f",
-                    "leftValue": "={{ $('trig_webhook_sign').item.json.body.closer_name }}",
-                    "rightValue": "Albert",
-                    "operator": {
-                      "type": "string",
-                      "operation": "equals"
-                    }
-                  }
-                ],
-                "combinator": "and"
-              },
-              "renameOutput": true,
-              "outputKey": "Albert"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3.4,
-      "position": [
-        -2048,
-        2032
-      ],
-      "id": "9c3b9c0c-c71e-4bac-a6c8-01f7a82edf61",
-      "name": "Switch1"
     }
   ],
   "connections": {
     "trig_webhook_sign": {
       "main": [
-        []
+        [
+          {
+            "node": "set_vars_html_doc",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "html_to_google_doc": {
@@ -1552,7 +1412,12 @@
       "main": [
         [
           {
-            "node": "compartir_contrato",
+            "node": "calc_country_detect",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "get_sheet_informes",
             "type": "main",
             "index": 0
           }
@@ -1596,7 +1461,7 @@
       "main": [
         [
           {
-            "node": "post_whatsapp_group_eca",
+            "node": "post_whatsapp_group_alma",
             "type": "main",
             "index": 0
           }
@@ -1610,11 +1475,11 @@
         ]
       ]
     },
-    "post_whatsapp_group_alquimia": {
+    "post_whatsapp_group_alma": {
       "main": [
         [
           {
-            "node": "get_sheet_informes",
+            "node": "post_whatsapp_group_alquimia",
             "type": "main",
             "index": 0
           }
@@ -1654,7 +1519,32 @@
       "main": [
         [
           {
-            "node": "Edit Fields1",
+            "node": "switch_closer_notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "switch_closer_notify": {
+      "main": [
+        [
+          {
+            "node": "post_whatsapp_daniel",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post_whatsapp_albert",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post_whatsapp_nathatia",
             "type": "main",
             "index": 0
           }
@@ -1775,7 +1665,7 @@
       "main": [
         [
           {
-            "node": "set_perfil",
+            "node": "Edit Fields1",
             "type": "main",
             "index": 0
           }
@@ -1786,87 +1676,7 @@
       "main": [
         [
           {
-            "node": "Switch1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "set_perfil": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "enviar_contrato": {
-      "main": [
-        [
-          {
-            "node": "calc_country_detect",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "compartir_contrato": {
-      "main": [
-        [
-          {
-            "node": "enviar_contrato",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "post_whatsapp_group_eca": {
-      "main": [
-        [
-          {
-            "node": "Wait",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Wait": {
-      "main": [
-        [
-          {
-            "node": "post_whatsapp_group_alquimia",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Switch1": {
-      "main": [
-        [
-          {
-            "node": "post_whatsapp_nathatia",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "post_whatsapp_daniel",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "post_whatsapp_albert",
+            "node": "switch_closer_notify",
             "type": "main",
             "index": 0
           }

@@ -33,7 +33,7 @@ export default async function ContractPage({ params }: PageProps) {
   const contractText = rawTemplate
     .replace(/\[NOMBRE_CLIENTE\]/g, contract.nombre_cliente)
     .replace(/\[TELEFONO_CLIENTE\]/g, contract.telefono_cliente)
-    .replace(/\[IMPORTE\]/g, contract.importe_cuotas)
+    .replace(/\[IMPORTE_CUOTAS\]/g, contract.importe_cuotas)
     .replace(/\[NUMERO_CUOTAS\]/g, contract.numero_cuotas)
     .replace(/\[DIA_COBRO\]/g, contract.dia_cobro || '')
     .replace(/\[MONEDA\]/g, contract.moneda || '')

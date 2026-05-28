@@ -238,6 +238,12 @@ export async function signContractAction(
     return { success: false, error: updateError.message };
   }
 
+  const calculateEndDate = (startDate: string, months: number) => {
+    const start = new Date(startDate);
+    start.setMonth(start.getMonth() + months);
+    return start;
+  };
+
   // Phase 5: Trigger n8n Webhook
   try {
     const webhookUrl = process.env.N8N_WEBHOOK_URL_SIGN;
@@ -255,13 +261,6 @@ export async function signContractAction(
         plan: contract.tipo_contrato,
         grupo: 'Alquimia',
       };
-
-      const now = new Date();
-      const fecha = now.toISOString().split('T')[0];
-      const hora = now.toLocaleTimeString('es-ES', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
 
       // Load template and replace placeholders
       const rawTemplate =
@@ -301,20 +300,32 @@ export async function signContractAction(
           nombre_cliente_contrato: nombreClienteContrato,
           nombre,
           apellidos,
-          telefono: contract.telefono_cliente,
           telefono_cliente: contract.telefono_cliente,
-          email: contract.email_cliente,
           email_cliente: contract.email_cliente,
           pais,
-          fecha_inicio: new Date().toLocaleDateString('es-ES'),
-          fecha,
-          hora,
+          fecha_contrato: new Date(contract.created_at).toLocaleDateString(
+            'es-ES',
+          ),
+          fecha_fin: calculateEndDate(
+            contract.created_at,
+            contract.numero_cuotas,
+          ).toLocaleDateString('es-ES'),
           closer_name: profile?.closer_name || 'Desconocido',
           plan: planInfo.plan,
           grupo: planInfo.grupo,
           tipo_contrato: contract.tipo_contrato,
           link_contrato: `${baseUrl}/contrato/${contract.id}`,
-          pdf_name: `Contrato_${nombreClienteContrato.trim().replace(/\s+/g, '_')}_${fecha}.pdf`,
+          pdf_name: `Contrato_${nombreClienteContrato.trim().replace(/\s+/g, '_')}_${new Date(contract.created_at).toLocaleDateString('es-ES')}.pdf`,
+          importe_total: contract.importe_total,
+          importe_pendiente:
+            contract.numero_cuotas > 1
+              ? contract.importe_total - contract.importe_cuotas
+              : 0,
+          moneda: contract.moneda,
+          numero_cuotas: contract.numero_cuotas,
+          cuotas_pendientes: contract.numero_cuotas - 1,
+          importe_cuotas: contract.importe_cuotas,
+          dia_cobro: contract.dia_cobro,
           html_contrato: htmlContrato,
           firma_data: signatureData,
         }),

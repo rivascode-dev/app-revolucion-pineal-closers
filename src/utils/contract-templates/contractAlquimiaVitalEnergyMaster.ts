@@ -52,7 +52,7 @@ Lo que significa que **Alquimia Vital no es una “suscripción”. sino una “
 
 3. El compromiso con pagar el 100% del importe acordado y las cuotas totales  correspondientes debe ser del 100%. 
 
-En este caso las cuotas acordadas con el experto han sido de **[NUMERO_CUOTAS]** cuotas de **[IMPORTE]**  **[MONEDA]**, que se cobrarán el día **[DIA_COBRO]** de cada mes.
+En este caso las cuotas acordadas con el experto han sido de **[NUMERO_CUOTAS]** cuotas de **[IMPORTE_CUOTAS]**  **[MONEDA]**, que se cobrarán el día **[DIA_COBRO]** de cada mes.
 
 Al firmar este acuerdo aceptas y te comprometes a abonarlas hasta completarlas
 
