@@ -37,59 +37,59 @@ const TYPE_OF_CONTRACTS = [
   },
 ];
 
-const contractSchema = z
-  .object({
-    nombre_cliente: z.string().min(1, 'El nombre completo es requerido'),
-    telefono_cliente: z
-      .string()
-      .min(1, 'El teléfono es requerido')
-      .regex(
-        /^\d+$/,
-        'El WhatsApp debe contener solo números, sin espacios ni prefijos (+)',
-      ),
-    email_cliente: z
-      .string()
-      .min(1, 'El correo electrónico es requerido')
-      .email('El formato de correo no es válido'),
-    tipo_contrato: z.string().min(1, 'El tipo de contrato es requerido'),
-    moneda: z.string().min(1, 'La moneda es requerida'),
-    importe_total: z
-      .string()
-      .min(1, 'El importe es requerido')
-      .refine(
-        (val) => !isNaN(Number(val)) && Number(val) > 0,
-        'El importe debe ser mayor a 0',
-      ),
-    importe_cuotas: z
-      .string()
-      .min(1, 'El importe es requerido')
-      .refine(
-        (val) => !isNaN(Number(val)) && Number(val) > 0,
-        'El importe debe ser mayor a 0',
-      ),
-    numero_cuotas: z.coerce
-      .number()
-      .int('El número de cuotas debe ser un número entero')
-      .min(1, 'Mínimo 1 cuota'),
-    dia_cobro: z.coerce
-      .number()
-      .min(1, 'El día de cobro debe ser al menos 1')
-      .max(31, 'El día de cobro no puede ser mayor a 31'),
-  })
-  .refine(
-    (data) => {
-      const total = Number(data.importe_total);
-      const cuotas = Number(data.numero_cuotas);
-      const importe = Number(data.importe_cuotas);
-      if (isNaN(total) || isNaN(cuotas) || isNaN(importe)) return true;
-      return Math.abs(total - cuotas * importe) < 0.01;
-    },
-    {
-      message:
-        'El importe total debe ser igual al número de cuotas por el importe de cuota',
-      path: ['importe_cuotas'],
-    },
-  );
+const contractSchema = z.object({
+  nombre_cliente: z.string().min(1, 'El nombre completo es requerido'),
+  telefono_cliente: z
+    .string()
+    .min(1, 'El teléfono es requerido')
+    .regex(
+      /^\d+$/,
+      'El WhatsApp debe contener solo números, sin espacios ni prefijos (+)',
+    ),
+  email_cliente: z
+    .string()
+    .min(1, 'El correo electrónico es requerido')
+    .email('El formato de correo no es válido'),
+  tipo_contrato: z.string().min(1, 'El tipo de contrato es requerido'),
+  moneda: z.string().min(1, 'La moneda es requerida'),
+  importe_total: z
+    .string()
+    .min(1, 'El importe es requerido')
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) > 0,
+      'El importe debe ser mayor a 0',
+    ),
+  importe_cuotas: z
+    .string()
+    .min(1, 'El importe es requerido')
+    .refine(
+      (val) => !isNaN(Number(val)) && Number(val) > 0,
+      'El importe debe ser mayor a 0',
+    ),
+  numero_cuotas: z.coerce
+    .number()
+    .int('El número de cuotas debe ser un número entero')
+    .min(1, 'Mínimo 1 cuota'),
+  dia_cobro: z.coerce
+    .number()
+    .min(1, 'El día de cobro debe ser al menos 1')
+    .max(31, 'El día de cobro no puede ser mayor a 31'),
+});
+// .refine(
+//   (data) => {
+//     const importe_total = Number(data.importe_total);
+//     const numero_cuotas = Number(data.numero_cuotas);
+//     const importe_cuotas = Number(data.importe_cuotas);
+//     if (isNaN(importe_total) || isNaN(numero_cuotas) || isNaN(importe_cuotas))
+//       return true;
+//     return Math.abs(importe_total - numero_cuotas * importe_cuotas) < 0.01;
+//   },
+//   {
+//     message:
+//       'El importe total debe ser igual al número de cuotas por el importe de cuota',
+//     path: ['importe_cuotas'],
+//   },
+// );
 
 type ContractFormValues = z.infer<typeof contractSchema>;
 
@@ -400,7 +400,7 @@ export default function NewContractPage() {
                 <Loader2 className='h-5 w-5 animate-spin text-background' />
               ) : (
                 <>
-                  <span>Generar y Obtener Enlace</span>
+                  <span>Generar y Enviar Contrato</span>
                   <Send className='h-4 w-4' strokeWidth={3} />
                 </>
               )}

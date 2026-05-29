@@ -28,30 +28,121 @@ function splitFullName(fullName: string): {
  * Maps common international phone prefixes to country names.
  */
 function getCountryByPhone(phone: string): string {
-  const cleanPhone = phone.replace(/\D/g, '');
+  if (!phone) return 'Desconocido';
+  
+  let cleanPhone = String(phone).replace(/\D/g, '');
+  if (cleanPhone.startsWith('00')) cleanPhone = cleanPhone.slice(2);
+
+  if (cleanPhone.length === 13 && cleanPhone.startsWith('521')) {
+    cleanPhone = '52' + cleanPhone.slice(3);
+  }
+  if (cleanPhone.length === 13 && cleanPhone.startsWith('549')) {
+    cleanPhone = '54' + cleanPhone.slice(3);
+  }
 
   const countryPrefixes = [
-    { prefix: '34', country: 'España' },
-    { prefix: '54', country: 'Argentina' },
-    { prefix: '56', country: 'Chile' },
-    { prefix: '52', country: 'México' },
-    { prefix: '57', country: 'Colombia' },
-    { prefix: '51', country: 'Perú' },
-    { prefix: '58', country: 'Venezuela' },
-    { prefix: '593', country: 'Ecuador' },
-    { prefix: '595', country: 'Paraguay' },
+    // ======= LATAM =======
     { prefix: '598', country: 'Uruguay' },
+    { prefix: '597', country: 'Surinam' },
+    { prefix: '596', country: 'Martinica' },
+    { prefix: '595', country: 'Paraguay' },
+    { prefix: '594', country: 'Guayana Francesa' },
+    { prefix: '593', country: 'Ecuador' },
+    { prefix: '592', country: 'Guyana' },
     { prefix: '591', country: 'Bolivia' },
-    { prefix: '506', country: 'Costa Rica' },
+    { prefix: '590', country: 'Guadalupe' },
+    { prefix: '58',  country: 'Venezuela' },
+    { prefix: '57',  country: 'Colombia' },
+    { prefix: '56',  country: 'Chile' },
+    { prefix: '55',  country: 'Brasil' },
+    { prefix: '54',  country: 'Argentina' },
+    { prefix: '53',  country: 'Cuba' },
+    { prefix: '52',  country: 'México' },
+    { prefix: '51',  country: 'Perú' },
     { prefix: '507', country: 'Panamá' },
-    { prefix: '502', country: 'Guatemala' },
-    { prefix: '503', country: 'El Salvador' },
-    { prefix: '504', country: 'Honduras' },
+    { prefix: '506', country: 'Costa Rica' },
     { prefix: '505', country: 'Nicaragua' },
-    { prefix: '599', country: 'Antillas Holandesas' },
-    { prefix: '53', country: 'Cuba' },
-    { prefix: '509', country: 'Haití' },
-    { prefix: '1', country: 'Estados Unidos / Canadá' },
+    { prefix: '504', country: 'Honduras' },
+    { prefix: '503', country: 'El Salvador' },
+    { prefix: '502', country: 'Guatemala' },
+    { prefix: '501', country: 'Belice' },
+    { prefix: '1',   country: 'NANP (EE. UU./Canadá/Caribe)' },
+
+    // ======= EUROPA =======
+    { prefix: '386', country: 'Eslovenia' },
+    { prefix: '385', country: 'Croacia' },
+    { prefix: '383', country: 'Kosovo' },
+    { prefix: '382', country: 'Montenegro' },
+    { prefix: '381', country: 'Serbia' },
+    { prefix: '380', country: 'Ucrania' },
+    { prefix: '378', country: 'San Marino' },
+    { prefix: '377', country: 'Mónaco' },
+    { prefix: '376', country: 'Andorra' },
+    { prefix: '375', country: 'Bielorrusia' },
+    { prefix: '374', country: 'Armenia' },
+    { prefix: '373', country: 'Moldavia' },
+    { prefix: '372', country: 'Estonia' },
+    { prefix: '371', country: 'Letonia' },
+    { prefix: '370', country: 'Lituania' },
+    { prefix: '359', country: 'Bulgaria' },
+    { prefix: '358', country: 'Finlandia' },
+    { prefix: '357', country: 'Chipre' },
+    { prefix: '356', country: 'Malta' },
+    { prefix: '355', country: 'Albania' },
+    { prefix: '354', country: 'Islandia' },
+    { prefix: '353', country: 'Irlanda' },
+    { prefix: '352', country: 'Luxemburgo' },
+    { prefix: '351', country: 'Portugal' },
+    { prefix: '49',  country: 'Alemania' },
+    { prefix: '48',  country: 'Polonia' },
+    { prefix: '47',  country: 'Noruega' },
+    { prefix: '46',  country: 'Suecia' },
+    { prefix: '45',  country: 'Dinamarca' },
+    { prefix: '44',  country: 'Reino Unido' },
+    { prefix: '43',  country: 'Austria' },
+    { prefix: '41',  country: 'Suiza' },
+    { prefix: '40',  country: 'Rumanía' },
+    { prefix: '39',  country: 'Italia' },
+    { prefix: '38',  country: 'Ex-Yugoslavia (legacy)' },
+    { prefix: '37',  country: 'Bálticos (legacy)' },
+    { prefix: '36',  country: 'Hungría' },
+    { prefix: '35',  country: 'Europa Este (legacy)' },
+    { prefix: '34',  country: 'España' },
+    { prefix: '33',  country: 'Francia' },
+    { prefix: '32',  country: 'Bélgica' },
+    { prefix: '31',  country: 'Países Bajos' },
+    { prefix: '30',  country: 'Grecia' },
+
+    // ======= ASIA-PACÍFICO =======
+    { prefix: '886', country: 'Taiwán' },
+    { prefix: '853', country: 'Macao' },
+    { prefix: '852', country: 'Hong Kong' },
+    { prefix: '689', country: 'Polinesia Francesa' },
+    { prefix: '685', country: 'Samoa' },
+    { prefix: '679', country: 'Fiyi' },
+    { prefix: '673', country: 'Brunéi' },
+    { prefix: '65',  country: 'Singapur' },
+    { prefix: '64',  country: 'Nueva Zelanda' },
+    { prefix: '63',  country: 'Filipinas' },
+    { prefix: '62',  country: 'Indonesia' },
+    { prefix: '61',  country: 'Australia' },
+    { prefix: '60',  country: 'Malasia' },
+    { prefix: '972', country: 'Israel' },
+    { prefix: '971', country: 'Emiratos Árabes Unidos' },
+    { prefix: '968', country: 'Omán' },
+    { prefix: '966', country: 'Arabia Saudita' },
+    { prefix: '965', country: 'Kuwait' },
+    { prefix: '964', country: 'Irak' },
+    { prefix: '963', country: 'Siria' },
+    { prefix: '962', country: 'Jordania' },
+    { prefix: '961', country: 'Líbano' },
+    { prefix: '974', country: 'Qatar' },
+    { prefix: '973', country: 'Baréin' },
+    { prefix: '82',  country: 'Corea del Sur' },
+    { prefix: '81',  country: 'Japón' },
+    { prefix: '86',  country: 'China' },
+    { prefix: '7',   country: 'Rusia/Kazajistán' },
+    { prefix: '90',  country: 'Turquía' },
   ];
 
   const sortedPrefixes = [...countryPrefixes].sort(
@@ -240,7 +331,7 @@ export async function signContractAction(
 
   const calculateEndDate = (startDate: string, months: number) => {
     const start = new Date(startDate);
-    start.setMonth(start.getMonth() + months);
+    start.setMonth(start.getMonth() + months - 1);
     return start;
   };
 
@@ -271,7 +362,7 @@ export async function signContractAction(
       const contractText = rawTemplate
         .replace(/\[NOMBRE_CLIENTE\]/g, contract.nombre_cliente)
         .replace(/\[TELEFONO_CLIENTE\]/g, contract.telefono_cliente)
-        .replace(/\[IMPORTE\]/g, contract.importe_cuotas)
+        .replace(/\[IMPORTE_CUOTAS\]/g, contract.importe_cuotas)
         .replace(/\[NUMERO_CUOTAS\]/g, contract.numero_cuotas)
         .replace(/\[DIA_COBRO\]/g, contract.dia_cobro || '')
         .replace(/\[MONEDA\]/g, contract.moneda || '')

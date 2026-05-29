@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import { CheckCircle2 } from 'lucide-react';
 import { SignatureContainer } from '@/sections/contratos/SignatureContainer';
 import ReactMarkdown from 'react-markdown';
-import { PrintButton } from '@/components/PrintButton';
 import { LightModeWrapper } from '@/sections/contratos/LightModeWrapper';
 
 interface PageProps {
@@ -42,7 +41,7 @@ export default async function ContractPage({ params }: PageProps) {
       new Date(contract.created_at).toLocaleDateString('es-ES'),
     );
 
-  const isFirmado = contract.estado === 'firmado';
+  const isSigned = contract.estado === 'firmado';
 
   return (
     <LightModeWrapper>
@@ -86,7 +85,7 @@ export default async function ContractPage({ params }: PageProps) {
 
               {/* Signature / Actions Pad Section */}
               <div className='p-6 sm:p-12 bg-slate-50/50 border-t border-slate-100 print:bg-transparent print:border-none print:p-0 print:mt-8'>
-                {isFirmado ? (
+                {isSigned ? (
                   <div className='py-2 flex flex-col items-center justify-center space-y-6'>
                     {/* Status Badge */}
                     <div className='relative print:hidden'>
@@ -101,8 +100,8 @@ export default async function ContractPage({ params }: PageProps) {
                         ¡Contrato Firmado!
                       </h3>
                       <p className='text-sm text-slate-500 max-w-sm mx-auto leading-relaxed'>
-                        Tu inscripción se ha procesado con éxito. En breve
-                        recibirás los accesos por WhatsApp.
+                        Te llegará una copia de tu contrato firmado por correo
+                        electrónico.
                       </p>
                     </div>
 
@@ -133,10 +132,6 @@ export default async function ContractPage({ params }: PageProps) {
                         </div>
                       </div>
                     )}
-
-                    <div className='print:hidden'>
-                      <PrintButton />
-                    </div>
                   </div>
                 ) : (
                   <div className='print:hidden'>
